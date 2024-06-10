@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/samclassic/head_sam"
+	"$halflambert" "1"
+}

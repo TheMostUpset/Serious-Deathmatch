@@ -1,0 +1,38 @@
+"deathmatch"
+{
+	"base"		"base"
+	"title"		"Serious Deathmatch"
+	"category"	"pvp"
+	"maps"		"^sdm_"
+	"menusystem"	"1"
+	"workshopid"	"3127352943"
+
+	"settings"
+	{
+		1
+		{
+			"name"		"sdm_max_frags"
+			"text"		"Max Frags"
+			"type"		"Numeric"
+			"default"	"20"
+		}
+		2
+		{
+			"name"		"sdm_timer_enabled"
+			"text"		"Timer"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		3
+		{
+			"name"		"sdm_max_time"
+			"text"		"Max Time"
+			"type"		"Numeric"
+			"default"	"600"
+		}
+
+		
+
+	}
+
+}

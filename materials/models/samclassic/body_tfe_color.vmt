@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/samclassic/body_TFE_color"
+	"$halflambert" "1"
+}

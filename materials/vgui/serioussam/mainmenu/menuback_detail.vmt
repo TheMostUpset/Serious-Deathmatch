@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/serioussam/mainmenu/MenuBack_detail"
+	"$translucent" "1"
+	"$additive" "1"
+	"$alpha" "0.1"
+}

@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/samclassic/Glasses"
+	"$halflambert" "1"
+}

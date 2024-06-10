@@ -1,0 +1,17 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/powerups/invisibility"
+	"$bumpmap"	"models/powerups/invisibility_normal"
+	"$halflambert" 1
+	
+	$phong 1
+	$phongboost 10
+	$normalmapalphaenvmapmask 1
+	$phongfresnelranges "[1 1 1]"
+	$translucent 1
+	$envmap "env_cubemap"
+	$envmapcontrast 1
+	$envmapsaturation 1
+	$envmaptint "[ 1 1 1 ]"
+	"$phongexponent" "5"
+}

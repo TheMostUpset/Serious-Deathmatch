@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/serioussam/hud/pseriousdamage"
+	"$alphatest" "1"
+	"$vertexcolor" "1"
+	"$nolod" 1
+}

@@ -1,0 +1,22 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/powerups/gold"
+	"$bumpmap"	"models/serioussam/powerups/gold_normal"	
+	"$detail" "models/serioussam/powerups/gold_detail.vtf"	
+	"$detailscale" "0.9"
+	"$detailblendfactor".25
+	"$detailblendmode" 5
+	
+	"$rimlight" "1"
+	"$rimlightexponent" "100"
+	"$rimlightboost" "2"	
+	
+	"$phong" "1"
+	"$phongexponent" "10"
+	"$phongboost" "10"
+	"$phongfresnelranges"	"[.25 1 4]"
+	"$basemapalphaphongmask" "1"
+	"$envmap" "customcubemaps/simplespec.vtf"
+	$envmaptint 0.1
+
+}
