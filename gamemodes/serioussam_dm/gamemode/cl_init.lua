@@ -43,6 +43,12 @@ function GM:InitPostEntity()
 	end
 end
 
+function GM:PlayerBindPress(ply, bind, pressed)
+	if bind == "+duck" and !ply:IsOnGround() then
+		return true
+	end
+end
+
 surface.CreateFont("seriousHUDfont_timer", {
 	font = "default",
 	size = ScrH()/16,
