@@ -285,7 +285,7 @@ function GM:HUDPaint()
 		end
 		if !Mapvote.frame or !Mapvote.frame:IsVisible() then
 			local x, y = ScrW() / 2, ScrH() / 4
-			local text = "The game has ended! Starting Map Vote in 5 seconds.."
+			local text = "The game has ended!"
 			draw.SimpleText( text, "GameEnd_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER )
 			draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )			
 			
