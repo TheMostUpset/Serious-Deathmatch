@@ -24,9 +24,9 @@ function GM:PlayerTick(ply, mv)
 	-- AntiBunnyHop
 	if mv:KeyPressed(IN_JUMP) and ply:OnGround() then
 		local vel = mv:GetVelocity()
-		if vel:Length2D() > mv:GetMaxClientSpeed() then
+		if vel:Length2D() > mv:GetMaxClientSpeed() + 1 then
 			vel.z = 0
-			mv:SetVelocity(vel * 0.75)
+			mv:SetVelocity(vel * 0.85)
 		end
 	end
 	if SERVER then
