@@ -182,6 +182,12 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 	if attacker:Frags() >= GetConVarNumber( "sdm_max_frags" ) then
 		self:GameEnd()
 	end
+	
+	local frags_left = GetConVarNumber("sdm_max_frags") - attacker:Frags()
+	local frags_left = frags_left - attacker:Frags() 
+	SetGlobalInt("frags_left", frags_left)
+	--print(GetGlobalInt("frags_left", 0))
+	--print(attacker:Frags())
 end
 
 -- отключаем урон после конца игры, чтобы ничего не сломать

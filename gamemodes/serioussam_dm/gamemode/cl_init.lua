@@ -8,7 +8,7 @@ local showGameUI
 local ssbg = Material( "materials/vgui/serioussam/mainmenu/MenuBack.jpg" )
 local detailTexture = Material("materials/vgui/serioussam/mainmenu/MenuBack_detail.png")
 local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
-
+local frags_left = GetConVarNumber("sdm_max_frags")
 local offset = 0
 local speed = 5
 -- local set_frags = GetConVarNumber( "sdm_max_frags" )
@@ -58,6 +58,14 @@ surface.CreateFont("seriousHUDfont_timer", {
 	weight = 600,
 	blursize = 1
 })
+
+surface.CreateFont("seriousHUDfont_fragsleft", {
+	font = "default",
+	size = ScrH()/32,
+	weight = 600,
+	blursize = 1
+})
+
 
 
 surface.CreateFont( "Scoreboard_Font", {
@@ -225,6 +233,8 @@ if SeriousHUD then
 	end
 end
 	
+
+	
 function GM:HUDPaint()
     playerTable:PaintManual()
 	if GetConVarNumber("sdm_timer_enabled") == 1 then
@@ -247,6 +257,12 @@ function GM:HUDPaint()
 			countdown = 0
 		end
 		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, color_white, TEXT_ALIGN_CENTER)
+
+		
+		draw.SimpleText("FRAGS LEFT: " .. GetGlobalInt("frags_left", GetConVarNumber("sdm_max_frags")), "seriousHUDfont_fragsleft", ScrH() / 45 + 2 ,ScrH() /  13.5 + 1, color_black, TEXT_ALIGN_LEFT)
+		draw.SimpleText("FRAGS LEFT: " .. GetGlobalInt("frags_left", GetConVarNumber("sdm_max_frags")), "seriousHUDfont_fragsleft", ScrH() / 45 ,ScrH() /  13.5, color_white, TEXT_ALIGN_LEFT)
+
+		
 	
 		if countdown <= 0 and !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )
