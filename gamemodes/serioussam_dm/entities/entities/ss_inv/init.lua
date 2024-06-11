@@ -41,8 +41,8 @@ function ENT:Pickup(ent)
 	self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
 	self:SendToClient(ent, ent.SSPowerups)
 	ent:SetNW2Bool( "HasInvis", true )
-	ent:SetNoDraw(true) 
-	ent:GetActiveWeapon():SetNoDraw(true)
+	--ent:SetNoDraw(true) 
+	--ent:GetActiveWeapon():SetNoDraw(true)
 	self:Remove()
 	timer.Simple(self.PDuration, function()
 		ent:SetNW2Bool( "HasInvis", false )
@@ -78,7 +78,7 @@ hook.Add("PlayerPostThink", "SSPowerups_Invisibility", function(ply)
 	
 	if ply.SSPowerups.Invisibility <= CurTime() then
 		ply.SSPowerups.Invisibility = nil
-		ply:SetNoDraw(false)
-		ply:SetNoTarget(false)
+		--ply:SetNoDraw(false)
+
 	end
 end)

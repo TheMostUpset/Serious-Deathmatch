@@ -384,7 +384,17 @@ hook.Add("PreDrawViewModel", "invis_vm", function(vm, wep)
         return
     end
     if IsValid(wep) then
-        render.SetBlend(0.5)
+        render.SetBlend(0.4)
+		render.OverrideBlend( false )
+    end
+end)
+
+hook.Add("PrePlayerDraw", "invis_pm", function(ply)
+    if not ply:GetNW2Bool( "HasInvis", false ) then
+        return
+    end
+    if IsValid(ply) then
+        render.SetBlend(0.2)
 		render.OverrideBlend( false )
     end
 end)
