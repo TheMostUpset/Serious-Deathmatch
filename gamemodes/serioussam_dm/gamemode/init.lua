@@ -17,12 +17,12 @@ util.AddNetworkString("FMenu")
 resource.AddFile( "resource/fonts/Mytupi.ttf" )
 resource.AddFile( "resource/fonts/Franklin Gothic Bold.ttf" )
 
-PLAYER_WALKSPEED = 370
+PLAYER_WALKSPEED = 380
 PLAYER_RUNSPEED = 250
-PLAYER_JUMPPOWER = 245
+PLAYER_JUMPPOWER = 280
 
-PLAYER_WALKSPEED_KNIFE = 460
-PLAYER_JUMPPOWER_KNIFE = 320
+PLAYER_WALKSPEED_KNIFE = 500
+PLAYER_JUMPPOWER_KNIFE = 330
 
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")

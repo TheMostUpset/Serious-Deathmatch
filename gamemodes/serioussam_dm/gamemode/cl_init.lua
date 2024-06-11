@@ -32,7 +32,7 @@ local slotsFix = {
 	["weapon_ss_minigun"] = 3,
 	["weapon_ss_rocketlauncher"] = 4,
 	["weapon_ss_singleshotgun"] = 2,
-	["weapon_ss_sniper"] = 4,
+	["weapon_ss_sniper"] = 5,
 	["weapon_ss_tommygun"] = 3
 }
 
