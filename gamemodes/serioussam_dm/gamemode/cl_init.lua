@@ -320,24 +320,35 @@ end
 
 net.Receive("sv_togglethirdperson")
 
-function CalcThirdperson(ply, pos, angles, fov)
+
+
+function CalcThirdperson(ply, pos, ang, fov)
 	if on then
-		local view = {};
-		local dist = 90;
-		local trace = {};
-                
-		trace.start = pos;
-		trace.endpos = pos - ( angles:Forward() * dist );
-		trace.filter = LocalPlayer();
-		local trace = util.TraceLine( trace );
-		if( trace.HitPos:Distance( pos ) < dist - 11 ) then
-			dist = trace.HitPos:Distance( pos ) - 11;
-		end;
-		view.origin = pos - ( angles:Forward() * dist ) + (angles:Up()*15);
-		view.angles = angles;
-		view.fov = fov;
-                
-        return view;
+		if ply:GetObserverMode() == OBS_MODE_IN_EYE then return end
+
+		local startpos = pos
+		local camPos = ang:Forward() * -90 + ang:Up() * (75 + ply:GetPos()[3] - pos[3])
+		local tr = util.TraceHull({
+			start = startpos,
+			endpos = startpos + camPos,
+			filter = ply,
+			mins = Vector(-5, -5, -5),
+			maxs = Vector(5, 5, 5),
+			mask = MASK_PLAYERSOLID_BRUSHONLY
+		})
+
+		if tr.Fraction > .25 then
+			pos = tr.HitPos
+	
+			local view = {}
+
+			view.origin = pos
+			view.angles = ang
+			view.fov = fov
+			view.drawviewer = true
+
+			return view
+		end
 	end
 end
 
