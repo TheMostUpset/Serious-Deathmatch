@@ -44,8 +44,12 @@ function GM:InitPostEntity()
 end
 
 function GM:PlayerBindPress(ply, bind, pressed)
-	if bind == "+duck" and !ply:IsOnGround() or bind == "+jump" and ply:Crouching() then
-		return true
+    if not pressed then return end
+    bind = bind:lower()
+	if ply:Alive() then
+		if bind == "+duck" and !ply:IsOnGround() or bind == "+jump" and ply:Crouching() then
+			return true
+		end
 	end
 end
 
