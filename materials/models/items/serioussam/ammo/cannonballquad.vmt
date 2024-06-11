@@ -1,8 +1,0 @@
-"VertexLitGeneric"
-{
-	"$basetexture" "models/weapons/serioussam/cannon/IronBall"
-	"$envmap" "env_cubemap"
-	"$envmapsaturation" .5
-	"$envmapcontrast" 1
-	"$envmaptint" .55 .55 .55
-}
