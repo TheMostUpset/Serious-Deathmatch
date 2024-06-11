@@ -32,7 +32,7 @@ local slotsFix = {
 	["weapon_ss_minigun"] = 3,
 	["weapon_ss_rocketlauncher"] = 4,
 	["weapon_ss_singleshotgun"] = 2,
-	["weapon_ss_sniper"] = 5,
+	["weapon_ss_sniper"] = 4,
 	["weapon_ss_tommygun"] = 3
 }
 
@@ -60,33 +60,8 @@ surface.CreateFont("seriousHUDfont_timer", {
 	blursize = 1
 })
 
-surface.CreateFont("DeathMessageFont", {
-	font = font,
-	size = fontSize,
-	weight = 500,
-	antialias = true,
-	additive = false
-})
 
-surface.CreateFont( "TheDefaultSettings", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = 16,
-	weight = 800,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false,
-} )
-
-surface.CreateFont( "TheDefaultSettings1", {
+surface.CreateFont( "Scoreboard_Font", {
 	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
 	size = ScrW() / 48,
@@ -104,12 +79,12 @@ surface.CreateFont( "TheDefaultSettings1", {
 	outline = false,
 } )
 
-surface.CreateFont( "TheDefaultSettings2", {
+surface.CreateFont( "Death_Font", {
 	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
 	size = ScrH() / 42,
 	weight = 800,
-	blursize = 1,
+	blursize = 0,
 	scanlines = 0,
 	antialias = true,
 	underline = false,
@@ -139,6 +114,8 @@ surface.CreateFont( "GameEnd_Font", {
 	additive = false,
 	outline = false,
 } )
+
+
 
 surface.CreateFont( "MainMenu_Font", {
 	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
@@ -205,11 +182,11 @@ function playerTable:Paint(w, h)
     local posY = 10
 
     for _, ply in ipairs(players) do
-        draw.SimpleText(ply:Nick(), "TheDefaultSettings1", ScrW() / 2 / 1.2 + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "TheDefaultSettings1", ScrW() /2  / 1.04  + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(ply:Nick(), "Scoreboard_Font", ScrW() / 2 / 1.2 + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
     
-        draw.SimpleText(ply:Nick(), "TheDefaultSettings1", ScrW() /2  / 1.2, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "TheDefaultSettings1", ScrW() /2 / 1.04 , posY, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(ply:Nick(), "Scoreboard_Font", ScrW() /2  / 1.2, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
 
         posY = posY + ScrH() / 28
     end
@@ -301,8 +278,8 @@ function GM:HUDPaint()
 		if !LocalPlayer():Alive() then
 			local x, y = ScrW() / 2, ScrH() / 4
 			local text = "Press FIRE to respawn"
-			draw.SimpleText( text, "TheDefaultSettings2", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
-			draw.SimpleText( text, "TheDefaultSettings2", x, y, color_white, TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, "Death_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, "Death_Font", x, y, color_white, TEXT_ALIGN_CENTER)
 		end
 	end
 end
@@ -345,12 +322,22 @@ net.Receive("sv_togglethirdperson")
 
 function CalcThirdperson(ply, pos, angles, fov)
 	if on then
-		local view = {}
-		view.origin = pos-(angles:Forward()*90) + (angles:Up()*15)
-		view.angles = angles 
-		view.fov = fov
-	 
-		return view
+		local view = {};
+		local dist = 90;
+		local trace = {};
+                
+		trace.start = pos;
+		trace.endpos = pos - ( angles:Forward() * dist );
+		trace.filter = LocalPlayer();
+		local trace = util.TraceLine( trace );
+		if( trace.HitPos:Distance( pos ) < dist - 11 ) then
+			dist = trace.HitPos:Distance( pos ) - 11;
+		end;
+		view.origin = pos - ( angles:Forward() * dist ) + (angles:Up()*15);
+		view.angles = angles;
+		view.fov = fov;
+                
+        return view;
 	end
 end
 
