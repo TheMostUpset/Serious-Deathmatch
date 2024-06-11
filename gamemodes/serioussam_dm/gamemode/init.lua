@@ -152,8 +152,8 @@ function GM:PlayerDeathThink( ply )
 end
 
 local pickupTable = {
-	["weapon_ss_colt"] = "ss_pickup_colt",
-	["weapon_ss_colt_dual"] = "ss_pickup_colt",
+	-- ["weapon_ss_colt"] = "ss_pickup_colt",
+	-- ["weapon_ss_colt_dual"] = "ss_pickup_colt",
 	["weapon_ss_cannon"] = "ss_pickup_cannon",
 	["weapon_ss_doubleshotgun"] = "ss_pickup_doubleshotgun",
 	["weapon_ss_flamer"] = "ss_pickup_flamer",
