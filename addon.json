@@ -1,10 +1,6 @@
 {
-  "title": "Serious Deathmatch",
-  "type": "gamemode",
-  "tags": [
-    "fun",
-    "cartoon",
-    "comic"
-  ],
-  "ignore": []
+	"title"		:	"Serious Deathmatch",
+	"type"		:	"gamemode",
+	"tags"		:	[ "fun", "cartoon", "comic" ],
+	"ignore"	:	[ "*.git*", "README.md" ]
 }
