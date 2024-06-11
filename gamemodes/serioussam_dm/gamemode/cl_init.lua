@@ -18,7 +18,6 @@ local flashSpeed = 4
 local originalflashColor = Color(240, 155, 0)
 local flashColor1 = Color(170, 85, 0)
 local flashColor2 = Color(255, 200, 0)
-local on = false
 
 include("cl_weaponselection.lua")
 
@@ -314,45 +313,55 @@ end
 
 
 
+local thirdperson_enabled = false
 function togglethirdperson()
-	on = not on
+	thirdperson_enabled = not thirdperson_enabled
 end
+concommand.Add("togglethirdperson", togglethirdperson)
 
-net.Receive("sv_togglethirdperson")
-
-
-
-function CalcThirdperson(ply, pos, ang, fov)
-	if on then
-		if ply:GetObserverMode() == OBS_MODE_IN_EYE then return end
-
-		local startpos = pos
-		local camPos = ang:Forward() * -90 + ang:Up() * (75 + ply:GetPos()[3] - pos[3])
-		local tr = util.TraceHull({
-			start = startpos,
-			endpos = startpos + camPos,
-			filter = ply,
-			mins = Vector(-5, -5, -5),
-			maxs = Vector(5, 5, 5),
-			mask = MASK_PLAYERSOLID_BRUSHONLY
-		})
-
-		if tr.Fraction > .25 then
-			pos = tr.HitPos
+hook.Add( "PlayerButtonDown", "TPCheck", function( ply, button )
 	
-			local view = {}
+	if not IsFirstTimePredicted() then return end
+	if CLIENT and button == KEY_H then
+		togglethirdperson()
+	end
 
-			view.origin = pos
-			view.angles = ang
-			view.fov = fov
-			view.drawviewer = true
+end)
 
-			return view
-		end
+function GM:CalcThirdpersonView(ply, pos, ang, fov)
+	if ply:GetObserverMode() == OBS_MODE_IN_EYE then return end
+
+	local startpos = pos
+	local camPos = ang:Forward() * -90 + ang:Up() * (75 + ply:GetPos()[3] - pos[3])
+	local tr = util.TraceHull({
+		start = startpos,
+		endpos = startpos + camPos,
+		filter = ply,
+		mins = Vector(-5, -5, -5),
+		maxs = Vector(5, 5, 5),
+		mask = MASK_PLAYERSOLID_BRUSHONLY
+	})
+
+	if tr.Fraction > .25 then
+		pos = tr.HitPos
+
+		local view = {}
+
+		view.origin = pos
+		view.angles = ang
+		view.fov = fov
+		view.drawviewer = true
+
+		return view
 	end
 end
 
-hook.Add("CalcView", "CalcThirdperson", CalcThirdperson)
+hook.Add("CalcView", "ThirdpersonView", function(ply, origin, angles, fov)
+	if thirdperson_enabled then
+		return GAMEMODE:CalcThirdpersonView(ply, origin, angles, fov)
+	end
+end)
+	
  
 local drawing = false
 
@@ -441,24 +450,6 @@ hook.Add("PostPlayerDraw", "gold_pm", function(ply)
 
         drawing = false
 	end
-end)
-
-hook.Add("ShouldDrawLocalPlayer", "MyHax ShouldDrawLocalPlayer", function(ply)
-	if on then
-        return true
-    end
-end)
-
-concommand.Add("togglethirdperson", togglethirdperson)
-
-
-hook.Add( "PlayerButtonDown", "TPCheck", function( ply, button )
-	
-	if not IsFirstTimePredicted() then return end
-	if CLIENT and button == KEY_H  then
-		togglethirdperson()
-	end
-
 end)
 
 function GM:OnSpawnMenuOpen()
