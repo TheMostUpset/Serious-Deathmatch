@@ -5,9 +5,9 @@ Mapvote.frame = nil
 Mapvote.initialize = function()
 
 	--Include client script assets, which are located under lua/mapvote/
-	for index, file in pairs( file.Find( "mapvote/cl_*.lua","LUA","nameasc" ) ) do
-			include( "mapvote/"..file )
-	end
+	-- for index, file in pairs( file.Find( "mapvote/cl_*.lua","LUA","nameasc" ) ) do
+			-- include( "mapvote/"..file )
+	-- end
 
 	net.Receive( "mapvote_prompt", Mapvote.guiFunction )
 end

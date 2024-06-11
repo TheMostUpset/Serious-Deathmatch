@@ -1,9 +1,9 @@
-if SERVER then
+
 --[[		Voting		]]--
 --[[	Starts a vote
 		@param duration The duration, in seconds, the vote should run for	
 		@param terminalHook The hook that ends the vote. Can be left nil	]]--
-Mapvote.startVote = function( duration, terminalHook, arg )
+Mapvote.startVote = function( duration, terminalHook )
 	if duration > 0 then
 		timer.Create( "Mapvote_Voting", duration or 30, 1, Mapvote.endVote )
 	else
@@ -13,17 +13,8 @@ Mapvote.startVote = function( duration, terminalHook, arg )
 			return
 		end
 	end
-	if arg == nil then
-		Mapvote.buildMapSelection()
-	else
-		if isstring( arg ) then
-			Mapvote.buildMapSelection( nil, arg )
-		else
-			if istable( arg ) then
-				Mapvote.buildMapSelection( arg )
-			end
-		end
-	end
+	
+	Mapvote.buildMapSelection()
 
 	SetGlobalInt( "Mapvote_State", MAPVOTE_VOTING )
 	Mapvote.players = {}
@@ -42,8 +33,7 @@ Mapvote.endVote = function()
 	net.Start("mapvote_finish")
 	net.Broadcast()
 	
-	local nextmap	= table.GetWinningKey(Mapvote.tally) or 1
-	local maps = Mapvote.readMapList()
+	local nextmap = table.GetWinningKey(Mapvote.tally) or 1
 	
 	Mapvote.winningMap = Mapvote.maps[nextmap]
 	
@@ -51,14 +41,10 @@ Mapvote.endVote = function()
 		v:PrintMessage( HUD_PRINTTALK, Mapvote.winningMap.." was chosen!")
 		v:PrintMessage( HUD_PRINTTALK, (Mapvote.tally[nextmap] or 0).." votes.")
 	end		
-		
-	--Here we push the winning map to the end of the map list.
-	table.RemoveByValue(maps, Mapvote.maps[nextmap] )
-	table.insert(maps, Mapvote.winningMap)
+
 	timer.Simple(3, function()
-	RunConsoleCommand("changelevel",Mapvote.winningMap)
+		RunConsoleCommand("changelevel", Mapvote.winningMap)
 	end)
-	Mapvote.writeMapList( maps )
 end
 
 --[[	Handles player voting	]]--
@@ -87,6 +73,4 @@ end
 		and if so runs the start function with gamemode specific arguments	]]--
 Mapvote.checkVote = function()
 	if Mapvote.shouldVote() then Mapvote.startVote( 30 )  end
-end
---[[	End of Overrides	]]--
 end
