@@ -17,7 +17,7 @@ surface.CreateFont( "Scoreboard_Font", {
 	extended = false,
 	size = ScrW() / 48,
 	weight = 800,
-	blursize = 0,
+	blursize = 1,
 	scanlines = 0,
 	antialias = true,
 	underline = false,

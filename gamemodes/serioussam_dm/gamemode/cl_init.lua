@@ -96,10 +96,10 @@ hook.Add( "PlayerButtonDown", "TPCheck", function( ply, button )
 end)
 
 function GM:CalcThirdpersonView(ply, pos, ang, fov)
-	if ply:GetObserverMode() == OBS_MODE_IN_EYE then return end
+	if ply:GetObserverMode() == OBS_MODE_IN_EYE or !ply:Alive() then return end
 
 	local startpos = pos
-	local camPos = ang:Forward() * -90 + ang:Up() * (75 + ply:GetPos()[3] - pos[3])
+	local camPos = ang:Forward() * -80 + ang:Up() * (80 + ply:GetPos()[3] - pos[3])
 	local tr = util.TraceHull({
 		start = startpos,
 		endpos = startpos + camPos,
