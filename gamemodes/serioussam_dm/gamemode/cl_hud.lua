@@ -15,11 +15,12 @@ function playerTable:Paint(w, h)
     local posY = 10
 
     for _, ply in ipairs(self.Players) do
-        draw.SimpleText(ply:Nick(), "Scoreboard_Font", posX + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
+		local nick, frags, deaths = ply:Nick(), ply:Frags(), ply:Deaths()
+        draw.SimpleText(nick, "Scoreboard_Font", posX + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
     
-        draw.SimpleText(ply:Nick(), "Scoreboard_Font", posX, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(nick, "Scoreboard_Font", posX, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
+        draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
 
         posY = posY + ScrH() / 28
     end
