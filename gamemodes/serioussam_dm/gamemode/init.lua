@@ -39,8 +39,8 @@ function GM:InitPostEntity()
 	if weapon_ss_doubleshotgun then weapon_ss_doubleshotgun.Primary.AnimSpeed = 1.5 end
 	local weapon_ss_singleshotgun = weapons.GetStored("weapon_ss_singleshotgun")
 	if weapon_ss_singleshotgun then weapon_ss_singleshotgun.Primary.AnimSpeed = 1.5 end
-	local ammo_base = scripted_ents.GetStored("ss_ammo_base")
-	if ammo_base then ammo_base.ModelScale = 10 end
+	-- local ammo_base = scripted_ents.GetStored("ss_ammo_base")
+	-- if ammo_base then ammo_base.ModelScale = 10 end
 end
 
 local timerEnded

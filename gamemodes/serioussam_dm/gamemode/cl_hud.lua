@@ -93,19 +93,13 @@ function GM:HUDPaint()
 			firstplayer = playerTable.Players[1]
 		end
 		if IsValid(firstplayer) then
-			local frags_left = cvar_max_frags:GetInt() - firstplayer:Frags()
-			local max_frags = GetConVarNumber("sdm_max_frags")
+			local max_frags = cvar_max_frags:GetInt()
+			local frags_left = math.min(max_frags - firstplayer:Frags(), max_frags)
 			if frags_left > 0 then
 				local text = "FRAGS LEFT: " .. frags_left
 				local x, y = ScrH() / 45, ScrH() /  13.5
-				if frags_left <= frags_left then
-					draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
-					draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
-				else
-					-- чтоб frags left не был больше максимального кол-ва фрагов 
-					draw.SimpleText(max_frags, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
-					draw.SimpleText(max_frags, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
-				end
+				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
+				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
 			end
 		end
 		if !LocalPlayer():Alive() then
