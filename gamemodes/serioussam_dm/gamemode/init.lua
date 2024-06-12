@@ -1,13 +1,15 @@
-AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("cl_hud.lua")
+AddCSLuaFile("cl_fonts.lua")
 AddCSLuaFile("cl_mapvote.lua")
 AddCSLuaFile("cl_weaponselection.lua")
-AddCSLuaFile( "shared.lua" )
-AddCSLuaFile( "shared_killfeed.lua" )
-AddCSLuaFile( "sb.lua" )
+AddCSLuaFile("shared.lua")
+AddCSLuaFile("shared_killfeed.lua")
+AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 
-include( "shared.lua" )
-include( "sb.lua" )
+include("shared.lua")
+include("sb.lua")
 include("sv_mapvote_init.lua")
 include("sv_mapvote_vote.lua")
 
@@ -44,7 +46,7 @@ local timerEnded
 function GM:Think()
 	local getGameTime = GetGlobalFloat("GameTime")
 	local activeTimer = CurTime() - getGameTime
-	if !GetGlobalBool("GameEnded") and activeTimer >= GetConVarNumber( "sdm_max_time" ) then
+	if !GetGlobalBool("GameEnded") and activeTimer >= cvar_max_time:GetInt() then
 		self:OnGameTimerEnd()
 	end
 end
@@ -179,34 +181,14 @@ function GM:SpawnPickupOnDeath(ply, actWep)
 end
 
 function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
-	if attacker:Frags() >= GetConVarNumber( "sdm_max_frags" ) then
+	if attacker:Frags() >= cvar_max_frags:GetInt() then
 		self:GameEnd()
 	end
-	
-	local frags_left = GetConVarNumber("sdm_max_frags") - attacker:Frags()
-	local frags_left = frags_left - attacker:Frags() 
-	SetGlobalInt("frags_left", frags_left)
-	--print(GetGlobalInt("frags_left", 0))
-	--print(attacker:Frags())
 end
 
 -- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	return !GetGlobalBool("GameEnded")
-end
-
-function GM:GetWinner()
-	local players = player.GetAll()
-	table.sort(players, function(a, b)
-        if a:Frags() > b:Frags() then
-            return true
-        elseif a:Frags() < b:Frags() then
-            return false
-        else
-            return a:Deaths() < b:Deaths()
-        end
-    end)
-	return players[1]
 end
 
 function GM:OnGameTimerEnd()

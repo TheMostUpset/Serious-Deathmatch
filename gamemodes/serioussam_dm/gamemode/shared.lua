@@ -6,6 +6,27 @@ GM.Website = "N/A"
 include( "shared_killfeed.lua" )
 include( "shared_gibs.lua" )
 
+cvar_max_frags = GetConVar( "sdm_max_frags" )
+cvar_max_time = GetConVar( "sdm_max_time" )
+
+function GM:GetPlayersSortedByFrags()
+	local players = player.GetAll()
+	table.sort(players, function(a, b)
+        if a:Frags() > b:Frags() then
+            return true
+        elseif a:Frags() < b:Frags() then
+            return false
+        else
+            return a:Deaths() < b:Deaths()
+        end
+    end)
+	return players
+end
+
+function GM:GetWinner()
+	local players = self:GetPlayersSortedByFrags()
+	return players[1]
+end
 
 -- local soundplayed = true	
 	

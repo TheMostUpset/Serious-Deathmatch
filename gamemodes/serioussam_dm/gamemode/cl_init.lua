@@ -1,25 +1,22 @@
 include("shared.lua")
-include( "sb.lua" )
-include( "cl_mapvote.lua" )
-AddCSLuaFile("cl_wepselect.lua")
+include("sb.lua")
+include("cl_hud.lua")
+include("cl_fonts.lua")
+include("cl_mapvote.lua")
+include("cl_weaponselection.lua")
 
-local endgamesoundplayed = false
 local showGameUI
+
 local ssbg = Material( "materials/vgui/serioussam/mainmenu/MenuBack.jpg" )
 local detailTexture = Material("materials/vgui/serioussam/mainmenu/MenuBack_detail.png")
 local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
-local frags_left = GetConVarNumber("sdm_max_frags")
+
 local offset = 0
 local speed = 5
--- local set_frags = GetConVarNumber( "sdm_max_frags" )
--- local frags_left = GetConVarNumber( "sdm_max_frags" )
--- local time_left = GetConVarNumber( "sdm_max_time" )
 local flashSpeed = 4
 local originalflashColor = Color(240, 155, 0)
 local flashColor1 = Color(170, 85, 0)
 local flashColor2 = Color(255, 200, 0)
-
-include("cl_weaponselection.lua")
 
 local slotsFix = {
 	["weapon_ss_cannon"] = 5,
@@ -52,252 +49,6 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	end
 end
 
-surface.CreateFont("seriousHUDfont_timer", {
-	font = "default",
-	size = ScrH()/16,
-	weight = 600,
-	blursize = 1
-})
-
-surface.CreateFont("seriousHUDfont_fragsleft", {
-	font = "default",
-	size = ScrH()/32,
-	weight = 600,
-	blursize = 1
-})
-
-
-
-surface.CreateFont( "Scoreboard_Font", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = ScrW() / 48,
-	weight = 800,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false,
-} )
-
-surface.CreateFont( "Death_Font", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = ScrH() / 42,
-	weight = 800,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false,
-} )
-
-surface.CreateFont( "GameEnd_Font", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = ScrH() / 42,
-	weight = 0,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = false,
-	additive = false,
-	outline = false,
-} )
-
-
-
-surface.CreateFont( "MainMenu_Font", {
-	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = ScrW() / 24	,
-	weight = 0,
-	blursize = 0,
-	scanlines = 0,
-	antialias = true,
-	underline = false,
-	italic = false,
-	strikeout = false,
-	symbol = false,
-	rotary = false,
-	shadow = true,
-	additive = false,
-	outline = false,
-} )
-
-surface.CreateFont( "Vote_Font", {
-	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = ScrW() / 32	,
-	weight = 0,
-} )
-
-surface.CreateFont( "Vote_Font2", {
-	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-	extended = false,
-	size = ScrW() / 42	,
-	weight = 0,
-} )
-
-surface.CreateFont("MainMenu_font_small", {
-	font = "Franklin Gothic",
-	size = ScrH()/52,
-	weight = 600,
-	blursize = 0,
-	shadow = true
-})
-
-
-local playerTable = vgui.Create("DPanel")
-playerTable:SetPos(ScrW() / 2, 0)
-playerTable:SetSize(ScrW(), ScrH())
-
-function playerTable:Paint(w, h)
-    surface.SetDrawColor(0, 0, 0, 0)
-    surface.DrawRect(0, 0, w, h)
-
-    local players = player.GetAll()
-
-
-	table.sort(players, function(a, b)
-        if a:Frags() > b:Frags() then
-            return true
-        elseif a:Frags() < b:Frags() then
-            return false
-        else
-            return a:Deaths() < b:Deaths()
-        end
-    end)
-
-    local posY = 10
-
-    for _, ply in ipairs(players) do
-        draw.SimpleText(ply:Nick(), "Scoreboard_Font", ScrW() / 2 / 1.2 + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
-    
-        draw.SimpleText(ply:Nick(), "Scoreboard_Font", ScrW() /2  / 1.2, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(ply:Frags() .. "  /  " .. ply:Deaths(), "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
-
-        posY = posY + ScrH() / 28
-    end
-end
-
-
-function GM:HUDItemPickedUp()
-    return true
-end
-
-local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
---[[
-hook.Add("HUDPaint", "CountdownTimer", function()
-    --if timerActive then
-        
-		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 160))
-		surface.SetDrawColor(Color(90, 120, 180))
-		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
-		surface.SetTexture(ITime)
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.DrawTexturedRect(ScrH() / 80 * 1.35 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)
-		
-		draw.RoundedBox(0, ScrH() / ScrH() * ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 160))
-		surface.SetDrawColor(Color(90, 120, 180))
-		surface.DrawOutlinedRect(ScrH() / ScrH() * ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
-		draw.SimpleText("00:00", "seriousHUDfont_timer", ScrH() / ScrH() * ScrH() / 14.75 + 5.5 * ScrW() / 120, ScrH() /  14.75 / 10, color_white, TEXT_ALIGN_CENTER)
-	end
-end)
---]]
-
-if SeriousHUD then
-	function SeriousHUD:Enabled()
-		return true
-	end
-	function SeriousHUD:AmmoIconsEnabled()
-		return true
-	end
-end
-	
-
-	
-function GM:HUDPaint()
-    playerTable:PaintManual()
-	if GetConVarNumber("sdm_timer_enabled") == 1 then
-		local timeLimit = GetConVarNumber( "sdm_max_time" )
-		local timer = "%02i:%02i"
-		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 160))
-		surface.SetDrawColor(Color(90, 120, 180))
-		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
-		surface.SetTexture(ITime)
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.DrawTexturedRect(ScrH() / 80 * 1.35 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)
-		
-		
-		
-		draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 160))
-		surface.SetDrawColor(Color(90, 120, 180))
-		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
-		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
-		if countdown < 0 then
-			countdown = 0
-		end
-		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, color_white, TEXT_ALIGN_CENTER)
-
-		
-		draw.SimpleText("FRAGS LEFT: " .. GetGlobalInt("frags_left", GetConVarNumber("sdm_max_frags")), "seriousHUDfont_fragsleft", ScrH() / 45 + 2 ,ScrH() /  13.5 + 1, color_black, TEXT_ALIGN_LEFT)
-		draw.SimpleText("FRAGS LEFT: " .. GetGlobalInt("frags_left", GetConVarNumber("sdm_max_frags")), "seriousHUDfont_fragsleft", ScrH() / 45 ,ScrH() /  13.5, color_white, TEXT_ALIGN_LEFT)
-
-		
-	
-		if countdown <= 0 and !endgamesoundplayed then
-			surface.PlaySound( "misc/serioussam/churchbell.wav" )
-			endgamesoundplayed = true
-		end
-	end
-	
-	if GetGlobalBool("GameEnded") then
-		if !endgamesoundplayed then
-			surface.PlaySound( "misc/serioussam/boioing.wav" )
-			endgamesoundplayed = true
-		end
-		if !Mapvote.frame or !Mapvote.frame:IsVisible() then
-			local x, y = ScrW() / 2, ScrH() / 4
-			local text = "The game has ended!"
-			draw.SimpleText( text, "GameEnd_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER )
-			draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )			
-			
-			local winner = GetGlobalString("WinnerName")
-			if winner and string.len(winner) > 0 then
-				local text = winner.." has won!"
-				local x, y = ScrW() / 2, ScrH()/3.6
-				draw.SimpleText( text, "GameEnd_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER )
-				draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
-			end
-		end
-	else
-		if !LocalPlayer():Alive() then
-			local x, y = ScrW() / 2, ScrH() / 4
-			local text = "Press FIRE to respawn"
-			draw.SimpleText( text, "Death_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
-			draw.SimpleText( text, "Death_Font", x, y, color_white, TEXT_ALIGN_CENTER)
-		end
-	end
-end
 
 -- hook.Add( "Tick", "RestartCheck", function()
 
@@ -477,10 +228,10 @@ function GM:ContextMenuOpen()
 end
 
 
-CreateClientConVar( "sdm_music", "1", true, false) 
+local cvar_music = CreateClientConVar( "sdm_music", 1, true, false) 
 function PlayRandomMusic()
 
-	if GetConVar("sdm_music"):GetInt() == 1 then
+	if cvar_music:GetBool() then
 	if game.GetMap() == "sdm_desert_temple" or game.GetMap() == "sdm_red_station" then
 		sound.PlayFile("sound/music/redstation.ogg", "", function(station_dt, errorID, errorName)
 			if IsValid(station_dt) then
@@ -946,7 +697,7 @@ function OpenSettingsMenu()
 
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	if GetConVar("sdm_music"):GetInt() == 0 then
+	if !cvar_music:GetBool() then
 	Music_Button:SetText("ENABLE MUSIC")
 	else
 	Music_Button:SetText("DISABLE MUSIC")
@@ -966,7 +717,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Music_Button.DoClick = function()
-		if GetConVar("sdm_music"):GetInt() == 0 then
+		if !cvar_music:GetBool() then
 			Music_Button:SetText("DISABLE MUSIC")
 			timer.Remove("looptimer")
 			RunConsoleCommand("sdm_music", "1")
