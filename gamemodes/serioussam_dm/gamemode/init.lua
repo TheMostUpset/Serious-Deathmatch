@@ -155,6 +155,9 @@ function GM:PlayerDeathThink( ply )
 
 end
 
+
+
+
 local pickupTable = {
 	["weapon_ss_colt"] = "ss_pickup_colt",
 	["weapon_ss_colt_dual"] = "ss_pickup_colt",
@@ -225,9 +228,10 @@ function GM:PlayerLoadout(ply)
    ply:Give('weapon_ss_knife')
    ply:Give('weapon_ss_colt_dual')
    ply:Give('weapon_ss_singleshotgun')
- 
+   EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
    return true
 end
+
 
 
 function GM:OnDamagedByExplosion()
