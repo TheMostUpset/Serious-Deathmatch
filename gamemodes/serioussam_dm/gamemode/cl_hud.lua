@@ -39,7 +39,7 @@ local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
 	
 function GM:HUDPaint()
     playerTable:PaintManual()
-	if GetConVarNumber("sdm_timer_enabled") == 1 then
+	if cvar_timer_enabled:GetBool() then
 		local timeLimit = cvar_max_time:GetInt()
 		local timer = "%02i:%02i"
 		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))

@@ -43,13 +43,14 @@ function GM:InitPostEntity()
 	-- if ammo_base then ammo_base.ModelScale = 10 end
 end
 
-local timerEnded
 -- вызывается каждый фрейм
 function GM:Think()
-	local getGameTime = GetGlobalFloat("GameTime")
-	local activeTimer = CurTime() - getGameTime
-	if !GetGlobalBool("GameEnded") and activeTimer >= cvar_max_time:GetInt() then
-		self:OnGameTimerEnd()
+	if cvar_timer_enabled:GetBool() then
+		local getGameTime = GetGlobalFloat("GameTime")
+		local activeTimer = CurTime() - getGameTime
+		if !GetGlobalBool("GameEnded") and activeTimer >= cvar_max_time:GetInt() then
+			self:OnGameTimerEnd()
+		end
 	end
 end
 

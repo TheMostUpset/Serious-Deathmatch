@@ -8,6 +8,7 @@ include( "shared_gibs.lua" )
 
 cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
+cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
 
 function GM:GetPlayersSortedByFrags()
 	local players = player.GetAll()
