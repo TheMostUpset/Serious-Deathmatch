@@ -6,16 +6,16 @@ surface.CreateFont("seriousHUDfont_timer", {
 })
 
 surface.CreateFont("seriousHUDfont_fragsleft", {
-	font = "default",
+	font = "Roboto",
 	size = ScrH()/32,
-	weight = 600,
+	weight = 800,
 	blursize = 1
 })
 
 surface.CreateFont( "Scoreboard_Font", {
 	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
-	size = ScrW() / 48,
+	size = ScrW() / 46,
 	weight = 800,
 	blursize = 1,
 	scanlines = 0,

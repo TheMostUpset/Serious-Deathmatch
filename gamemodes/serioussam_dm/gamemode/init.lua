@@ -92,6 +92,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 	-- Don't spawn for at least 2 seconds
 	ply.NextSpawnTime = CurTime() + 2
 	ply.DeathTime = CurTime()
+	
 
 	if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ply end
 
@@ -146,11 +147,9 @@ end
 function GM:PlayerDeathThink( ply )
 
 	if ply.NextSpawnTime && ply.NextSpawnTime > CurTime() then return end
-
+	
 	if ply:IsBot() or ply:KeyPressed(IN_ATTACK) then
-
 		ply:Spawn()
-
 	end
 
 end

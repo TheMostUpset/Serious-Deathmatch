@@ -11,7 +11,7 @@ function playerTable:Paint(w, h)
 
     self.Players = GAMEMODE:GetPlayersSortedByFrags()
 
-	local posX = ScrW() / 2 / 1.2
+	local posX = ScrW() / 2 / 1.215
     local posY = 10
 
     for _, ply in ipairs(self.Players) do
@@ -42,8 +42,8 @@ function GM:HUDPaint()
 	if GetConVarNumber("sdm_timer_enabled") == 1 then
 		local timeLimit = cvar_max_time:GetInt()
 		local timer = "%02i:%02i"
-		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 115))
-		surface.SetDrawColor(Color(90, 120, 180))
+		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
+		surface.SetDrawColor(Color(90, 120, 180, 255))
 		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
 		surface.SetTexture(ITime)
 		surface.SetDrawColor(255, 255, 255, 255)
@@ -51,7 +51,7 @@ function GM:HUDPaint()
 		
 		
 		
-		draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 115))
+		draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
 		surface.SetDrawColor(Color(90, 120, 180))
 		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
@@ -98,8 +98,14 @@ function GM:HUDPaint()
 			if frags_left > 0 then
 				local text = "FRAGS LEFT: " .. frags_left
 				local x, y = ScrH() / 45, ScrH() /  13.5
-				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
-				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
+				if GetConVarNumber("sdm_timer_enabled") == 1 then
+					draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
+					draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
+				else
+					local x, y = ScrH() / 45, ScrH() / 70
+					draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
+					draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
+				end
 			end
 		end
 		if !LocalPlayer():Alive() then
