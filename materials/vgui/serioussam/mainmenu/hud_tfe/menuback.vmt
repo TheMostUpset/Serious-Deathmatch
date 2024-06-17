@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/serioussam/mainmenu/hud_tfe/menuback"
+	"$color" "{0 0 0}"
+}

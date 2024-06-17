@@ -7,16 +7,20 @@ include("cl_weaponselection.lua")
 
 local showGameUI
 
-local ssbg = Material( "materials/vgui/serioussam/mainmenu/MenuBack.jpg" )
-local detailTexture = Material("materials/vgui/serioussam/mainmenu/MenuBack_detail.png")
-local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
+
 
 local offset = 0
 local speed = 5
 local flashSpeed = 4
-local originalflashColor = Color(240, 155, 0)
-local flashColor1 = Color(170, 85, 0)
-local flashColor2 = Color(255, 200, 0)
+
+
+function GetMMFColor()
+	if SeriousHUD and SeriousHUD:GetSkin() == 1 then
+		return SeriousHUD:GetColor()
+	end
+	return 240, 155, 0
+end
+
 
 local slotsFix = {
 	["weapon_ss_cannon"] = 5,
@@ -313,9 +317,22 @@ hook.Add("Initialize", "PlayRandomMusicOnSpawn", PlayRandomMusic)
 
 
 function OpenSSMenu()
+
 	showGameUI = true
-
-
+	
+	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
+	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
+	local originalflashColor = Color(SeriousHUD:GetTextColor())
+	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
+	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
+	local flashColor2 = color_white
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
+		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
+		originalflashColor = Color(240, 155, 0)
+		flashColor1 = Color(170, 85, 0)
+		flashColor2 = Color(255, 200, 0)
+	end
 	local EscMenu = vgui.Create("DFrame")
 	EscMenu:SetSize(ScrW(), ScrH())
 	EscMenu:Center()
@@ -327,7 +344,10 @@ function OpenSSMenu()
 
 
 	EscMenu.Paint = function(self, w, h)
-		surface.SetMaterial(ssbg)
+	local offsetX = math.sin(CurTime() * 1.5) * 15
+	local offsetY = math.cos(CurTime() * 1.5) * 15
+
+		surface.SetTexture(ssbg)
 		surface.SetDrawColor(Color(255,255,255,255))
 		surface.DrawTexturedRect(0,0,w,h)
 
@@ -336,8 +356,11 @@ function OpenSSMenu()
 			offset = 0
 		end
 
-	local offsetX = math.sin(CurTime() * 1.5) * 10
-	local offsetY = math.cos(CurTime() * 1.5) * 10
+
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		local offsetX = math.sin(CurTime() * 1.5) * 10
+		local offsetY = math.cos(CurTime() * 1.5) * 10
+	end
 
 	surface.SetTexture(detailTexture_vtf)
 	surface.DrawTexturedRect(offsetX - 50, offsetY - 50, ScrW() + 100, ScrH() + 100)
@@ -355,7 +378,11 @@ Continue_Button:SetSize(ScrW()/8, ScrH()/20)
 Continue_Button:Center()
 Continue_Button:SetY(ScrH()/2.58)
 Continue_Button:SetFont("MainMenu_Font")
-Continue_Button:SetTextColor(Color(240, 155, 0))
+if GetConVarNumber("ss_hud_skin") == 2 then
+	Continue_Button:SetTextColor(Color(240, 155, 0))
+elseif GetConVarNumber("ss_hud_skin") == 1 then
+	Continue_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+end
 Continue_Button.Paint = function(self, w, h) 
     if isFlashing then
         local t = RealTime() * flashSpeed -- 4
@@ -390,7 +417,11 @@ Disconnect_Button:SetSize(ScrW()/8, ScrH()/20)
 Disconnect_Button:Center()
 Disconnect_Button:SetY(ScrH()/1.8)
 Disconnect_Button:SetFont("MainMenu_Font")
-Disconnect_Button:SetTextColor(Color(240, 155, 0))
+if GetConVarNumber("ss_hud_skin") == 2 then
+	Disconnect_Button:SetTextColor(Color(240, 155, 0))
+elseif GetConVarNumber("ss_hud_skin") == 1 then
+	Disconnect_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+end
 Disconnect_Button.Paint = function(self, w, h) 
     if isFlashing then
         local t = RealTime() * flashSpeed -- 4
@@ -425,7 +456,11 @@ Options_Button:SetSize(ScrW()/8, ScrH()/20)
 Options_Button:Center()
 Options_Button:SetY(ScrH()/2)
 Options_Button:SetFont("MainMenu_Font")
-Options_Button:SetTextColor(Color(240, 155, 0))
+if GetConVarNumber("ss_hud_skin") == 2 then
+	Options_Button:SetTextColor(Color(240, 155, 0))
+elseif GetConVarNumber("ss_hud_skin") == 1 then
+	Options_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+end
 Options_Button.Paint = function(self, w, h) 
     if isFlashing then
         local t = RealTime() * flashSpeed -- 4
@@ -460,7 +495,11 @@ LegacyM_Button:SetSize(ScrW()/6, ScrH()/20)
 LegacyM_Button:Center()
 LegacyM_Button:SetY(ScrH()/2.25)
 LegacyM_Button:SetFont("MainMenu_Font")
-LegacyM_Button:SetTextColor(Color(240, 155, 0))
+if GetConVarNumber("ss_hud_skin") == 2 then
+	LegacyM_Button:SetTextColor(Color(240, 155, 0))
+elseif GetConVarNumber("ss_hud_skin") == 1 then
+	LegacyM_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+end
 LegacyM_Button.Paint = function(self, w, h) 
     if isFlashing then
         local t = RealTime() * flashSpeed -- 4
@@ -498,7 +537,11 @@ Quit_Button:SetSize(ScrW()/16, ScrH()/20)
 Quit_Button:Center()
 Quit_Button:SetY(ScrH()/1.635)
 Quit_Button:SetFont("MainMenu_Font")
-Quit_Button:SetTextColor(Color(240, 155, 0))
+if GetConVarNumber("ss_hud_skin") == 2 then
+	Quit_Button:SetTextColor(Color(240, 155, 0))
+elseif GetConVarNumber("ss_hud_skin") == 1 then
+	Quit_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+end
 Quit_Button.Paint = function(self, w, h)
 end
 
@@ -529,6 +572,15 @@ end
 
 function OpenConfirmationMenu()
 	showGameUI = true
+	local originalflashColor = Color(SeriousHUD:GetTextColor())
+	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
+	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
+	local flashColor2 = color_white
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		originalflashColor = Color(240, 155, 0)
+		flashColor1 = Color(170, 85, 0)
+		flashColor2 = Color(255, 200, 0)
+	end
 	local DarkOverlayMenu = vgui.Create("DFrame")
 	DarkOverlayMenu:SetSize(ScrW(), ScrH())
 	DarkOverlayMenu:SetPos(0, 0)
@@ -551,7 +603,7 @@ function OpenConfirmationMenu()
 	ConfirmationMenu:MakePopup()
 	ConfirmationMenu.Paint = function(self, w, h)
 
-		draw.RoundedBox(0, 0, 0, w+5, h+5, Color(240, 155, 0, 75))
+		draw.RoundedBox(0, 0, 0, w+5, h+5, Color(GetMMFColor()))
 		surface.SetDrawColor(Color(255, 255, 255))
 		surface.SetMaterial(ssbg)
 		surface.DrawTexturedRect(1,1,w-2,h-2)
@@ -566,7 +618,7 @@ function OpenConfirmationMenu()
 	surface.SetDrawColor(Color(255,255,255,255))
 	surface.DrawTexturedRect(offsetX-25, offsetY-25, w+50, h+50)
 	offset = offset + speed
-	draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(240, 155, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(SeriousHUD:GetTextColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	local YesButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
@@ -575,7 +627,11 @@ function OpenConfirmationMenu()
 	YesButton:SetX(ScrW() - ScrW()/1.25)
 	YesButton:SetY(ScrH()- ScrH()/1.15)
 	YesButton:SetFont("MainMenu_Font")
-	YesButton:SetTextColor(Color(240, 155, 0))
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		YesButton:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		YesButton:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
 	YesButton.Paint = function(self, w, h) 
 		if isFlashing then
 			local t = RealTime() * flashSpeed -- 4
@@ -610,7 +666,11 @@ function OpenConfirmationMenu()
 	NoButton:SetX(ScrW()/3.55)
 	NoButton:SetY(ScrH()- ScrH()/1.15)
 	NoButton:SetFont("MainMenu_Font")
-	NoButton:SetTextColor(Color(240, 155, 0))
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		NoButton:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		NoButton:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
 	NoButton.Paint = function(self, w, h) 
 		if isFlashing then
 			local t = RealTime() * flashSpeed -- 4
@@ -639,6 +699,15 @@ function OpenConfirmationMenu()
 end
 function OpenSettingsMenu()
 	showGameUI = true
+	local originalflashColor = Color(SeriousHUD:GetTextColor())
+	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
+	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
+	local flashColor2 = color_white
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		originalflashColor = Color(240, 155, 0)
+		flashColor1 = Color(170, 85, 0)
+		flashColor2 = Color(255, 200, 0)
+	end
 	local SettingsMenu = vgui.Create("DFrame")
 	SettingsMenu:SetSize(ScrW(), ScrH())
 	SettingsMenu:Center()
@@ -673,7 +742,11 @@ function OpenSettingsMenu()
 	Playermodel_Button:Center()
 	Playermodel_Button:SetY(ScrH()/6)
 	Playermodel_Button:SetFont("MainMenu_Font")
-	Playermodel_Button:SetTextColor(Color(240, 155, 0))
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Playermodel_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Playermodel_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
 
 	Playermodel_Button.Paint = function(self, w, h) 
 		if isFlashing then
@@ -705,7 +778,11 @@ function OpenSettingsMenu()
 	Music_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Music_Button:Center()
 	Music_Button:SetFont("MainMenu_Font")
-	Music_Button:SetTextColor(Color(240, 155, 0))
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Music_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Music_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
 	Music_Button.Paint = function(self, w, h) 
 		if isFlashing then
 			local t = RealTime() * flashSpeed -- 4
@@ -821,7 +898,11 @@ function OpenSettingsMenu()
 	Back_Button:SetSize(ScrW()/15, ScrH()/20)
 	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/11)
 	Back_Button:SetFont("MainMenu_Font")
-	Back_Button:SetTextColor(Color(240, 155, 0))
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Back_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Back_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
 	Back_Button.Paint = function(self, w, h) 
 		if isFlashing then
 			local t = RealTime() * flashSpeed -- 4
@@ -864,7 +945,7 @@ function OpenSettingsMenu()
 	end
 	buttonKleiner.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
@@ -881,7 +962,7 @@ function OpenSettingsMenu()
 	end
 	buttonKleiner1.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 	
@@ -899,7 +980,7 @@ function OpenSettingsMenu()
 	end
 		buttonBarney.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
@@ -917,7 +998,7 @@ function OpenSettingsMenu()
 	end
 		buttonBarney2.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
@@ -935,7 +1016,7 @@ function OpenSettingsMenu()
 	end
 	buttonBarney3.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
@@ -953,7 +1034,7 @@ function OpenSettingsMenu()
 	end
 	buttonBarney4.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
@@ -974,7 +1055,7 @@ function OpenSettingsMenu()
 	end
 	buttonAlyx.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
@@ -994,7 +1075,7 @@ function OpenSettingsMenu()
 	end
 	buttonSteve.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(240, 155, 0))
+		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 	

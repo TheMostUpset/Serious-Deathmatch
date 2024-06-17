@@ -30,8 +30,8 @@ Mapvote.guiFunction = function()
 	Mapvote.frame.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 160))
 		draw.SimpleText("Map Vote", "Vote_Font", w/2 + 1, 6, color_black, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText("Map Vote", "Vote_Font", w/2, 5, Color(240, 155, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		surface.SetDrawColor(Color(90, 120, 180))
+		draw.SimpleText("Map Vote", "Vote_Font", w/2, 5, Color(SeriousHUD:GetTextColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end	
 	
