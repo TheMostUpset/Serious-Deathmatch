@@ -1,5 +1,6 @@
 "UnlitGeneric"
 {
 	"$basetexture" "vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail"
-	"$alpha" "0.9"
+	"$vertexcolor" 1
+	"$vertexalpha" 1
 }

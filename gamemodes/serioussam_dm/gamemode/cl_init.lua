@@ -322,6 +322,7 @@ function OpenSSMenu()
 	
 	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
 	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
+	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 	local originalflashColor = Color(SeriousHUD:GetTextColor())
 	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
 	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
@@ -344,12 +345,27 @@ function OpenSSMenu()
 
 
 	EscMenu.Paint = function(self, w, h)
-	local offsetX = math.sin(CurTime() * 1.5) * 15
-	local offsetY = math.cos(CurTime() * 1.5) * 15
-
+		local offsetX = math.sin(CurTime() * 1.5) * -22
+		local offsetY = math.cos(CurTime() * 1.5) * -22
+		surface.SetDrawColor(0,0,0)
+		surface.DrawRect(0, 0, w, h)
 		surface.SetTexture(ssbg)
-		surface.SetDrawColor(Color(255,255,255,255))
-		surface.DrawTexturedRect(0,0,w,h)
+		local hudr, hudg, hudb = SeriousHUD:GetColor()
+		surface.SetDrawColor(hudr, hudg, hudb, 145)
+		local texW = 256
+		local texH = 256
+		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			surface.DrawTexturedRect(0,0,w,h)
+		end
+		surface.SetTexture(grid_bg)
+		surface.SetDrawColor(hudr, hudg, hudb, 100)
+		if GetConVarNumber("ss_hud_skin") == 2 then 
+			surface.SetDrawColor(0, 0, 0, 0)
+		end
+		local texW = 16
+		local texH = 16
+		surface.DrawTexturedRectUV( 0, 0, w, h, 0, 0, w / texW, h / texH )
 
 		offset = offset + speed
 		if offset > w then
@@ -357,16 +373,21 @@ function OpenSSMenu()
 		end
 
 
-	if GetConVarNumber("ss_hud_skin") == 2 then
-		local offsetX = math.sin(CurTime() * 1.5) * 10
-		local offsetY = math.cos(CurTime() * 1.5) * 10
-	end
 
-	surface.SetTexture(detailTexture_vtf)
-	surface.DrawTexturedRect(offsetX - 50, offsetY - 50, ScrW() + 100, ScrH() + 100)
-	surface.SetDrawColor( 255, 255, 255, 255 )
-	draw.SimpleText("GAME", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-end
+		local texW = 256
+		local texH = 128
+		local offsetX = math.sin(CurTime() * 1.5) * 30
+		local offsetY = math.cos(CurTime() * 1.5) * 30
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			offsetX = math.sin(CurTime() * 1.5) * 10
+			offsetY = math.cos(CurTime() * 1.5) * 10
+		end
+		surface.SetTexture(detailTexture_vtf)
+		surface.SetDrawColor(hudr, hudg, hudb, 140)
+		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
+		surface.SetDrawColor(SeriousHUD:GetColor())
+		draw.SimpleText("GAME", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
 
 
 
@@ -572,11 +593,16 @@ end
 
 function OpenConfirmationMenu()
 	showGameUI = true
+	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
+	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
+	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 	local originalflashColor = Color(SeriousHUD:GetTextColor())
 	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
 	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
 	local flashColor2 = color_white
 	if GetConVarNumber("ss_hud_skin") == 2 then
+		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
+		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 		originalflashColor = Color(240, 155, 0)
 		flashColor1 = Color(170, 85, 0)
 		flashColor2 = Color(255, 200, 0)
@@ -594,7 +620,7 @@ function OpenConfirmationMenu()
 
 
 	local ConfirmationMenu = vgui.Create("DFrame")
-	ConfirmationMenu:SetSize(ScrW()/1.9, ScrH()/4.65)
+	ConfirmationMenu:SetSize(ScrW()/2.01, ScrH()/4.5)
 	ConfirmationMenu:SetTitle("")
 	ConfirmationMenu:SetVisible(true)
 	ConfirmationMenu:SetDraggable(false)
@@ -602,23 +628,56 @@ function OpenConfirmationMenu()
 	ConfirmationMenu:Center()
 	ConfirmationMenu:MakePopup()
 	ConfirmationMenu.Paint = function(self, w, h)
+		local hudr, hudg, hudb = GetMMFColor()
+		local offsetX = math.sin(CurTime() * 1.5) * -22
+		local offsetY = math.cos(CurTime() * 1.5) * -22
+		surface.SetDrawColor(0, 0, 0, 255)
+		surface.DrawRect(0, 0, w, h)
+		surface.SetDrawColor(hudr, hudg, hudb, 255)
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+		
+		surface.SetTexture(ssbg)
+		local hudr, hudg, hudb = SeriousHUD:GetColor()
+		surface.SetDrawColor(hudr, hudg, hudb, 145)
+		local texW = 256
+		local texH = 256
+		if GetConVarNumber("ss_hud_skin") == 2 then
+		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w-500, h-500, 0, 0, w / texW, h / texH )
+		else
+		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
+		end
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			surface.DrawTexturedRect(1,1,w-2,h-2)
+		end
+		surface.SetTexture(grid_bg)
+		surface.SetDrawColor(hudr, hudg, hudb, 100)
+		if GetConVarNumber("ss_hud_skin") == 2 then 
+			surface.SetDrawColor(0, 0, 0, 0)
+		end
+		local texW = 16
+		local texH = 16
+		surface.DrawTexturedRectUV( 0, 0, w, h, 0, 0, w / texW, h / texH )
 
-		draw.RoundedBox(0, 0, 0, w+5, h+5, Color(GetMMFColor()))
-		surface.SetDrawColor(Color(255, 255, 255))
-		surface.SetMaterial(ssbg)
-		surface.DrawTexturedRect(1,1,w-2,h-2)
-			if offset > w then
+		offset = offset + speed
+		if offset > w then
 			offset = 0
 		end
 
-	local offsetX = math.sin(CurTime() * 1.5) * 10
-	local offsetY = math.cos(CurTime() * 1.5) * 10
 
-	surface.SetTexture(detailTexture_vtf)
-	surface.SetDrawColor(Color(255,255,255,255))
-	surface.DrawTexturedRect(offsetX-25, offsetY-25, w+50, h+50)
-	offset = offset + speed
-	draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(SeriousHUD:GetTextColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+		local texW = 256
+		local texH = 128
+		local offsetX = math.sin(CurTime() * 1.5) * 30
+		local offsetY = math.cos(CurTime() * 1.5) * 30
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			offsetX = math.sin(CurTime() * 1.5) * 10
+			offsetY = math.cos(CurTime() * 1.5) * 10
+		end
+		surface.SetTexture(detailTexture_vtf)
+		surface.SetDrawColor(hudr, hudg, hudb, 140)
+		surface.DrawTexturedRectUV( offsetX-50, offsetY-50, w*4, h*4, 0, 0, w / texW, h / texH )
+		surface.SetDrawColor(SeriousHUD:GetColor())
+	draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	local YesButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
@@ -694,16 +753,22 @@ function OpenConfirmationMenu()
 	NoButton.DoClick = function()
 	ConfirmationMenu:Close()
 	DarkOverlayMenu:Close()
+	showGameUI = true
 	surface.PlaySound("menus/press.wav")
 	end
 end
 function OpenSettingsMenu()
+	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
+	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
+	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 	showGameUI = true
 	local originalflashColor = Color(SeriousHUD:GetTextColor())
 	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
 	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
 	local flashColor2 = color_white
 	if GetConVarNumber("ss_hud_skin") == 2 then
+		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
+		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 		originalflashColor = Color(240, 155, 0)
 		flashColor1 = Color(170, 85, 0)
 		flashColor2 = Color(255, 200, 0)
@@ -717,21 +782,47 @@ function OpenSettingsMenu()
 	SettingsMenu:MakePopup()
 
 	SettingsMenu.Paint = function(self, w, h)
-		surface.SetMaterial(ssbg)
-		surface.SetDrawColor(Color(255,255,255,255))
-		surface.DrawTexturedRect(0,0,w,h)
+		local offsetX = math.sin(CurTime() * 1.5) * -22
+		local offsetY = math.cos(CurTime() * 1.5) * -22
+		surface.SetDrawColor(0,0,0)
+		surface.DrawRect(0, 0, w, h)
+		surface.SetTexture(ssbg)
+		local hudr, hudg, hudb = SeriousHUD:GetColor()
+		surface.SetDrawColor(hudr, hudg, hudb, 145)
+		local texW = 256
+		local texH = 256
+		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			surface.DrawTexturedRect(0,0,w,h)
+		end
+		surface.SetTexture(grid_bg)
+		surface.SetDrawColor(hudr, hudg, hudb, 100)
+		if GetConVarNumber("ss_hud_skin") == 2 then 
+			surface.SetDrawColor(0, 0, 0, 0)
+		end
+		local texW = 16
+		local texH = 16
+		surface.DrawTexturedRectUV( 0, 0, w, h, 0, 0, w / texW, h / texH )
 
 		offset = offset + speed
 		if offset > w then
 			offset = 0
 		end
 
-		local offsetX = math.sin(CurTime() * 1.5) * 10
-		local offsetY = math.cos(CurTime() * 1.5) * 10
 
+
+		local texW = 256
+		local texH = 128
+		local offsetX = math.sin(CurTime() * 1.5) * 30
+		local offsetY = math.cos(CurTime() * 1.5) * 30
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			offsetX = math.sin(CurTime() * 1.5) * 10
+			offsetY = math.cos(CurTime() * 1.5) * 10
+		end
 		surface.SetTexture(detailTexture_vtf)
-		surface.SetDrawColor(Color(255,255,255,20))
-		surface.DrawTexturedRect(offsetX - 50, offsetY - 50, ScrW() + 100, ScrH() + 100)
+		surface.SetDrawColor(hudr, hudg, hudb, 140)
+		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
+		surface.SetDrawColor(SeriousHUD:GetColor())
 		draw.SimpleText("OPTIONS", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
@@ -777,6 +868,7 @@ function OpenSettingsMenu()
 	end
 	Music_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Music_Button:Center()
+	Music_Button:SetY(ScrH()/2.25)
 	Music_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		Music_Button:SetTextColor(Color(240, 155, 0))
@@ -890,7 +982,183 @@ function OpenSettingsMenu()
 		Music_Button:SetTextColor(originalflashColor)
 	end
 
+	local Crosshair_Button = vgui.Create("DButton", SettingsMenu)
+	local isFlashing = false
+	Crosshair_Button:SetText("CROSSHAIR")
+	Crosshair_Button:SetSize(ScrW()/4, ScrH() / 20)
+	Crosshair_Button:Center()
+	Crosshair_Button:SetY(ScrH()/1.9)
+	Crosshair_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Crosshair_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Crosshair_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
 
+	Crosshair_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			Crosshair_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+
+	Crosshair_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Crosshair_Button.OnCursorExited = function()
+		isFlashing = false
+		Crosshair_Button:SetTextColor(originalflashColor)
+	end
+	
+	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)	-- Add image to Frame
+	Crosshair_Image:Center()	-- Move it into frame
+	Crosshair_Image:SetY(ScrH()/1.68)	-- Size it to 150x150
+	Crosshair_Image:SetSize(ScrH()/20, ScrH() / 20)
+	-- Set material relative to "garrysmod/materials/"
+	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
+	
+	local Forward_Button = vgui.Create("DButton", SettingsMenu)
+	local isFlashing = false
+	Forward_Button:SetText(">")
+	Forward_Button:SetSize(ScrW()/80, ScrH() / 20)
+	Forward_Button:SetX(ScrW()/1.9)
+	Forward_Button:SetY(ScrH()/1.7)
+	Forward_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Forward_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Forward_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+
+	Forward_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			Forward_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	
+	Forward_Button.DoClick = function()
+	local crosshair_value =  GetConVarNumber("ss_crosshair") + 1
+	if crosshair_value > 7 then
+	return false
+	else
+	RunConsoleCommand("ss_crosshair", crosshair_value)
+	Crosshair_Image:SetImage("vgui/serioussam/Crosshair" .. crosshair_value)
+	end
+	end
+	
+	Forward_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Forward_Button.OnCursorExited = function()
+		isFlashing = false
+		Forward_Button:SetTextColor(originalflashColor)
+	end
+	
+
+	
+	local Backwards_Button = vgui.Create("DButton", SettingsMenu)
+	local isFlashing = false
+	Backwards_Button:SetText("<")
+	Backwards_Button:SetSize(ScrW()/80, ScrH() / 20)
+	Backwards_Button:SetX(ScrW()/2.195)
+	Backwards_Button:SetY(ScrH()/1.7)
+	Backwards_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Backwards_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Backwards_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+
+	Backwards_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			Backwards_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	
+	Backwards_Button.DoClick = function()
+	local crosshair_value =  GetConVarNumber("ss_crosshair") - 1
+	if crosshair_value < 1 then
+	return false
+	else
+	RunConsoleCommand("ss_crosshair", crosshair_value)
+	Crosshair_Image:SetImage("vgui/serioussam/Crosshair" .. crosshair_value)
+	end
+	
+	
+	end
+	
+	Backwards_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Backwards_Button.OnCursorExited = function()
+		isFlashing = false
+		Backwards_Button:SetTextColor(originalflashColor)
+	end
+
+	local TFE_Color_Button = vgui.Create("DButton", SettingsMenu)
+	local isFlashing = false
+	TFE_Color_Button:SetText("TFE HUD COLOR")
+	TFE_Color_Button:SetSize(ScrW()/4, ScrH() / 20)
+	TFE_Color_Button:Center()
+	TFE_Color_Button:SetY(ScrH()/1.44)
+	TFE_Color_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		TFE_Color_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		TFE_Color_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+
+	TFE_Color_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			TFE_Color_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	TFE_Color_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	TFE_Color_Button.OnCursorExited = function()
+		isFlashing = false
+		TFE_Color_Button:SetTextColor(originalflashColor)
+	end
+
+	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
+	TFE_Color_Mixer:SetSize(ScrW()/8, ScrW()/12.5)
+	TFE_Color_Mixer:Center()
+	TFE_Color_Mixer:SetY(ScrH()/1.3)
+	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
+	TFE_Color_Mixer:SetAlphaBar(false) 			-- Show/hide the alpha bar 				DEF:true
+	TFE_Color_Mixer:SetWangs(true) 				-- Show/hide the R G B A indicators 	DEF:true
+	TFE_Color_Mixer:SetColor(Color(30,100,160)) 	-- Set the default color
+	TFE_Color_Mixer:SetConVarR("ss_hud_color_r")
+	TFE_Color_Mixer:SetConVarG("ss_hud_color_g")
+	TFE_Color_Mixer:SetConVarB("ss_hud_color_b")
 
 	local Back_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -928,6 +1196,7 @@ function OpenSettingsMenu()
 		showGameUI = true
 		surface.PlaySound("menus/press.wav")
 	end
+
 
  
 	local buttonKleiner = vgui.Create("DImageButton", SettingsMenu)

@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/serioussam/mainmenu/hud_tfe/grid"
+	"$translucent" "1"
+	"$vertexcolor" 1
+	"$vertexalpha" 1
+}
