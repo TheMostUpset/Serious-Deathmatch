@@ -5,6 +5,11 @@ playerTable:SetPos(ScrW() / 2, 0)
 playerTable:SetSize(ScrW(), ScrH())
 playerTable.Players = {}
 
+function TSEHud()
+if GetConVarNumber("ss_hud_skin") == 2 then 
+return true end
+end
+
 function playerTable:Paint(w, h)
     surface.SetDrawColor(0, 0, 0, 0)
     surface.DrawRect(0, 0, w, h)
@@ -16,13 +21,26 @@ function playerTable:Paint(w, h)
 
     for _, ply in ipairs(self.Players) do
 		local nick, frags, deaths = ply:Nick(), ply:Frags(), ply:Deaths()
-        draw.SimpleText(nick, "Scoreboard_Font", posX + 1, posY + 1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY +1, Color(0, 0, 0), TEXT_ALIGN_RIGHT)
-    
-        draw.SimpleText(nick, "Scoreboard_Font", posX, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
-        draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(255, 255, 255), TEXT_ALIGN_RIGHT)
+		local hudr, hudg, hudb = SeriousHUD:GetColor()
+		
+			draw.SimpleText(nick, "Scoreboard_Font", posX + 1, posY + 1, color_black, TEXT_ALIGN_RIGHT)
+			draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY +1, color_black, TEXT_ALIGN_RIGHT)
+			
+			if SeriousHUD:GetSkin() == 2 then
+				draw.SimpleText(nick, "Scoreboard_Font", posX, posY, Color(90, 121, 181), TEXT_ALIGN_RIGHT)
+			else
+				draw.SimpleText(nick, "Scoreboard_Font", posX, posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
+			end
+				
+			draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
 
-        posY = posY + ScrH() / 28
+			posY = posY + ScrH() / 28
+			
+			--draw.SimpleText(nick, "Scoreboard_Font", posX + 1, posY + 1, color_black, TEXT_ALIGN_RIGHT)
+			--draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY +1, color_black, TEXT_ALIGN_RIGHT)
+    	
+			posY = posY + ScrH() / 28
+		
     end
 end
 
@@ -42,27 +60,43 @@ function GM:HUDPaint()
 	if cvar_timer_enabled:GetBool() then
 		local timeLimit = cvar_max_time:GetInt()
 		local timer = "%02i:%02i"
-		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
-		surface.SetDrawColor(Color(90, 120, 180, 255))
-		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
-		surface.SetTexture(ITime)
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.DrawTexturedRect(ScrH() / 80 * 1.35 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)
-		
-		
-		
-		draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
-		surface.SetDrawColor(Color(90, 120, 180))
-		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
-		if countdown < 0 then
-			countdown = 0
-		end
-		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, color_black, TEXT_ALIGN_CENTER)			
-		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, color_white, TEXT_ALIGN_CENTER)		
+		local hudr, hudg, hudb = SeriousHUD:GetColor()
+		
+			draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
+			
+			if SeriousHUD:GetSkin() == 2 then
+				surface.SetDrawColor(90, 121, 181, 255)
+			else
+				surface.SetDrawColor(hudr, hudg, hudb, 255)
+			end
+			
+			surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
+			surface.SetTexture(ITime)
+			
+			surface.SetDrawColor(hudr, hudg, hudb, 255)
+			
+			surface.DrawTexturedRect(ScrH() / 80 * 1.35 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)
+
+		
+		
+			draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
+			
+			if SeriousHUD:GetSkin() == 2 then
+				surface.SetDrawColor(90, 121, 181, 255)
+			else
+				surface.SetDrawColor(hudr, hudg, hudb, 255)
+			end
+			
+			surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
+
+			draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, color_black, TEXT_ALIGN_CENTER)			
+			draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)		
+
 	
-	
+
 		if countdown <= 0 and !endgamesoundplayed then
+			countdown = 0
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )
 			endgamesoundplayed = true
 		end
