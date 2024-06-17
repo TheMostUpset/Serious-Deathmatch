@@ -868,7 +868,7 @@ function OpenSettingsMenu()
 	end
 	Music_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Music_Button:Center()
-	Music_Button:SetY(ScrH()/2.25)
+	Music_Button:SetY(ScrH()/2.45)
 	Music_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		Music_Button:SetTextColor(Color(240, 155, 0))
@@ -987,7 +987,7 @@ function OpenSettingsMenu()
 	Crosshair_Button:SetText("CROSSHAIR")
 	Crosshair_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Crosshair_Button:Center()
-	Crosshair_Button:SetY(ScrH()/1.9)
+	Crosshair_Button:SetY(ScrH()/2.05)
 	Crosshair_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		Crosshair_Button:SetTextColor(Color(240, 155, 0))
@@ -1018,7 +1018,7 @@ function OpenSettingsMenu()
 	
 	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)	-- Add image to Frame
 	Crosshair_Image:Center()	-- Move it into frame
-	Crosshair_Image:SetY(ScrH()/1.68)	-- Size it to 150x150
+	Crosshair_Image:SetY(ScrH()/1.8)	-- Size it to 150x150
 	Crosshair_Image:SetSize(ScrH()/20, ScrH() / 20)
 	-- Set material relative to "garrysmod/materials/"
 	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
@@ -1028,7 +1028,7 @@ function OpenSettingsMenu()
 	Forward_Button:SetText(">")
 	Forward_Button:SetSize(ScrW()/80, ScrH() / 20)
 	Forward_Button:SetX(ScrW()/1.9)
-	Forward_Button:SetY(ScrH()/1.7)
+	Forward_Button:SetY(ScrH()/1.825)
 	Forward_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		Forward_Button:SetTextColor(Color(240, 155, 0))
@@ -1074,7 +1074,7 @@ function OpenSettingsMenu()
 	Backwards_Button:SetText("<")
 	Backwards_Button:SetSize(ScrW()/80, ScrH() / 20)
 	Backwards_Button:SetX(ScrW()/2.195)
-	Backwards_Button:SetY(ScrH()/1.7)
+	Backwards_Button:SetY(ScrH()/1.825)
 	Backwards_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		Backwards_Button:SetTextColor(Color(240, 155, 0))
@@ -1115,12 +1115,60 @@ function OpenSettingsMenu()
 		Backwards_Button:SetTextColor(originalflashColor)
 	end
 
+	local HUD_Button = vgui.Create("DButton", SettingsMenu)
+	local isFlashing = false
+	if GetConVarNumber("ss_hud_skin") == 2 then
+	HUD_Button:SetText("TFE HUD")
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+	HUD_Button:SetText("TSE HUD")
+	end
+	HUD_Button:SetSize(ScrW()/4, ScrH() / 20)
+	HUD_Button:Center()
+	HUD_Button:SetY(ScrH()/1.56)
+	HUD_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		HUD_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		HUD_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	HUD_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			HUD_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	HUD_Button.DoClick = function()
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			HUD_Button:SetText("TSE HUD")
+			RunConsoleCommand("ss_hud_skin", "1")
+		elseif GetConVarNumber("ss_hud_skin") == 1 then
+			HUD_Button:SetText("TFE HUD")
+			RunConsoleCommand("ss_hud_skin", "2")
+			
+		end
+	surface.PlaySound("menus/press.wav")
+	end
+	HUD_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	HUD_Button.OnCursorExited = function()
+		isFlashing = false
+		HUD_Button:SetTextColor(originalflashColor)
+	end
+
+
 	local TFE_Color_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	TFE_Color_Button:SetText("TFE HUD COLOR")
 	TFE_Color_Button:SetSize(ScrW()/4, ScrH() / 20)
 	TFE_Color_Button:Center()
-	TFE_Color_Button:SetY(ScrH()/1.44)
+	TFE_Color_Button:SetY(ScrH()/1.38)
 	TFE_Color_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		TFE_Color_Button:SetTextColor(Color(240, 155, 0))
@@ -1151,7 +1199,7 @@ function OpenSettingsMenu()
 	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
 	TFE_Color_Mixer:SetSize(ScrW()/8, ScrW()/12.5)
 	TFE_Color_Mixer:Center()
-	TFE_Color_Mixer:SetY(ScrH()/1.3)
+	TFE_Color_Mixer:SetY(ScrH()/1.25)
 	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
 	TFE_Color_Mixer:SetAlphaBar(false) 			-- Show/hide the alpha bar 				DEF:true
 	TFE_Color_Mixer:SetWangs(true) 				-- Show/hide the R G B A indicators 	DEF:true
@@ -1203,7 +1251,7 @@ function OpenSettingsMenu()
 	buttonKleiner:SetImage("materials/icons/playermodels/samclassic.png")
 	buttonKleiner:SetSize(64, 64)
 
-	buttonKleiner:SetPos(ScrW()/2 - 145, ScrH()/2 /1.5 - 70)
+	buttonKleiner:SetPos(ScrW()/2 - 145, ScrH()/2 /1.6 - 70)
 
 	buttonKleiner.DoClick = function()
 		net.Start("PlayerModelMenu")
@@ -1221,7 +1269,7 @@ function OpenSettingsMenu()
 	local buttonKleiner1 = vgui.Create("DImageButton", SettingsMenu)
 	buttonKleiner1:SetImage("materials/icons/playermodels/samclassic_skin1.png")
 	buttonKleiner1:SetSize(64, 64)
-	buttonKleiner1:SetPos(ScrW()/2 - 75, ScrH()/2 /1.5 - 70)
+	buttonKleiner1:SetPos(ScrW()/2 - 75, ScrH()/2 /1.6 - 70)
 	buttonKleiner1.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/samclassic.mdl")
@@ -1239,7 +1287,7 @@ function OpenSettingsMenu()
 	local buttonBarney = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney:SetImage("materials/icons/playermodels/redrick.png")
 	buttonBarney:SetSize(64, 64)
-	buttonBarney:SetPos(ScrW()/2 + 10, ScrH()/2 /1.5 - 70)
+	buttonBarney:SetPos(ScrW()/2 + 10, ScrH()/2 /1.6 - 70)
 	buttonBarney.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
@@ -1257,7 +1305,7 @@ function OpenSettingsMenu()
 	local buttonBarney2 = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney2:SetImage("materials/icons/playermodels/redrick_skin1.png")
 	buttonBarney2:SetSize(64, 64)
-	buttonBarney2:SetPos(ScrW()/2 + 80, ScrH()/2 /1.5 - 70)
+	buttonBarney2:SetPos(ScrW()/2 + 80, ScrH()/2 /1.6 - 70)
 	buttonBarney2.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
@@ -1275,7 +1323,7 @@ function OpenSettingsMenu()
 	local buttonBarney3 = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney3:SetImage("materials/icons/playermodels/redrick_skin2.png")
 	buttonBarney3:SetSize(64, 64)
-	buttonBarney3:SetPos(ScrW()/2 - 145, ScrH()/2 /1.5 + 6)
+	buttonBarney3:SetPos(ScrW()/2 - 145, ScrH()/2 /1.6 + 6)
 	buttonBarney3.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
@@ -1293,7 +1341,7 @@ function OpenSettingsMenu()
 	local buttonBarney4 = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney4:SetImage("materials/icons/playermodels/redrick_skin3.png")
 	buttonBarney4:SetSize(64, 64)
-	buttonBarney4:SetPos(ScrW()/2 - 75, ScrH()/2 /1.5 + 6)
+	buttonBarney4:SetPos(ScrW()/2 - 75, ScrH()/2 /1.6 + 6)
 	buttonBarney4.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
@@ -1314,7 +1362,7 @@ function OpenSettingsMenu()
 	local buttonAlyx = vgui.Create("DImageButton", SettingsMenu)
 	buttonAlyx:SetImage("materials/icons/playermodels/beheadedben.png")
 	buttonAlyx:SetSize(64, 64)
-	buttonAlyx:SetPos(ScrW()/2 + 10, ScrH()/2 /1.5 + 6)
+	buttonAlyx:SetPos(ScrW()/2 + 10, ScrH()/2 /1.6 + 6)
 	buttonAlyx.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/beheadedben.mdl")
@@ -1334,7 +1382,7 @@ function OpenSettingsMenu()
 	local buttonSteve = vgui.Create("DImageButton", SettingsMenu)
 	buttonSteve:SetImage("materials/icons/playermodels/steelsteve.png")
 	buttonSteve:SetSize(64, 64)
-	buttonSteve:SetPos(ScrW()/2 + 80, ScrH()/2 /1.5 + 6)
+	buttonSteve:SetPos(ScrW()/2 + 80, ScrH()/2 /1.6 + 6)
 	buttonSteve.DoClick = function()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/steelsteve.mdl")
