@@ -29,17 +29,17 @@ function GM:GetWinner()
 	return players[1]
 end
 
--- local soundplayed = true	
-	
--- hook.Add("PlayerButtonDown", "CheckForRespawn", function(ply, button)
-    -- if button == MOUSE_LEFT and ply:Alive() == false then
-        -- timer.Simple(5, function()
-            -- if IsValid(ply) and ply:Alive() == false then
-                -- ply:Spawn()
-            -- end
-        -- end)
-    -- end
--- end)
+function GM:StartCommand(ply, cmd)
+	if ply:GetMoveType() == MOVETYPE_WALK then
+		if cmd:KeyDown(IN_DUCK) and !ply:IsOnGround() then
+			cmd:RemoveKey(IN_DUCK)
+		end
+		if cmd:KeyDown(IN_JUMP) and (ply:Crouching() or cmd:KeyDown(IN_DUCK)) then
+			cmd:RemoveKey(IN_JUMP)
+			cmd:RemoveKey(IN_DUCK)
+		end
+	end
+end
 
 local nextStuckCheck = 0
 function GM:PlayerTick(ply, mv)
