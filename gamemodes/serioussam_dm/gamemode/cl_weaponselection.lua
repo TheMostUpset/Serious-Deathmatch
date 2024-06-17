@@ -183,41 +183,37 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
     end
 end)
 
+local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
+local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
 hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 --weapon selection
-	local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
-	local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
-	local client = LocalPlayer()
-	local t = client.SSPowerups
-	local awep = client:GetActiveWeapon()
-	local hudr, hudg, hudb = SeriousHUD:GetColor()
+	-- local client = LocalPlayer()
+	-- local t = client.SSPowerups
+	-- local awep = client:GetActiveWeapon()
+	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
 	local size = ScrH() / 14.75
 	local gap_screen = ScrH() / 14
-	local gap_rect = 7
+	-- local gap_rect = 7
 	local y = ScrH() - size - gap_screen
-	local armor_y = y * .908
-	local widerect_w = size * 2.42
-	local widerectleft_x = size + gap_screen + gap_rect
-	local text_align_y = size / 5
+	-- local armor_y = y * .908
+	-- local widerect_w = size * 2.42
+	-- local widerectleft_x = size + gap_screen + gap_rect
+	-- local text_align_y = size / 5
 	
-	local cntr = widerectleft_x + widerect_w + ScrW() / 8 - 52
-	local ammorectx = cntr + size + gap_rect
-	local ammoiconrectx = ammorectx + widerect_w + gap_rect
+	-- local cntr = widerectleft_x + widerect_w + ScrW() / 8 - 52
+	-- local ammorectx = cntr + size + gap_rect
+	-- local ammoiconrectx = ammorectx + widerect_w + gap_rect
 
 
-	local rect, recta = 0, 160
-	local armor = client:Alive() and client:Armor() or 0
+	-- local rect, recta = 0, 160
+	-- local armor = client:Alive() and client:Armor() or 0
 	local ammosize = size/1.25
 	local ammoy = y+ammosize/4
 	local icon_gap = 5.5
-	local iconpos = ScrW() / 2
+	-- local iconpos = ScrW() / 2
 	local powerupx = ScrH() / 14.75 /1.25
 	local powerupy = ScrH() / 14.75 /1.25
-	if SeriousHUD:GetSkin() == 2 then
-		local hudr, hudg, hudb = 90, 120, 180
-	else
-		local hudr, hudg, hudb = SeriousHUD:GetColor()
-	end
+
     if not IsValid(LocalPlayer()) then return end
 
     if alpha < 1e-02 then
@@ -249,6 +245,12 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 	ss_x = (ScrW() + thisWidth) / 2
 	
     local pos = x
+	local frame_r, frame_g, frame_b = SeriousHUD:GetFrameColor()
+	if SeriousHUD:GetSkin() == 1 then
+		WeaponSelector.Colors.Select = Color(255,255,255,100)
+	elseif SeriousHUD:GetSkin() == 2 then
+		WeaponSelector.Colors.Select = Color(252, 186, 4, 100)
+	end
 
     for i, v in SortedPairs(tblLoad) do
         local y = Marge
@@ -256,31 +258,15 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
         pos = x + thisWidth
 
         for j, wep in pairs(v) do
-		
-
-			if SeriousHUD:GetSkin() == 2 then
-				local hudr, hudg, hudb = 90, 120, 180
-			else
-				local hudr, hudg, hudb = SeriousHUD:GetColor()
-			end
             local selected = CurTb == i and CurSlt == j
-            local height = height + (height + Marge) * 1 
-			if SeriousHUD:GetSkin() == 1 then
-			WeaponSelector.Colors.Select = Color(255,255,255,100)
-			elseif SeriousHUD:GetSkin() == 2 then
-			WeaponSelector.Colors.Select = Color(252, 186, 4, 100)
-			end
+            local height = height + (height + Marge) * 1
             draw.RoundedBox(0, x, ammoy / 1.2, powerupx, powerupy, selected and WeaponSelector.Colors.Select or Color(20, 20, 20, 160))
-            if SeriousHUD:GetSkin() == 2 then
-			surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(90, 120, 180))
-			else
-			surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(hudr, hudg, hudb))
-			end
+  
+			surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(frame_r, frame_g, frame_b))
 			surface.DrawOutlinedRect( x, ammoy / 1.2, powerupx, powerupy)
 
 			--serious sam weapon icons
-			local icon = SeriousHUD and SeriousHUD.WeaponIcons[wep.classname] or sdmg
-			local hudr, hudg, hudb = SeriousHUD:GetColor()
+			local icon = SeriousHUD and SeriousHUD:GetWeaponIcon(wep.classname) or sdmg
 			surface.SetTexture(icon)			
 			surface.SetDrawColor(Color(hudr, hudg, hudb))
 			surface.DrawTexturedRect( x+2, ammoy / 1.2+2, ammosize/1.075, ammosize/1.075)
