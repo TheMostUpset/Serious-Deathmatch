@@ -52,6 +52,13 @@ function GM:GetHUDColorExtra()
 		return 90, 121, 181
 	end
 end
+function GM:GetHUDSkin()
+	if SeriousHUD then
+		return SeriousHUD:GetSkin()
+	else
+		return 2
+	end
+end
 
 local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
 	
