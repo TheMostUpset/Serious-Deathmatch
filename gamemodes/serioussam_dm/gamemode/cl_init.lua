@@ -328,8 +328,8 @@ function OpenSSMenu()
 	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
 	local flashColor2 = color_white
 	if GetConVarNumber("ss_hud_skin") == 2 then
-		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
-		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
+		ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
+		detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 		originalflashColor = Color(240, 155, 0)
 		flashColor1 = Color(170, 85, 0)
 		flashColor2 = Color(255, 200, 0)
@@ -349,7 +349,11 @@ function OpenSSMenu()
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0,0,0)
 		surface.DrawRect(0, 0, w, h)
+		if GetConVarNumber("ss_hud_skin") == 2 then
+		surface.SetTexture(ssbg_tse)
+		else
 		surface.SetTexture(ssbg)
+		end
 		local hudr, hudg, hudb = SeriousHUD:GetColor()
 		surface.SetDrawColor(hudr, hudg, hudb, 145)
 		local texW = 256
@@ -382,7 +386,11 @@ function OpenSSMenu()
 			offsetX = math.sin(CurTime() * 1.5) * 10
 			offsetY = math.cos(CurTime() * 1.5) * 10
 		end
+		if GetConVarNumber("ss_hud_skin") == 2 then
+		surface.SetTexture(detailTexture_vtf_tse)
+		else
 		surface.SetTexture(detailTexture_vtf)
+		end
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
 		surface.SetDrawColor(SeriousHUD:GetColor())
@@ -767,8 +775,8 @@ function OpenSettingsMenu()
 	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
 	local flashColor2 = color_white
 	if GetConVarNumber("ss_hud_skin") == 2 then
-		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
-		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
+		ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
+		detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 		originalflashColor = Color(240, 155, 0)
 		flashColor1 = Color(170, 85, 0)
 		flashColor2 = Color(255, 200, 0)
@@ -786,7 +794,12 @@ function OpenSettingsMenu()
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0,0,0)
 		surface.DrawRect(0, 0, w, h)
+		
+		if GetConVarNumber("ss_hud_skin") == 2 then
+		surface.SetTexture(ssbg_tse)
+		else
 		surface.SetTexture(ssbg)
+		end
 		local hudr, hudg, hudb = SeriousHUD:GetColor()
 		surface.SetDrawColor(hudr, hudg, hudb, 145)
 		local texW = 256
@@ -795,8 +808,10 @@ function OpenSettingsMenu()
 		if GetConVarNumber("ss_hud_skin") == 2 then
 			surface.DrawTexturedRect(0,0,w,h)
 		end
+		if GetConVarNumber("ss_hud_skin") == 1 then 
 		surface.SetTexture(grid_bg)
 		surface.SetDrawColor(hudr, hudg, hudb, 100)
+		end
 		if GetConVarNumber("ss_hud_skin") == 2 then 
 			surface.SetDrawColor(0, 0, 0, 0)
 		end
@@ -819,7 +834,11 @@ function OpenSettingsMenu()
 			offsetX = math.sin(CurTime() * 1.5) * 10
 			offsetY = math.cos(CurTime() * 1.5) * 10
 		end
+		if GetConVarNumber("ss_hud_skin") == 2 then
+		surface.SetTexture(detailTexture_vtf_tse)
+		else
 		surface.SetTexture(detailTexture_vtf)
+		end
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
 		surface.SetDrawColor(SeriousHUD:GetColor())
