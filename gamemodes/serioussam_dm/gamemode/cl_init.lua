@@ -315,26 +315,26 @@ hook.Add("Initialize", "PlayRandomMusicOnSpawn", PlayRandomMusic)
 
 
 
+local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
+local ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
+local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
+local detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
+local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 
 function OpenSSMenu()
 
 	showGameUI = true
 	
-	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
-	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
-	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 	local originalflashColor = Color(SeriousHUD:GetTextColor())
 	local SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
 	local flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
 	local flashColor2 = color_white
 	if GetConVarNumber("ss_hud_skin") == 2 then
-		ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
-		detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 		originalflashColor = Color(240, 155, 0)
 		flashColor1 = Color(170, 85, 0)
 		flashColor2 = Color(255, 200, 0)
 	end
-	local EscMenu = vgui.Create("DFrame")
+	EscMenu = vgui.Create("DFrame")
 	EscMenu:SetSize(ScrW(), ScrH())
 	EscMenu:Center()
 	EscMenu:SetTitle("")
@@ -350,9 +350,9 @@ function OpenSSMenu()
 		surface.SetDrawColor(0,0,0)
 		surface.DrawRect(0, 0, w, h)
 		if GetConVarNumber("ss_hud_skin") == 2 then
-		surface.SetTexture(ssbg_tse)
+			surface.SetTexture(ssbg_tse)
 		else
-		surface.SetTexture(ssbg)
+			surface.SetTexture(ssbg)
 		end
 		local hudr, hudg, hudb = SeriousHUD:GetColor()
 		surface.SetDrawColor(hudr, hudg, hudb, 145)
@@ -387,9 +387,9 @@ function OpenSSMenu()
 			offsetY = math.cos(CurTime() * 1.5) * 10
 		end
 		if GetConVarNumber("ss_hud_skin") == 2 then
-		surface.SetTexture(detailTexture_vtf_tse)
+			surface.SetTexture(detailTexture_vtf_tse)
 		else
-		surface.SetTexture(detailTexture_vtf)
+			surface.SetTexture(detailTexture_vtf)
 		end
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
@@ -400,203 +400,203 @@ function OpenSSMenu()
 
 
 
-local Continue_Button = vgui.Create("DButton", EscMenu)
-local isFlashing = false
-Continue_Button:SetText("CONTINUE")
-Continue_Button:SetSize(ScrW()/8, ScrH()/20)
-Continue_Button:Center()
-Continue_Button:SetY(ScrH()/2.58)
-Continue_Button:SetFont("MainMenu_Font")
-if GetConVarNumber("ss_hud_skin") == 2 then
-	Continue_Button:SetTextColor(Color(240, 155, 0))
-elseif GetConVarNumber("ss_hud_skin") == 1 then
-	Continue_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-end
-Continue_Button.Paint = function(self, w, h) 
-    if isFlashing then
-        local t = RealTime() * flashSpeed -- 4
-        local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
-        local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
-        local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
-       
-        Continue_Button:SetTextColor(Color(r, g, b))
-    end
-	
-end
-Continue_Button.OnCursorEntered = function()
-    isFlashing = true
-	surface.PlaySound("menus/select.wav")
-end
+	local Continue_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Continue_Button:SetText("CONTINUE")
+	Continue_Button:SetSize(ScrW()/8, ScrH()/20)
+	Continue_Button:Center()
+	Continue_Button:SetY(ScrH()/2.58)
+	Continue_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Continue_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Continue_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	Continue_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+		   
+			Continue_Button:SetTextColor(Color(r, g, b))
+		end
+		
+	end
+	Continue_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
 
-Continue_Button.OnCursorExited = function()
-    isFlashing = false
-    Continue_Button:SetTextColor(originalflashColor)
-end
+	Continue_Button.OnCursorExited = function()
+		isFlashing = false
+		Continue_Button:SetTextColor(originalflashColor)
+	end
 
-Continue_Button.DoClick = function()
-    EscMenu:Close()
-	showGameUI = false
+	Continue_Button.DoClick = function()
+		EscMenu:Close()
+		showGameUI = false
+		surface.PlaySound("menus/press.wav")
+	end
+
+	local Disconnect_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Disconnect_Button:SetText("STOP GAME")
+	Disconnect_Button:SetSize(ScrW()/8, ScrH()/20)
+	Disconnect_Button:Center()
+	Disconnect_Button:SetY(ScrH()/1.8)
+	Disconnect_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Disconnect_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Disconnect_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	Disconnect_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			Disconnect_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	Disconnect_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Disconnect_Button.OnCursorExited = function()
+		isFlashing = false
+		Disconnect_Button:SetTextColor(originalflashColor)
+	end
+
+
+	Disconnect_Button.DoClick = function()
+		RunConsoleCommand("disconnect")
+		surface.PlaySound("menus/press.wav")
+		surface.PlaySound("menus/press.wav")
+	end
+
+	local Options_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Options_Button:SetText("OPTIONS")
+	Options_Button:SetSize(ScrW()/8, ScrH()/20)
+	Options_Button:Center()
+	Options_Button:SetY(ScrH()/2)
+	Options_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Options_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Options_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	Options_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			Options_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	Options_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Options_Button.OnCursorExited = function()
+		isFlashing = false
+		Options_Button:SetTextColor(originalflashColor)
+	end
+
+	Options_Button.DoClick = function()
+		OpenSettingsMenu()
+
+		surface.PlaySound("menus/press.wav")
+
+	end
+
+	local LegacyM_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	LegacyM_Button:SetText("LEGACY MENU")
+	LegacyM_Button:SetSize(ScrW()/6, ScrH()/20)
+	LegacyM_Button:Center()
+	LegacyM_Button:SetY(ScrH()/2.25)
+	LegacyM_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		LegacyM_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		LegacyM_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	LegacyM_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			LegacyM_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	LegacyM_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	LegacyM_Button.OnCursorExited = function()
+		isFlashing = false
+		LegacyM_Button:SetTextColor(originalflashColor)
+	end
+
+	LegacyM_Button.DoClick = function()
+		EscMenu:Close()
+		showGameUI = false
+		gui.ActivateGameUI()
+
 	surface.PlaySound("menus/press.wav")
-end
 
-local Disconnect_Button = vgui.Create("DButton", EscMenu)
-local isFlashing = false
-Disconnect_Button:SetText("STOP GAME")
-Disconnect_Button:SetSize(ScrW()/8, ScrH()/20)
-Disconnect_Button:Center()
-Disconnect_Button:SetY(ScrH()/1.8)
-Disconnect_Button:SetFont("MainMenu_Font")
-if GetConVarNumber("ss_hud_skin") == 2 then
-	Disconnect_Button:SetTextColor(Color(240, 155, 0))
-elseif GetConVarNumber("ss_hud_skin") == 1 then
-	Disconnect_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-end
-Disconnect_Button.Paint = function(self, w, h) 
-    if isFlashing then
-        local t = RealTime() * flashSpeed -- 4
-        local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
-        local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
-        local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
-        
-        Disconnect_Button:SetTextColor(Color(r, g, b))
-    end
-end
-Disconnect_Button.OnCursorEntered = function()
-    isFlashing = true
-	surface.PlaySound("menus/select.wav")
-end
-
-Disconnect_Button.OnCursorExited = function()
-    isFlashing = false
-    Disconnect_Button:SetTextColor(originalflashColor)
-end
+	end
 
 
-Disconnect_Button.DoClick = function()
-    RunConsoleCommand("disconnect")
-	surface.PlaySound("menus/press.wav")
-	surface.PlaySound("menus/press.wav")
-end
+	local Quit_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Quit_Button:SetText("QUIT")
+	Quit_Button:SetSize(ScrW()/16, ScrH()/20)
+	Quit_Button:Center()
+	Quit_Button:SetY(ScrH()/1.635)
+	Quit_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Quit_Button:SetTextColor(Color(240, 155, 0))
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Quit_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	Quit_Button.Paint = function(self, w, h)
+	end
 
-local Options_Button = vgui.Create("DButton", EscMenu)
-local isFlashing = false
-Options_Button:SetText("OPTIONS")
-Options_Button:SetSize(ScrW()/8, ScrH()/20)
-Options_Button:Center()
-Options_Button:SetY(ScrH()/2)
-Options_Button:SetFont("MainMenu_Font")
-if GetConVarNumber("ss_hud_skin") == 2 then
-	Options_Button:SetTextColor(Color(240, 155, 0))
-elseif GetConVarNumber("ss_hud_skin") == 1 then
-	Options_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-end
-Options_Button.Paint = function(self, w, h) 
-    if isFlashing then
-        local t = RealTime() * flashSpeed -- 4
-        local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
-        local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
-        local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
-        
-        Options_Button:SetTextColor(Color(r, g, b))
-    end
-end
-Options_Button.OnCursorEntered = function()
-    isFlashing = true
-	surface.PlaySound("menus/select.wav")
-end
+	Quit_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			local t = RealTime() * flashSpeed -- 4
+			local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+			local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+			local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+			
+			Quit_Button:SetTextColor(Color(r, g, b))
+		end
+	end
+	Quit_Button.OnCursorEntered = function()
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
 
-Options_Button.OnCursorExited = function()
-    isFlashing = false
-    Options_Button:SetTextColor(originalflashColor)
-end
-
-Options_Button.DoClick = function()
-OpenSettingsMenu()
-
-surface.PlaySound("menus/press.wav")
-
-end
-
-local LegacyM_Button = vgui.Create("DButton", EscMenu)
-local isFlashing = false
-LegacyM_Button:SetText("LEGACY MENU")
-LegacyM_Button:SetSize(ScrW()/6, ScrH()/20)
-LegacyM_Button:Center()
-LegacyM_Button:SetY(ScrH()/2.25)
-LegacyM_Button:SetFont("MainMenu_Font")
-if GetConVarNumber("ss_hud_skin") == 2 then
-	LegacyM_Button:SetTextColor(Color(240, 155, 0))
-elseif GetConVarNumber("ss_hud_skin") == 1 then
-	LegacyM_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-end
-LegacyM_Button.Paint = function(self, w, h) 
-    if isFlashing then
-        local t = RealTime() * flashSpeed -- 4
-        local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
-        local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
-        local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
-        
-        LegacyM_Button:SetTextColor(Color(r, g, b))
-    end
-end
-LegacyM_Button.OnCursorEntered = function()
-    isFlashing = true
-	surface.PlaySound("menus/select.wav")
-end
-
-LegacyM_Button.OnCursorExited = function()
-    isFlashing = false
-    LegacyM_Button:SetTextColor(originalflashColor)
-end
-
-LegacyM_Button.DoClick = function()
-    EscMenu:Close()
-	showGameUI = false
-	gui.ActivateGameUI()
-
-surface.PlaySound("menus/press.wav")
-
-end
-
-
-local Quit_Button = vgui.Create("DButton", EscMenu)
-local isFlashing = false
-Quit_Button:SetText("QUIT")
-Quit_Button:SetSize(ScrW()/16, ScrH()/20)
-Quit_Button:Center()
-Quit_Button:SetY(ScrH()/1.635)
-Quit_Button:SetFont("MainMenu_Font")
-if GetConVarNumber("ss_hud_skin") == 2 then
-	Quit_Button:SetTextColor(Color(240, 155, 0))
-elseif GetConVarNumber("ss_hud_skin") == 1 then
-	Quit_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-end
-Quit_Button.Paint = function(self, w, h)
-end
-
-Quit_Button.Paint = function(self, w, h) 
-    if isFlashing then
-        local t = RealTime() * flashSpeed -- 4
-        local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
-        local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
-        local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
-        
-        Quit_Button:SetTextColor(Color(r, g, b))
-    end
-end
-Quit_Button.OnCursorEntered = function()
-    isFlashing = true
-	surface.PlaySound("menus/select.wav")
-end
-
-Quit_Button.OnCursorExited = function()
-    isFlashing = false
-    Quit_Button:SetTextColor(originalflashColor)
-end
-Quit_Button.DoClick = function()
-    OpenConfirmationMenu()
-	surface.PlaySound("menus/press.wav")
-end
+	Quit_Button.OnCursorExited = function()
+		isFlashing = false
+		Quit_Button:SetTextColor(originalflashColor)
+	end
+	Quit_Button.DoClick = function()
+		OpenConfirmationMenu()
+		surface.PlaySound("menus/press.wav")
+	end
 end
 
 function OpenConfirmationMenu()
@@ -685,7 +685,7 @@ function OpenConfirmationMenu()
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-50, offsetY-50, w*4, h*4, 0, 0, w / texW, h / texH )
 		surface.SetDrawColor(SeriousHUD:GetColor())
-	draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	local YesButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
@@ -721,10 +721,10 @@ function OpenConfirmationMenu()
 
 	YesButton.DoClick = function()
 
-	RunConsoleCommand("gamemenucommand", "quit")
+		RunConsoleCommand("gamemenucommand", "quit")
 
 
-	surface.PlaySound("menus/press.wav")
+		surface.PlaySound("menus/press.wav")
 	end
 	local NoButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
@@ -759,12 +759,13 @@ function OpenConfirmationMenu()
 	end
 
 	NoButton.DoClick = function()
-	ConfirmationMenu:Close()
-	DarkOverlayMenu:Close()
-	showGameUI = true
-	surface.PlaySound("menus/press.wav")
+		ConfirmationMenu:Close()
+		DarkOverlayMenu:Close()
+		showGameUI = true
+		surface.PlaySound("menus/press.wav")
 	end
 end
+
 function OpenSettingsMenu()
 	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
 	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
@@ -796,9 +797,9 @@ function OpenSettingsMenu()
 		surface.DrawRect(0, 0, w, h)
 		
 		if GetConVarNumber("ss_hud_skin") == 2 then
-		surface.SetTexture(ssbg_tse)
+			surface.SetTexture(ssbg_tse)
 		else
-		surface.SetTexture(ssbg)
+			surface.SetTexture(ssbg)
 		end
 		local hudr, hudg, hudb = SeriousHUD:GetColor()
 		surface.SetDrawColor(hudr, hudg, hudb, 145)
@@ -835,9 +836,9 @@ function OpenSettingsMenu()
 			offsetY = math.cos(CurTime() * 1.5) * 10
 		end
 		if GetConVarNumber("ss_hud_skin") == 2 then
-		surface.SetTexture(detailTexture_vtf_tse)
+			surface.SetTexture(detailTexture_vtf_tse)
 		else
-		surface.SetTexture(detailTexture_vtf)
+			surface.SetTexture(detailTexture_vtf)
 		end
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
@@ -881,9 +882,9 @@ function OpenSettingsMenu()
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	if !cvar_music:GetBool() then
-	Music_Button:SetText("ENABLE MUSIC")
+		Music_Button:SetText("ENABLE MUSIC")
 	else
-	Music_Button:SetText("DISABLE MUSIC")
+		Music_Button:SetText("DISABLE MUSIC")
 	end
 	Music_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Music_Button:Center()
@@ -989,7 +990,7 @@ function OpenSettingsMenu()
 			timer.Remove("looptimer")
 			
 		end
-	surface.PlaySound("menus/press.wav")
+		surface.PlaySound("menus/press.wav")
 	end
 	Music_Button.OnCursorEntered = function()
 		isFlashing = true
@@ -1067,13 +1068,13 @@ function OpenSettingsMenu()
 	end
 	
 	Forward_Button.DoClick = function()
-	local crosshair_value =  GetConVarNumber("ss_crosshair") + 1
-	if crosshair_value > 7 then
-	return false
-	else
-	RunConsoleCommand("ss_crosshair", crosshair_value)
-	Crosshair_Image:SetImage("vgui/serioussam/Crosshair" .. crosshair_value)
-	end
+		local crosshair_value = GetConVarNumber("ss_crosshair") + 1
+		if crosshair_value > 7 then
+			return false
+		else
+			RunConsoleCommand("ss_crosshair", crosshair_value)
+			Crosshair_Image:SetImage("vgui/serioussam/Crosshair" .. crosshair_value)
+		end
 	end
 	
 	Forward_Button.OnCursorEntered = function()
@@ -1113,15 +1114,13 @@ function OpenSettingsMenu()
 	end
 	
 	Backwards_Button.DoClick = function()
-	local crosshair_value =  GetConVarNumber("ss_crosshair") - 1
-	if crosshair_value < 1 then
-	return false
-	else
-	RunConsoleCommand("ss_crosshair", crosshair_value)
-	Crosshair_Image:SetImage("vgui/serioussam/Crosshair" .. crosshair_value)
-	end
-	
-	
+		local crosshair_value = GetConVarNumber("ss_crosshair") - 1
+		if crosshair_value < 1 then
+			return false
+		else
+			RunConsoleCommand("ss_crosshair", crosshair_value)
+			Crosshair_Image:SetImage("vgui/serioussam/Crosshair" .. crosshair_value)
+		end	
 	end
 	
 	Backwards_Button.OnCursorEntered = function()
@@ -1137,9 +1136,9 @@ function OpenSettingsMenu()
 	local HUD_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	if GetConVarNumber("ss_hud_skin") == 2 then
-	HUD_Button:SetText("TFE HUD")
+		HUD_Button:SetText("TFE HUD")
 	elseif GetConVarNumber("ss_hud_skin") == 1 then
-	HUD_Button:SetText("TSE HUD")
+		HUD_Button:SetText("TSE HUD")
 	end
 	HUD_Button:SetSize(ScrW()/4, ScrH() / 20)
 	HUD_Button:Center()
@@ -1161,15 +1160,39 @@ function OpenSettingsMenu()
 		end
 	end
 	HUD_Button.DoClick = function()
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			HUD_Button:SetText("TSE HUD")
-			RunConsoleCommand("ss_hud_skin", "1")
-		elseif GetConVarNumber("ss_hud_skin") == 1 then
-			HUD_Button:SetText("TFE HUD")
-			RunConsoleCommand("ss_hud_skin", "2")
-			
+		local cvar = GetConVar("ss_hud_skin")
+		if cvar then
+			local skin = cvar:GetInt()
+			if skin == 2 then
+				RunConsoleCommand("ss_hud_skin", "1")
+				HUD_Button:SetText("TSE HUD")
+				local r, g, b = GetConVarNumber("ss_hud_color_r"), GetConVarNumber("ss_hud_color_g"), GetConVarNumber("ss_hud_color_b")
+				originalflashColor = Color(r, g, b)
+				flashColor1 = Color(r / 2, g / 2, b / 2)
+				flashColor2 = color_white
+				local children = SettingsMenu:GetChildren()
+				table.Add(children, EscMenu:GetChildren())
+				for k, v in ipairs(children) do
+					if v:GetName() == "DButton" then
+						v:SetTextColor(Color(r, g, b, 255))
+					end
+				end
+			elseif skin == 1 then
+				RunConsoleCommand("ss_hud_skin", "2")	
+				HUD_Button:SetText("TFE HUD")
+				originalflashColor = Color(240, 155, 0)
+				flashColor1 = Color(170, 85, 0)
+				flashColor2 = Color(255, 200, 0)
+				local children = SettingsMenu:GetChildren()
+				table.Add(children, EscMenu:GetChildren())
+				for k, v in ipairs(children) do
+					if v:GetName() == "DButton" then
+						v:SetTextColor(Color(240, 155, 0))
+					end
+				end		
+			end
 		end
-	surface.PlaySound("menus/press.wav")
+		surface.PlaySound("menus/press.wav")
 	end
 	HUD_Button.OnCursorEntered = function()
 		isFlashing = true
