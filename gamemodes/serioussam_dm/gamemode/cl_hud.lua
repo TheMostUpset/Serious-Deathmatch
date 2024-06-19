@@ -64,9 +64,54 @@ function GM:GetHUDSkin()
 	end
 end
 
+function GM:HUDDrawTargetID()
+
+	local tr = util.GetPlayerTrace( LocalPlayer() )
+	local trace = util.TraceLine( tr )
+	if ( !trace.Hit ) then return end
+	if ( !trace.HitNonWorld ) then return end
+
+	local text = "ERROR"
+	local font = "seriousHUDfont_targetid"
+
+	if ( trace.Entity:IsPlayer() ) then
+		text = trace.Entity:Nick()
+	else
+		--text = trace.Entity:GetClass()
+		return
+	end
+
+	surface.SetFont( font )
+	local w, h = surface.GetTextSize( text )
+
+	local MouseX, MouseY = input.GetCursorPos()
+
+	if ( MouseX == 0 && MouseY == 0 || !vgui.CursorVisible() ) then
+
+		MouseX = ScrW() / 2
+		MouseY = ScrH() / 2
+
+	end
+
+	local x = MouseX
+	local y = MouseY *1.15
+
+	x = x - w / 2
+	y = y + 30
+
+	-- The fonts internal drop shadow looks lousy with AA on
+	draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 255 ) )
+	draw.SimpleText( text, font, x, y, Color(SeriousHUD:GetFrameColor()))
+
+	y = y + h + 5
+
+
+end
+
 local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
 	
 function GM:HUDPaint()
+hook.Run( "HUDDrawTargetID" )
     playerTable:PaintManual()
 	if cvar_timer_enabled:GetBool() then
 		local timeLimit = cvar_max_time:GetInt()

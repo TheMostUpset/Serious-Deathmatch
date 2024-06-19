@@ -118,10 +118,8 @@ hook.Add("CalcView", "ThirdpersonView", function(ply, origin, angles, fov)
 		return GAMEMODE:CalcThirdpersonView(ply, origin, angles, fov)
 	end
 end)
-	
- 
-local drawing = false
 
+local drawing = false
 local sdmg_mat = Material("models/effects/serioussam/sdmg_overlay")
 local inv_mat = Material("models/powerups/invisibility")
 local protect_mat = Material("models/serioussam/powerups/gold")
