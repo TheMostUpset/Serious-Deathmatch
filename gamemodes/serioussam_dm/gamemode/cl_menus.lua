@@ -19,6 +19,62 @@ function GetMMFColor()
 	return 240, 155, 0
 end
 
+local function PaintBackground(self, w, h)
+	local skin = GAMEMODE:GetHUDSkin()
+	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
+	
+	local offsetX = math.sin(CurTime() * 1.5) * -22
+	local offsetY = math.cos(CurTime() * 1.5) * -22
+	surface.SetDrawColor(0,0,0)
+	surface.DrawRect(0, 0, w, h)
+	
+	if skin == 2 then
+		surface.SetTexture(ssbg_tse)
+	else
+		surface.SetTexture(ssbg)
+	end
+	surface.SetDrawColor(hudr, hudg, hudb, 145)
+	local texW = 256
+	local texH = 256
+	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
+	if skin == 2 then
+		surface.DrawTexturedRect(0,0,w,h)
+	end
+	if skin == 1 then 
+	surface.SetTexture(grid_bg)
+	surface.SetDrawColor(hudr, hudg, hudb, 100)
+	end
+	if skin == 2 then 
+		surface.SetDrawColor(0, 0, 0, 0)
+	end
+	local texW = 16
+	local texH = 16
+	surface.DrawTexturedRectUV( 0, 0, w, h, 0, 0, w / texW, h / texH )
+
+	offset = offset + speed
+	if offset > w then
+		offset = 0
+	end
+
+
+
+	local texW = 256
+	local texH = 128
+	local offsetX = math.sin(CurTime() * 1.5) * 30
+	local offsetY = math.cos(CurTime() * 1.5) * 30
+	if skin == 2 then
+		offsetX = math.sin(CurTime() * 1.5) * 10
+		offsetY = math.cos(CurTime() * 1.5) * 10
+	end
+	if skin == 2 then
+		surface.SetTexture(detailTexture_vtf_tse)
+	else
+		surface.SetTexture(detailTexture_vtf)
+	end
+	surface.SetDrawColor(hudr, hudg, hudb, 140)
+	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
+end
+
 local function GetButtonColor()
 	if GAMEMODE:GetHUDSkin() == 1 then
 		return Color(GAMEMODE:GetHUDColor())
@@ -59,55 +115,7 @@ function OpenSSMenu()
 
 
 	EscMenu.Paint = function(self, w, h)
-		local offsetX = math.sin(CurTime() * 1.5) * -22
-		local offsetY = math.cos(CurTime() * 1.5) * -22
-		surface.SetDrawColor(0,0,0)
-		surface.DrawRect(0, 0, w, h)
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			surface.SetTexture(ssbg_tse)
-		else
-			surface.SetTexture(ssbg)
-		end
-		local hudr, hudg, hudb = SeriousHUD:GetColor()
-		surface.SetDrawColor(hudr, hudg, hudb, 145)
-		local texW = 256
-		local texH = 256
-		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			surface.DrawTexturedRect(0,0,w,h)
-		end
-		surface.SetTexture(grid_bg)
-		surface.SetDrawColor(hudr, hudg, hudb, 100)
-		if GetConVarNumber("ss_hud_skin") == 2 then 
-			surface.SetDrawColor(0, 0, 0, 0)
-		end
-		local texW = 16
-		local texH = 16
-		surface.DrawTexturedRectUV( 0, 0, w, h, 0, 0, w / texW, h / texH )
-
-		offset = offset + speed
-		if offset > w then
-			offset = 0
-		end
-
-
-
-		local texW = 256
-		local texH = 128
-		local offsetX = math.sin(CurTime() * 1.5) * 30
-		local offsetY = math.cos(CurTime() * 1.5) * 30
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			offsetX = math.sin(CurTime() * 1.5) * 10
-			offsetY = math.cos(CurTime() * 1.5) * 10
-		end
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			surface.SetTexture(detailTexture_vtf_tse)
-		else
-			surface.SetTexture(detailTexture_vtf)
-		end
-		surface.SetDrawColor(hudr, hudg, hudb, 140)
-		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
-		surface.SetDrawColor(SeriousHUD:GetColor())
+		PaintBackground(self, w, h)
 		draw.SimpleText("GAME", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
@@ -350,7 +358,7 @@ function OpenConfirmationMenu()
 		surface.SetTexture(detailTexture_vtf)
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-50, offsetY-50, w*4, h*4, 0, 0, w / texW, h / texH )
-		surface.SetDrawColor(SeriousHUD:GetColor())
+
 		draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	local YesButton = vgui.Create("DButton", ConfirmationMenu)
@@ -432,58 +440,7 @@ function OpenSettingsMenu()
 	SettingsMenu:MakePopup()
 
 	SettingsMenu.Paint = function(self, w, h)
-		local offsetX = math.sin(CurTime() * 1.5) * -22
-		local offsetY = math.cos(CurTime() * 1.5) * -22
-		surface.SetDrawColor(0,0,0)
-		surface.DrawRect(0, 0, w, h)
-		
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			surface.SetTexture(ssbg_tse)
-		else
-			surface.SetTexture(ssbg)
-		end
-		local hudr, hudg, hudb = SeriousHUD:GetColor()
-		surface.SetDrawColor(hudr, hudg, hudb, 145)
-		local texW = 256
-		local texH = 256
-		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			surface.DrawTexturedRect(0,0,w,h)
-		end
-		if GetConVarNumber("ss_hud_skin") == 1 then 
-		surface.SetTexture(grid_bg)
-		surface.SetDrawColor(hudr, hudg, hudb, 100)
-		end
-		if GetConVarNumber("ss_hud_skin") == 2 then 
-			surface.SetDrawColor(0, 0, 0, 0)
-		end
-		local texW = 16
-		local texH = 16
-		surface.DrawTexturedRectUV( 0, 0, w, h, 0, 0, w / texW, h / texH )
-
-		offset = offset + speed
-		if offset > w then
-			offset = 0
-		end
-
-
-
-		local texW = 256
-		local texH = 128
-		local offsetX = math.sin(CurTime() * 1.5) * 30
-		local offsetY = math.cos(CurTime() * 1.5) * 30
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			offsetX = math.sin(CurTime() * 1.5) * 10
-			offsetY = math.cos(CurTime() * 1.5) * 10
-		end
-		if GetConVarNumber("ss_hud_skin") == 2 then
-			surface.SetTexture(detailTexture_vtf_tse)
-		else
-			surface.SetTexture(detailTexture_vtf)
-		end
-		surface.SetDrawColor(hudr, hudg, hudb, 140)
-		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
-		surface.SetDrawColor(SeriousHUD:GetColor())
+		PaintBackground(self, w, h)
 		draw.SimpleText("OPTIONS", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
