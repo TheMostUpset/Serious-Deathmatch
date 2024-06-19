@@ -1,4 +1,5 @@
-"UnlitGeneric"
+"VertexLitGeneric"
 {
 	"$basetexture" "models/serioussam/powerups/sdmg"
+	"$selfillum" "1"
 }
