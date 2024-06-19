@@ -179,10 +179,12 @@ function GM:SpawnPickupOnDeath(ply, actWep)
 	local drop = pickupTable[actWep:GetClass()]
 	if drop then
 		local ent = ents.Create(drop)
-		ent:SetPos(ply:GetPos() + Vector(0,0,30))
-		ent:SetDropped(true)
-		ent.AmmoToGive = ply:GetAmmoCount(actWep:GetPrimaryAmmoType())
-		ent:Spawn()
+		if IsValid(ent) then
+			ent:SetPos(ply:GetPos() + Vector(0,0,30))
+			ent:SetDropped(true)
+			ent.AmmoToGive = ply:GetAmmoCount(actWep:GetPrimaryAmmoType())
+			ent:Spawn()
+		end
 	end
 end
 
