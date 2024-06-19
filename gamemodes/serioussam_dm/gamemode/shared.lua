@@ -8,14 +8,13 @@ cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
 cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
 if !cvar_max_frags then
-	cvar_max_frags = CreateConVar("sdm_max_frags", 20, FCVAR_REPLICATED)
-	print("AAAAAAAAAAAAAAAAA")
+	cvar_max_frags = CreateConVar("sdm_max_frags", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
 if !cvar_max_time then
-	cvar_max_time = CreateConVar("sdm_max_time", 600, FCVAR_REPLICATED)
+	cvar_max_time = CreateConVar("sdm_max_time", 600, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
 if !cvar_timer_enabled then
-	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, FCVAR_REPLICATED)
+	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
 
 include( "shared_killfeed.lua" )
