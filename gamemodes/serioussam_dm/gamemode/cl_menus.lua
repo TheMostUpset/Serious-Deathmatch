@@ -821,6 +821,7 @@ function OpenSettingsMenu()
 	local children = SettingsMenu:GetChildren()
 	table.Add(children, EscMenu:GetChildren())
 	TFE_Color_Mixer.ValueChanged = function(self, col)
+	if GAMEMODE:GetHUDSkin() == 2 then return false end
 		UpdateButtonsColor(children, col)
 	end
 
