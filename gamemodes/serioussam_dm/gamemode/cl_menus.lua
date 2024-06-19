@@ -609,7 +609,7 @@ function OpenSettingsMenu()
 	elseif GetConVarNumber("ss_bob") == 1 then
 		Bob_Button:SetText("DISABLE BOBBING")
 	end
-	Bob_Button:SetSize(ScrW()/6, ScrH() / 20)
+	Bob_Button:SetSize(ScrW()/5.5, ScrH() / 20)
 	Bob_Button:Center()
 	Bob_Button:SetY(ScrH()/2.213)
 	Bob_Button:SetFont("MainMenu_Font")
