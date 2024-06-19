@@ -43,6 +43,16 @@ function OpenSSMenu()
 
 
 	EscMenu.Paint = function(self, w, h)
+		if GetConVarNumber("ss_hud_skin") == 2 then
+			originalflashColor = Color(240, 155, 0)
+			flashColor1 = Color(170, 85, 0)
+			flashColor2 = Color(255, 200, 0)
+		elseif GetConVarNumber("ss_hud_skin") == 1 then
+			originalflashColor = Color(SeriousHUD:GetTextColor())
+			SHUD_text_r, SHUD_text_g, SHUD_text_b = SeriousHUD:GetTextColor()
+			flashColor1 = Color(SHUD_text_r / 2, SHUD_text_g / 2, SHUD_text_b / 2)
+			flashColor2 = color_white
+		end
 		local offsetX = math.sin(CurTime() * 1.5) * -22
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0,0,0)
