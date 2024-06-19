@@ -107,3 +107,6 @@ function GM:PlayerNoClip(ply, state)
 	
 	return cvars.Bool("sv_cheats")
 end
+
+function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
+end
