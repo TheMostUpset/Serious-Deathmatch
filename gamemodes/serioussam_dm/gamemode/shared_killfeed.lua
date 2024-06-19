@@ -1,17 +1,3 @@
-if CLIENT then
-  
-    surface.CreateFont("killfeed_font",{
-        font = "Roboto",
-        size = ScrH() / 46,
-        weight = 1000,
-        antialiasing = true,
-        additive = false,
-		shadow = true
-    });
-end
---[[
-  KILLFEED
-]]
 local NET_STRING = "killfeed_log";
 
 if CLIENT then
@@ -54,11 +40,12 @@ if CLIENT then
 
 
     -- Draw the killicon
-
+	local x = ScrW() - ScrW() /1.065 + killerSize
     local kOffset = (size + icon + offset + killerSize); -- Killicon offset
     if (killicon.Exists(feed.weapon)) then
-      killicon.Draw(ScrW() - ScrW() /1.065 + killerSize / 1, y, feed.weapon, 255);
+      killicon.Draw(x, y, feed.weapon, 255);
     end
+	
 
   
   end

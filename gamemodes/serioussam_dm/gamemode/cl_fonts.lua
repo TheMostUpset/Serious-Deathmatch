@@ -30,6 +30,15 @@ surface.CreateFont( "Scoreboard_Font", {
 	outline = false,
 } )
 
+surface.CreateFont("killfeed_font",{
+	font = "Roboto",
+	size = ScrH() / 46,
+	weight = 1000,
+	antialiasing = true,
+	additive = false,
+	shadow = true
+});
+
 surface.CreateFont( "Death_Font", {
 	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,

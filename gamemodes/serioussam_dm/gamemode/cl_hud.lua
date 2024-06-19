@@ -13,8 +13,8 @@ function playerTable:Paint(w, h)
 
 	local posX = ScrW() / 2 / 1.215
     local posY = 10
-	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
-	local nickr, nickg, nickb = GAMEMODE:GetHUDColorExtra()
+	local hudr, hudg, hudb = SeriousHUD:GetFrameColor()
+
 
     for _, ply in ipairs(self.Players) do
 		local nick, frags, deaths = ply:Nick(), ply:Frags(), ply:Deaths()
@@ -22,8 +22,12 @@ function playerTable:Paint(w, h)
 		draw.SimpleText(nick, "Scoreboard_Font", posX + 1, posY + 1, color_black, TEXT_ALIGN_RIGHT)
 		draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY +1, color_black, TEXT_ALIGN_RIGHT)
 		
-		draw.SimpleText(nick, "Scoreboard_Font", posX, posY, Color(nickr, nickg, nickb), TEXT_ALIGN_RIGHT)
+		draw.SimpleText(nick, "Scoreboard_Font", posX, posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
+		if ply == LocalPlayer() then
 		draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
+		else
+		draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, color_white, TEXT_ALIGN_RIGHT)
+		end
 		
 		posY = posY + ScrH() / 28		
     end

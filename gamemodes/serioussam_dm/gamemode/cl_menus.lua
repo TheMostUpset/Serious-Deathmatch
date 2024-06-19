@@ -628,7 +628,7 @@ function OpenSettingsMenu()
 	
 	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)	-- Add image to Frame
 	Crosshair_Image:Center()	-- Move it into frame
-	Crosshair_Image:SetY(ScrH()/1.8)	-- Size it to 150x150
+	Crosshair_Image:SetY(ScrH()/1.775)	-- Size it to 150x150
 	Crosshair_Image:SetSize(ScrH()/20, ScrH() / 20)
 	-- Set material relative to "garrysmod/materials/"
 	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
@@ -638,7 +638,7 @@ function OpenSettingsMenu()
 	Forward_Button:SetText(">")
 	Forward_Button:SetSize(ScrW()/80, ScrH() / 20)
 	Forward_Button:SetX(ScrW()/1.9)
-	Forward_Button:SetY(ScrH()/1.825)
+	Forward_Button:SetY(ScrH()/1.8)
 	Forward_Button:SetFont("MainMenu_Font")
 	Forward_Button:SetTextColor(GetButtonColor())
 
@@ -649,6 +649,7 @@ function OpenSettingsMenu()
 	end
 	
 	Forward_Button.DoClick = function()
+	surface.PlaySound("menus/press.wav")
 		local crosshair_value = GetConVarNumber("ss_crosshair") + 1
 		if crosshair_value > 7 then
 			return false
@@ -675,7 +676,7 @@ function OpenSettingsMenu()
 	Backwards_Button:SetText("<")
 	Backwards_Button:SetSize(ScrW()/80, ScrH() / 20)
 	Backwards_Button:SetX(ScrW()/2.195)
-	Backwards_Button:SetY(ScrH()/1.825)
+	Backwards_Button:SetY(ScrH()/1.8)
 	Backwards_Button:SetFont("MainMenu_Font")
 	Backwards_Button:SetTextColor(GetButtonColor())
 	
@@ -686,6 +687,7 @@ function OpenSettingsMenu()
 	end
 	
 	Backwards_Button.DoClick = function()
+	surface.PlaySound("menus/press.wav")
 		local crosshair_value = GetConVarNumber("ss_crosshair") - 1
 		if crosshair_value < 1 then
 			return false
@@ -714,7 +716,7 @@ function OpenSettingsMenu()
 	end
 	HUD_Button:SetSize(ScrW()/4, ScrH() / 20)
 	HUD_Button:Center()
-	HUD_Button:SetY(ScrH()/1.56)
+	HUD_Button:SetY(ScrH()/1.55)
 	HUD_Button:SetFont("MainMenu_Font")
 	HUD_Button:SetTextColor(GetButtonColor())
 
