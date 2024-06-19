@@ -3,12 +3,23 @@ GM.Name = "Serious Deathmatch"
 GM.Author = "wico."
 GM.Email = "N/A"
 GM.Website = "N/A"
-include( "shared_killfeed.lua" )
-include( "shared_gibs.lua" )
 
 cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
 cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
+if !cvar_max_frags then
+	cvar_max_frags = CreateConVar("sdm_max_frags", 20, FCVAR_REPLICATED)
+	print("AAAAAAAAAAAAAAAAA")
+end
+if !cvar_max_time then
+	cvar_max_time = CreateConVar("sdm_max_time", 600, FCVAR_REPLICATED)
+end
+if !cvar_timer_enabled then
+	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, FCVAR_REPLICATED)
+end
+
+include( "shared_killfeed.lua" )
+include( "shared_gibs.lua" )
 
 function GM:GetPlayersSortedByFrags()
 	local players = player.GetAll()

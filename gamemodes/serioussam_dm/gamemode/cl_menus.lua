@@ -621,15 +621,13 @@ function OpenSettingsMenu()
 		end
 	end
 	Bob_Button.DoClick = function()
-		local cvar = GetConVar("ss_hud_skin")
+		local cvar = GetConVar("ss_bob")
 		if cvar then
-			local skin = cvar:GetInt()
-			local children = SettingsMenu:GetChildren()
-			table.Add(children, EscMenu:GetChildren())
-			if GetConVarNumber("ss_bob") == 0 then
+			local state = cvar:GetInt()
+			if state == 0 then
 				RunConsoleCommand("ss_bob", "1")
 				Bob_Button:SetText("DISABLE BOBBING")
-			elseif GetConVarNumber("ss_bob") == 1 then
+			elseif state == 1 then
 				RunConsoleCommand("ss_bob", "0")
 				Bob_Button:SetText("ENABLE BOBBING")
 			end

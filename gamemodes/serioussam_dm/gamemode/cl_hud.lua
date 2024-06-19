@@ -13,7 +13,7 @@ function playerTable:Paint(w, h)
 
 	local posX = ScrW() / 2 / 1.215
     local posY = 10
-	local hudr, hudg, hudb = SeriousHUD:GetFrameColor()
+	local hudr, hudg, hudb = GAMEMODE:GetHUDColorFrame()
 
 
     for _, ply in ipairs(self.Players) do
@@ -49,11 +49,11 @@ function GM:GetHUDColor()
 		return 255, 255, 255
 	end
 end
-function GM:GetHUDColorExtra()
-	if SeriousHUD and SeriousHUD:GetSkin() == 1 then
-		return SeriousHUD:GetColor()
+function GM:GetHUDColorFrame()
+	if SeriousHUD then
+		return SeriousHUD:GetFrameColor()
 	else
-		return 90, 121, 181
+		return 90, 120, 180
 	end
 end
 function GM:GetHUDSkin()
@@ -101,7 +101,7 @@ function GM:HUDDrawTargetID()
 
 	-- The fonts internal drop shadow looks lousy with AA on
 	draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 255 ) )
-	draw.SimpleText( text, font, x, y, Color(SeriousHUD:GetFrameColor()))
+	draw.SimpleText( text, font, x, y, Color(self:GetHUDColorFrame()))
 
 	y = y + h + 5
 
@@ -111,9 +111,9 @@ end
 local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
 	
 function GM:HUDPaint()
-hook.Run( "HUDDrawTargetID" )
+	hook.Run( "HUDDrawTargetID" )
     playerTable:PaintManual()
-	if cvar_timer_enabled:GetBool() then
+	if cvar_timer_enabled and cvar_timer_enabled:GetBool() then
 		local timeLimit = cvar_max_time:GetInt()
 		local timer = "%02i:%02i"
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
@@ -122,7 +122,7 @@ hook.Run( "HUDDrawTargetID" )
         end
 		
 		local hudr, hudg, hudb = self:GetHUDColor()
-		local hudr_e, hudg_e, hudb_e = self:GetHUDColorExtra()
+		local hudr_e, hudg_e, hudb_e = self:GetHUDColorFrame()
 		
 		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
 		
@@ -170,7 +170,7 @@ hook.Run( "HUDDrawTargetID" )
 		if playerTable and playerTable.Players then
 			firstplayer = playerTable.Players[1]
 		end
-		if IsValid(firstplayer) then
+		if IsValid(firstplayer) and cvar_max_frags then
 			local max_frags = cvar_max_frags:GetInt()
 			local frags_left = math.min(max_frags - firstplayer:Frags(), max_frags)
 			if frags_left > 0 then
