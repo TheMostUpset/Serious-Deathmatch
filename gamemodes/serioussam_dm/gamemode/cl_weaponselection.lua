@@ -61,11 +61,14 @@ local function update()
         local classname = v:GetClass()
         local Slot = CurSwep[classname] and CurSwep[classname].Slot - 1 or v.Slot or 1
         tblLoad[Slot] = tblLoad[Slot] or {}
+		local ammotype = v:GetPrimaryAmmoType()
+		local ammo = ammotype > -1 and LocalPlayer():GetAmmoCount(ammotype) or 999
 
         table.insert(tblLoad[Slot], {
             classname = classname,
             name = v:GetPrintName(),
-            slotpos = CurSwep[classname] and CurSwep[classname].SlotPos - 1 or v.SlotPos or 1
+            slotpos = CurSwep[classname] and CurSwep[classname].SlotPos - 1 or v.SlotPos or 1,
+			ammo = ammo
         })
     end
 
@@ -267,8 +270,12 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 
 			--serious sam weapon icons
 			local icon = SeriousHUD and SeriousHUD:GetWeaponIcon(wep.classname) or sdmg
+			local iconr, icong, iconb = hudr, hudg, hudb
+			if wep.ammo == 0 then
+				iconr, icong, iconb = iconr / 3, icong / 3, iconb / 3
+			end
 			surface.SetTexture(icon)			
-			surface.SetDrawColor(Color(hudr, hudg, hudb))
+			surface.SetDrawColor(Color(iconr, icong, iconb))
 			surface.DrawTexturedRect( x+2, ammoy / 1.2+2, ammosize/1.075, ammosize/1.075)
 			
 			local w, h = surface.GetTextSize(wep.classname)
