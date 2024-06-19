@@ -99,6 +99,28 @@ local function ButtonFlashing(button)
 	button:SetTextColor(Color(r, g, b))
 end
 
+local function UpdateButtonsSkin(t, skin)
+	local col = Color(240, 155, 0, 255)
+	if skin == 1 then
+		local r, g, b = GetConVarNumber("ss_hud_color_r"), GetConVarNumber("ss_hud_color_g"), GetConVarNumber("ss_hud_color_b")
+		col = Color(r, g, b, 255)
+	end
+	for k, v in ipairs(t) do
+		if v:GetName() == "DButton" then
+			v:SetTextColor(col)
+		end
+	end
+end
+
+local function UpdateButtonsColor(t, col)
+	col = col or Color(240, 155, 0, 255)
+	for k, v in ipairs(t) do
+		if v:GetName() == "DButton" then
+			v:SetTextColor(col)
+		end
+	end
+end
+
 function OpenSSMenu()
 
 	showGameUI = true
@@ -705,27 +727,16 @@ function OpenSettingsMenu()
 		local cvar = GetConVar("ss_hud_skin")
 		if cvar then
 			local skin = cvar:GetInt()
+			local children = SettingsMenu:GetChildren()
+			table.Add(children, EscMenu:GetChildren())
 			if skin == 2 then
 				RunConsoleCommand("ss_hud_skin", "1")
 				HUD_Button:SetText("TSE HUD")
-				local r, g, b = GetConVarNumber("ss_hud_color_r"), GetConVarNumber("ss_hud_color_g"), GetConVarNumber("ss_hud_color_b")
-				local children = SettingsMenu:GetChildren()
-				table.Add(children, EscMenu:GetChildren())
-				for k, v in ipairs(children) do
-					if v:GetName() == "DButton" then
-						v:SetTextColor(Color(r, g, b, 255))
-					end
-				end
+				UpdateButtonsSkin(children, 1)
 			elseif skin == 1 then
 				RunConsoleCommand("ss_hud_skin", "2")	
 				HUD_Button:SetText("TFE HUD")
-				local children = SettingsMenu:GetChildren()
-				table.Add(children, EscMenu:GetChildren())
-				for k, v in ipairs(children) do
-					if v:GetName() == "DButton" then
-						v:SetTextColor(Color(240, 155, 0))
-					end
-				end		
+				UpdateButtonsSkin(children, 2)
 			end
 		end
 		surface.PlaySound("menus/press.wav")
@@ -765,18 +776,6 @@ function OpenSettingsMenu()
 		TFE_Color_Button:SetTextColor(GetButtonColor())
 	end
 
-	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
-	TFE_Color_Mixer:SetSize(ScrW()/8, ScrW()/12.5)
-	TFE_Color_Mixer:Center()
-	TFE_Color_Mixer:SetY(ScrH()/1.25)
-	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
-	TFE_Color_Mixer:SetAlphaBar(false) 			-- Show/hide the alpha bar 				DEF:true
-	TFE_Color_Mixer:SetWangs(true) 				-- Show/hide the R G B A indicators 	DEF:true
-	TFE_Color_Mixer:SetColor(Color(30,100,160)) 	-- Set the default color
-	TFE_Color_Mixer:SetConVarR("ss_hud_color_r")
-	TFE_Color_Mixer:SetConVarG("ss_hud_color_g")
-	TFE_Color_Mixer:SetConVarB("ss_hud_color_b")
-
 	local Back_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Back_Button:SetText("BACK")
@@ -805,6 +804,23 @@ function OpenSettingsMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 
+
+	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
+	TFE_Color_Mixer:SetSize(ScrW()/8, ScrW()/12.5)
+	TFE_Color_Mixer:Center()
+	TFE_Color_Mixer:SetY(ScrH()/1.25)
+	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
+	TFE_Color_Mixer:SetAlphaBar(false) 			-- Show/hide the alpha bar 				DEF:true
+	TFE_Color_Mixer:SetWangs(true) 				-- Show/hide the R G B A indicators 	DEF:true
+	TFE_Color_Mixer:SetColor(Color(30,100,160)) 	-- Set the default color
+	TFE_Color_Mixer:SetConVarR("ss_hud_color_r")
+	TFE_Color_Mixer:SetConVarG("ss_hud_color_g")
+	TFE_Color_Mixer:SetConVarB("ss_hud_color_b")
+	local children = SettingsMenu:GetChildren()
+	table.Add(children, EscMenu:GetChildren())
+	TFE_Color_Mixer.ValueChanged = function(self, col)
+		UpdateButtonsColor(children, col)
+	end
 
  
 	local buttonKleiner = vgui.Create("DImageButton", SettingsMenu)
