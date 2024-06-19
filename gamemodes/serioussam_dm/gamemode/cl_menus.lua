@@ -83,13 +83,12 @@ local function GetButtonColor()
 end
 
 local function ButtonFlashing(button)
-	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
-
-	local flashColor1 = Color(hudr / 2, hudg / 2, hudb / 2)
-	local flashColor2 = color_white
-	if GAMEMODE:GetHUDSkin() == 2 then
-		flashColor1 = Color(170, 85, 0)
-		flashColor2 = Color(255, 200, 0)
+	local flashColor1 = Color(170, 85, 0)
+	local flashColor2 = Color(255, 200, 0)
+	if GAMEMODE:GetHUDSkin() == 1 then
+		local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
+		flashColor1 = Color(hudr / 2, hudg / 2, hudb / 2)
+		flashColor2 = color_white
 	end
 	
 	local t = RealTime() * flashSpeed -- 4
