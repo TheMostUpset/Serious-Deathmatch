@@ -41,9 +41,6 @@ end
 
 
 
-function ENT:Pickup(ply)
-
-end
 
 local function netBroadcast(ply, t)
 	net.Start("SSPowerupsClient")
@@ -55,6 +52,7 @@ end
 
 function ENT:SendToClient(ply, t)
 	netBroadcast(ply, t)
+	
 end
 
 
