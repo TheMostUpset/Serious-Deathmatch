@@ -18,12 +18,28 @@
 		}
 		2
 		{
+			"name"		"sdm_use_hitboxes"
+			"text"		"Headshots"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		3
+		{
+			"name"		"sdm_mapvote_enabled"
+			"text"		"Map Vote"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		4
+		{
 			"name"		"sdm_timer_enabled"
 			"text"		"Timer"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		3
+
+
+		5
 		{
 			"name"		"sdm_max_time"
 			"text"		"Max Time"
