@@ -45,22 +45,18 @@ end
 
 function ENT:Touch(ent)	
 	if IsValid(ent) and ent:IsPlayer() and ent:Alive() and self.Available then
+		if !ent.SSPowerups then
+			ent.SSPowerups = {}
+		end
 		if game.SinglePlayer() then
-			if !ent.SSPowerups then
-				ent.SSPowerups = {}
-			end
 			self:Remove()
 		else
-			if !ent.SSPowerups then
-				ent.SSPowerups = {}
-			end
 			self.Available = false
 			self:SetNoDraw(true)
 			self.ReEnabled = CurTime() + self.RespawnTime
 		end
-		self:Pickup(ent)
-		
-	self:SendPickupMsg(ent, "Serious Damage")
+		self:Pickup(ent)		
+		self:SendPickupMsg(ent, "Serious Damage")
 	end
 end
 
