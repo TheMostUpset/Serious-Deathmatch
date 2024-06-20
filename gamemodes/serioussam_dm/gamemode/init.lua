@@ -240,6 +240,9 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetRunSpeed(PLAYER_RUNSPEED)	
    -- ply:SetSlowWalkSpeed( 380 )
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
+	if player.GetCount() > 1 and self:GetState() == STATE_GAME_PREPARE then
+	self:GameStart()
+	end
 end
 
 function GM:PlayerLoadout(ply)
