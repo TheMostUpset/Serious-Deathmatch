@@ -272,16 +272,20 @@ end
 
 function GM:UpdatePlayerSpeed(ply, wep)
 	wep = wep or ply:GetActiveWeapon()
-	local hasSeriousSpeed = ply.SSPowerups and ply.SSPowerups.Speed and ply.SSPowerups.Speed > CurTime()
+	local hasSeriousSpeed = ply:HasSeriousSpeed()
 	local mul = hasSeriousSpeed and 2 or 1
 	
 	ply:SetRunSpeed(PLAYER_RUNSPEED * mul)	
    -- ply:SetSlowWalkSpeed( 380 )
 	if IsValid(wep) and wep:GetClass() == "weapon_ss_knife" then
+		mul = hasSeriousSpeed and 1.315 or 1
 		ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE * mul)
+		mul = hasSeriousSpeed and 1.1 or 1
 		ply:SetJumpPower(PLAYER_JUMPPOWER_KNIFE * mul)
 	else
+		mul = hasSeriousSpeed and 1.63 or 1
 		ply:SetWalkSpeed(PLAYER_WALKSPEED * mul)
+		mul = hasSeriousSpeed and 1.1 or 1
 		ply:SetJumpPower(PLAYER_JUMPPOWER * mul)
 	end   
 end

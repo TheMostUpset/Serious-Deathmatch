@@ -8,20 +8,8 @@ local function PowerupActive(ply)
 end
 
 function ENT:Pickup(ent)
-    local duration = CurTime() + self.PDuration
-  
+    local duration = CurTime() + self.PDuration  
     ent.SSPowerups.SeriousDamage = duration
-    -- if self.PDuration >= 3 then
-        -- ent.SSPowerups.SeriousDamageOut = duration - 3		
-    -- end
-
-    self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
-	-- ent:SetNW2Bool( "HasSDMG", true )
-
-	-- timer.Create("SeriousDamageTime"..ent:EntIndex(), self.PDuration, 1, function()
-		-- ent:SetNW2Bool( "HasSDMG", false )
-	-- end)
-
 end
 
 hook.Add("EntityTakeDamage", "SSPowerups_SeriousDamage", function(ent, dmginfo)

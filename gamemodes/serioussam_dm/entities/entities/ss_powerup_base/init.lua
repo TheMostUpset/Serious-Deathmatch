@@ -55,6 +55,7 @@ function ENT:Touch(ent)
 			self:SetNoDraw(true)
 			self.ReEnabled = CurTime() + self.RespawnTime
 		end
+		self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
 		self:Pickup(ent)
 		self:SendToClient(ent, ent.SSPowerups)
 		self:SendPickupMsg(ent, self.PrintName)
