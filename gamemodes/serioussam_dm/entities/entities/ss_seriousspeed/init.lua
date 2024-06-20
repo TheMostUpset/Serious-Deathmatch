@@ -9,7 +9,7 @@ end
 
 function ENT:Pickup(ent)
     local duration = CurTime() + self.PDuration
-  
+	ent:SetNW2Float("PickupTime", duration)
     ent.SSPowerups.Speed = duration
     -- if self.PDuration >= 3 then
         -- ent.SSPowerups.SpeedOut = duration - 3		

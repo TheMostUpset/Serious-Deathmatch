@@ -11,8 +11,9 @@ local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
 local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
 local protect = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability")
 local speed = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
-	
+
 local function AddPowerupOverlay(pTime, col)
+	local currentTime = CurTime()
 	drawing = false
 	local t = LocalPlayer().SSPowerups
 
@@ -27,11 +28,11 @@ local function AddPowerupOverlay(pTime, col)
 	local widerect_w = size * 2.42
 	local widerectleft_x = size + gap_screen + gap_rect
 	local text_align_y = size / 5
-	
+
 	local cntr = widerectleft_x + widerect_w + ScrW() / 8 - 52
 	local ammorectx = cntr + size + gap_rect
 	local ammoiconrectx = ammorectx + widerect_w + gap_rect
-	
+	local elapsedTime = RealTime()
 	local hudr, hudg, hudb = 90, 120, 180
 	local rect, recta = 0, 160
 	local armor = client:Alive() and client:Armor() or 0
@@ -40,7 +41,6 @@ local function AddPowerupOverlay(pTime, col)
 	local icon_gap = 5.5
 	local iconpos = ScrW() - gap_screen + icon_gap 
     local CT = CurTime()
-	
 	local powerupx = ScrH() / 14.75 /1.25
 	local powerupy = ScrH() / 14.75 /1.25
 	
@@ -76,6 +76,9 @@ local function AddPowerupOverlay(pTime, col)
 	surface.SetTexture(speed)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
+	surface.SetDrawColor(255, 255, 0, 220)
+	local timebar = LocalPlayer():GetNW2Float("PickupTime") - CurTime()
+    surface.DrawRect(iconpos + ammosize / 1.375, ammoy* 1.055 - math.floor(timebar)/1.7 - timebar, ammosize / 4.75, timebar* 1.7)
     end
 	end
 
@@ -86,6 +89,7 @@ hook.Add("HUDPaintBackground", "SSPowerupsHUD", function()
     if !t then return end
     AddPowerupOverlay(t.QuadDamage, Color(255, 0, 0, 25))
 	AddPowerupOverlay(t.Invisibility, Color(255, 0, 0, 25))
+	
 end)
 
 
@@ -117,4 +121,5 @@ function ENT:Draw()
 	self:DrawModel()
 	self.Rotate = (RealTime() - self.RotateTime)*180 %360
 	self:SetAngles(Angle(0,self.Rotate,0))
+	
 end
