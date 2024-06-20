@@ -10,6 +10,7 @@ AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
+local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 
 include("shared.lua")
 include("sb.lua")
@@ -31,7 +32,12 @@ PLAYER_JUMPPOWER_KNIFE = 330
 
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
-	RunConsoleCommand("sv_airaccelerate", "0")
+	RunConsoleCommand("sv_airaccelerate", "5")
+end
+
+function GM:ShutDown()
+	-- revert to default values
+	RunConsoleCommand("sv_airaccelerate", "10")
 end
 
 -- хук который вызывается после создания всех энтитей, но игроков в этот момент еще может не быть
@@ -176,7 +182,7 @@ local pickupTable = {
 }
 
 function GM:SpawnPickupOnDeath(ply, actWep)
-	local drop = pickupTable[actWep:GetClass()]
+	local drop = pickupTable[actWep:GetClass()] or actWep.EntityPickup
 	if drop then
 		local ent = ents.Create(drop)
 		if IsValid(ent) then
@@ -234,7 +240,11 @@ function GM:GameEnd()
 		SetGlobalString("WinnerName", winner:Nick())
 	end
 	timer.Simple(5, function()
-		Mapvote.startVote(30)
+		if cvar_mapvote:GetBool() then
+			Mapvote.startVote(30)
+		else
+			self:GameRestart()
+		end
 	end)
 end
 

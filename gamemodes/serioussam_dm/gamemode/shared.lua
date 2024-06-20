@@ -119,12 +119,12 @@ function GM:FinishMove(pl, move)
 			wishspeed = maxspeed
 		end
 		if actualspeed > wishspeed then
-			wishspeed = wishspeed / 2
+			wishspeed = wishspeed / 4
 		end
 
 		local wishdir = wishvel:GetNormal()
 
-		Accelerate(move, wishdir, wishspeed, 2)
+		Accelerate(move, wishdir, wishspeed, 0.75)
 	
 		INAIR = nil
 	end
