@@ -109,17 +109,23 @@ function GM:HUDDrawTargetID()
 end
 
 local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
+
+function GM:ShouldDrawTimer()
+	return cvar_timer_enabled and cvar_timer_enabled:GetBool() and GetGlobalFloat("GameTime") > 0
+end
 	
 function GM:HUDPaint()
+	local game_state = self:GetState()
+	
 	hook.Run( "HUDDrawTargetID" )
     playerTable:PaintManual()
-	if cvar_timer_enabled and cvar_timer_enabled:GetBool() then
+	if self:ShouldDrawTimer() then
 		local timeLimit = cvar_max_time:GetInt()
 		local timer = "%02i:%02i"
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
-        if countdown < 0 then
-            countdown = 0
-        end
+		if countdown < 0 then
+			countdown = 0
+		end
 		
 		local hudr, hudg, hudb = self:GetHUDColor()
 		local hudr_e, hudg_e, hudb_e = self:GetHUDColorFrame()
@@ -146,7 +152,12 @@ function GM:HUDPaint()
 		end
 	end
 	
-	if GetGlobalBool("GameEnded") then
+	if game_state == STATE_GAME_PREPARE then
+		local x, y = ScrW() / 2, ScrH() / 4
+		local text = "Waiting for all players to connect"
+		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
+	elseif game_state == STATE_GAME_END then
 		if !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/boioing.wav" )
 			endgamesoundplayed = true
@@ -165,7 +176,7 @@ function GM:HUDPaint()
 				draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 			end
 		end
-	else
+	elseif game_state == STATE_GAME_PROGRESS then
 		local firstplayer = LocalPlayer()
 		if playerTable and playerTable.Players then
 			firstplayer = playerTable.Players[1]
@@ -176,14 +187,11 @@ function GM:HUDPaint()
 			if frags_left > 0 then
 				local text = "FRAGS LEFT: " .. frags_left
 				local x, y = ScrH() / 45, ScrH() /  13.5
-				if GetConVarNumber("sdm_timer_enabled") == 1 then
-					draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
-					draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
-				else
-					local x, y = ScrH() / 45, ScrH() / 70
-					draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
-					draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
+				if !self:ShouldDrawTimer() then
+					y = ScrH() / 70
 				end
+				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
+				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
 			end
 		end
 		if !LocalPlayer():Alive() then

@@ -36,8 +36,6 @@ end
 
 -- хук который вызывается после создания всех энтитей, но игроков в этот момент еще может не быть
 function GM:InitPostEntity()
-	SetGlobalFloat("GameTime", CurTime()) -- создаем глобальный float с текущим временем
-
 	local weapon_ss_doubleshotgun = weapons.GetStored("weapon_ss_doubleshotgun")
 	if weapon_ss_doubleshotgun then weapon_ss_doubleshotgun.Primary.AnimSpeed = 1.5 end
 	local weapon_ss_singleshotgun = weapons.GetStored("weapon_ss_singleshotgun")
@@ -48,10 +46,10 @@ end
 
 -- вызывается каждый фрейм
 function GM:Think()
-	if cvar_timer_enabled:GetBool() then
+	if cvar_timer_enabled:GetBool() and self:GetState() == STATE_GAME_PROGRESS then
 		local getGameTime = GetGlobalFloat("GameTime")
 		local activeTimer = CurTime() - getGameTime
-		if !GetGlobalBool("GameEnded") and activeTimer >= cvar_max_time:GetInt() then
+		if activeTimer >= cvar_max_time:GetInt() then
 			self:OnGameTimerEnd()
 		end
 	end
@@ -198,15 +196,30 @@ end
 
 -- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
-	return !GetGlobalBool("GameEnded")
+	return self:GetState() != STATE_GAME_END
+end
+
+function GM:StartGameTimer()
+	SetGlobalFloat("GameTime", CurTime()) -- создаем глобальный float с текущим временем
 end
 
 function GM:OnGameTimerEnd()
 	self:GameEnd()
 end
 
+function GM:GameStart()
+	self:StartGameTimer()
+	self:SetState(STATE_GAME_PROGRESS)
+	for k, v in ipairs(player.GetAll()) do
+		v:KillSilent()
+		v:SetFrags(0)
+		v:SetDeaths(0)
+		v:Spawn()
+	end
+end
+
 function GM:GameEnd()
-	SetGlobalBool("GameEnded", true)
+	self:SetState(STATE_GAME_END)
 	local winner = self:GetWinner()
 	if IsValid(winner) then
 		SetGlobalString("WinnerName", winner:Nick())

@@ -17,8 +17,19 @@ if !cvar_timer_enabled then
 	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
 
+STATE_GAME_PREPARE = 0
+STATE_GAME_PROGRESS = 1
+STATE_GAME_END = 2
+
 include( "shared_killfeed.lua" )
 include( "shared_gibs.lua" )
+
+function GM:GetState()
+	return GetGlobalInt("State")
+end
+function GM:SetState(num)
+	return SetGlobalInt("State", num)
+end
 
 function GM:GetPlayersSortedByFrags()
 	local players = player.GetAll()
