@@ -22,9 +22,11 @@ function ENT:Pickup(ent)
 	-- ent:SetNW2Bool( "HasSSpeed", true )
 
 	timer.Create("SeriousSpeedTime"..ent:EntIndex(), self.PDuration, 1, function()
-		-- ent:SetNW2Bool( "HasSSpeed", false )
-		ent.SSPowerups.Speed = nil
-		GAMEMODE:UpdatePlayerSpeed(ent)
+		if IsValid(ent) and ent.SSPowerups then
+			-- ent:SetNW2Bool( "HasSSpeed", false )
+			ent.SSPowerups.Speed = nil
+			GAMEMODE:UpdatePlayerSpeed(ent)
+		end
 	end)
 
 end
