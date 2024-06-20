@@ -207,6 +207,15 @@ function GM:OnGameTimerEnd()
 	self:GameEnd()
 end
 
+function GM:GamePrepare()
+	self:SetState(STATE_GAME_PREPARE)
+	timer.Create("TimerGameStart", 5, 1, function()
+		if self:GetState() == STATE_GAME_PREPARE then
+			self:GameStart()
+		end
+	end)
+end
+
 function GM:GameStart()
 	self:StartGameTimer()
 	self:SetState(STATE_GAME_PROGRESS)
@@ -229,6 +238,23 @@ function GM:GameEnd()
 	end)
 end
 
+function GM:GameRestart()
+	game.CleanUpMap()
+	self:SetState(STATE_GAME_WARMUP)
+	SetGlobalFloat("GameTime", 0)
+	-- hook.Run("InitPostEntity")
+	for k, v in ipairs(player.GetAll()) do
+		v:KillSilent()
+		v:SetFrags(0)
+		v:SetDeaths(0)
+		v:Spawn()
+	end
+	
+	-- timer.Create(5, function()
+		self:GamePrepare()
+	-- end)
+end
+
 function GM:GetFallDamage(ply, speed)
 	return 0
 end
@@ -240,8 +266,8 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetRunSpeed(PLAYER_RUNSPEED)	
    -- ply:SetSlowWalkSpeed( 380 )
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
-	if player.GetCount() > 1 and self:GetState() == STATE_GAME_PREPARE then
-	self:GameStart()
+	if player.GetCount() > 1 and self:GetState() == STATE_GAME_WARMUP then
+		self:GamePrepare()
 	end
 end
 

@@ -17,9 +17,10 @@ if !cvar_timer_enabled then
 	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
 
-STATE_GAME_PREPARE = 0
-STATE_GAME_PROGRESS = 1
-STATE_GAME_END = 2
+STATE_GAME_WARMUP = 0
+STATE_GAME_PREPARE = 1
+STATE_GAME_PROGRESS = 2
+STATE_GAME_END = 3
 
 include( "shared_killfeed.lua" )
 include( "shared_gibs.lua" )
@@ -60,6 +61,14 @@ function GM:StartCommand(ply, cmd)
 			cmd:RemoveKey(IN_DUCK)
 		end
 	end
+end
+
+function GM:ShouldLockMovement()
+	return self:GetState() == STATE_GAME_PREPARE
+end
+
+function GM:Move(ply, mv)
+	return hook.Run("ShouldLockMovement")
 end
 
 local nextStuckCheck = 0

@@ -43,7 +43,11 @@ Mapvote.endVote = function()
 	end		
 
 	timer.Simple(3, function()
-		RunConsoleCommand("changelevel", Mapvote.winningMap)
+		if Mapvote.winningMap == game.GetMap() then
+			GAMEMODE:GameRestart()
+		else
+			RunConsoleCommand("changelevel", Mapvote.winningMap)
+		end
 	end)
 end
 
