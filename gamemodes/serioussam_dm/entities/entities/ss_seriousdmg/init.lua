@@ -28,27 +28,17 @@ function ENT:Pickup(ent)
 	timer.Simple(self.PDuration, function()
 	ent:SetNW2Bool( "HasSDMG", false )
 	end)
-	
+	--[[
     timer.Simple(180, function()
     local ent = ents.Create("ss_seriousdmg")
     ent:SetPos(pos)
     ent:Spawn()
     end)
-
-
-end
-
-function ENT:Touch(ent)
-	if IsValid(ent) and ent:IsPlayer() and ent:Alive() then
-		if !ent.SSPowerups then
-			ent.SSPowerups = {}
-		end
-		self:Pickup(ent)
-		
-	self:SendPickupMsg(ent, "Serious Damage")
-	end
+	--]]
 
 end
+
+
 
 
 hook.Add("EntityTakeDamage", "SSPowerups_QuadDamage", function(ent, dmginfo)
