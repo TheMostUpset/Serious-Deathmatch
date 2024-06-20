@@ -22,8 +22,7 @@ function ENT:Initialize()
 end
 
 local function PowerupActive(ply)
-	return ply.SSPowerups and ply.SSPowerups.Protect
-	
+	return ply.SSPowerups and ply.SSPowerups.Protect	
 end
 
 function ENT:Pickup(ent)
@@ -34,45 +33,26 @@ function ENT:Pickup(ent)
 	local duration = CurTime() + self.PDuration
 
 	ent.SSPowerups.Protect = duration
-	if self.PDuration >= 3 then
-		ent.SSPowerups.ProtectOut = duration - 3
-	end
+	-- if self.PDuration >= 3 then
+		-- ent.SSPowerups.ProtectOut = duration - 3
+	-- end
 	
 	self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
 	self:SendToClient(ent, ent.SSPowerups)
 	ent:SetNW2Bool( "HasProtect", true )
-	self:Remove()
+
 	timer.Simple(self.PDuration, function()
 		ent:SetNW2Bool( "HasProtect", false )
 	end)
-	
-	timer.Simple(180, function()
-		local ent = ents.Create("ss_protect")
-    ent:SetPos(pos)
-    ent:Spawn()
-    end)
 end
-
-function ENT:Touch(ent)
-	if IsValid(ent) and ent:IsPlayer() and ent:Alive() then
-		if !ent.SSPowerups then
-			ent.SSPowerups = {}
-		end
-		self:Pickup(ent)
-		
-	self:SendPickupMsg(ent, "Invulnerability")
-	end
-	
-end
-
 
 hook.Add("PlayerPostThink", "SSPowerups_Protect", function(ply)
 	if !PowerupActive(ply) then return end
 	
-	if ply.SSPowerups.ProtectOut and ply.SSPowerups.ProtectOut <= CurTime() then
-		ply.SSPowerups.ProtectOut = nil
+	-- if ply.SSPowerups.ProtectOut and ply.SSPowerups.ProtectOut <= CurTime() then
+		-- ply.SSPowerups.ProtectOut = nil
 
-	end	
+	-- end	
 	
 	if ply.SSPowerups.Protect <= CurTime() then
 		ply.SSPowerups.Protect = nil

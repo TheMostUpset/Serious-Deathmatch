@@ -56,7 +56,7 @@ function ENT:Touch(ent)
 			self.ReEnabled = CurTime() + self.RespawnTime
 		end
 		self:Pickup(ent)		
-		self:SendPickupMsg(ent, "Serious Damage")
+		self:SendPickupMsg(ent, self.PrintName)
 	end
 end
 
