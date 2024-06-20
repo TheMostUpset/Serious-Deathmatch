@@ -6,7 +6,7 @@ util.AddNetworkString("SSPowerupsClient")
 
  
 ENT.PDuration = 30
-ENT.RespawnTime = 10
+ENT.RespawnTime = 180
 local ss_cvar_powerupduration = CreateConVar("ss_powerupduration", 20)
 
 function ENT:SpawnFunction(ply, tr)
