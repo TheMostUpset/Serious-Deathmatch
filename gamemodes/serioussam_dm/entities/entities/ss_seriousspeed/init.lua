@@ -1,7 +1,7 @@
 AddCSLuaFile("shared.lua")
 include('shared.lua')
 
-ENT.model = "models/serioussam/powerups/sdmg.mdl"
+ENT.model = "models/serioussam/powerups/seriousspeed.mdl"
 
 local function PowerupActive(ply)
 	return ply.SSPowerups and ply.SSPowerups.Speed and ply.SSPowerups.Speed > CurTime()

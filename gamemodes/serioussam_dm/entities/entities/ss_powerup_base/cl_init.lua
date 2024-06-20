@@ -7,12 +7,15 @@ net.Receive("SSPowerupsClient", function()
 	end
 end)
 
+local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
+local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
+local protect = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability")
+local speed = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
+	
 local function AddPowerupOverlay(pTime, col)
 	drawing = false
 	local t = LocalPlayer().SSPowerups
-	local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
-	local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
-	local protect = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability")
+
 	local client = LocalPlayer()
 	local awep = client:GetActiveWeapon()
 	
@@ -64,6 +67,13 @@ local function AddPowerupOverlay(pTime, col)
     surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
     surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
 	surface.SetTexture(protect)
+	surface.SetDrawColor(255, 255, 255, 255)
+	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)
+	elseif LocalPlayer():GetNW2Bool( "HasSSpeed", false ) then
+	draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
+    surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
+    surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
+	surface.SetTexture(speed)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
     end

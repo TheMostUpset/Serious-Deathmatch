@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/powerups/seriousspeed"
+	"$selfillum" "1"
+}
