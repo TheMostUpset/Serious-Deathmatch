@@ -14,13 +14,22 @@ function ENT:Pickup(ent)
     -- if self.PDuration >= 3 then
         -- ent.SSPowerups.SpeedOut = duration - 3		
     -- end
+	
+	ent:SetWalkSpeed(PLAYER_WALKSPEED * 2)
+	-- ent:SetJumpPower(PLAYER_RUNSPEED)
+	ent:SetRunSpeed(PLAYER_RUNSPEED * 2)
 
     self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
+	
     self:SendToClient(ent, ent.SSPowerups)
-	ent:SetNW2Bool( "HasSSpeed	", true )
+	ent:SetNW2Bool( "HasSSpeed", true )
 
-	timer.Simple(self.PDuration, function()
+	timer.Create("SeriousSpeedTime"..ent:EntIndex(), self.PDuration, 1, function()
 		ent:SetNW2Bool( "HasSSpeed", false )
+		
+		ent:SetWalkSpeed(PLAYER_WALKSPEED)
+		-- ent:SetJumpPower(PLAYER_RUNSPEED)
+		ent:SetRunSpeed(PLAYER_RUNSPEED)
 	end)
 
 end

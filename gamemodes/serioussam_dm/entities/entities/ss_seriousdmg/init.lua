@@ -19,7 +19,7 @@ function ENT:Pickup(ent)
     self:SendToClient(ent, ent.SSPowerups)
 	ent:SetNW2Bool( "HasSDMG", true )
 
-	timer.Simple(self.PDuration, function()
+	timer.Create("SeriousDamageTime"..ent:EntIndex(), self.PDuration, 1, function()
 		ent:SetNW2Bool( "HasSDMG", false )
 	end)
 

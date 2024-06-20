@@ -119,6 +119,20 @@ hook.Add("CalcView", "ThirdpersonView", function(ply, origin, angles, fov)
 	end
 end)
 
+hook.Add("CalcView", "SeriousSpeedPowerup", function(ply, origin, angles, fov)
+	if ply:GetNW2Bool("HasSSpeed", false) then
+		fov = fov + 10
+	
+		local view = {}
+
+		view.origin = origin
+		view.angles = angles
+		view.fov = fov
+
+		return view
+	end
+end)
+
 local drawing = false
 local sdmg_mat = Material("models/effects/serioussam/sdmg_overlay")
 local inv_mat = Material("models/powerups/invisibility")

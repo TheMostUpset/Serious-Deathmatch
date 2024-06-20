@@ -8,7 +8,7 @@ local function PowerupActive(ply)
 end
 
 function ENT:Pickup(ent)
-	if PowerupActive(ent) then return end
+	-- if PowerupActive(ent) then return end
 	
 	local duration = CurTime() + self.PDuration
 
@@ -21,7 +21,7 @@ function ENT:Pickup(ent)
 	self:SendToClient(ent, ent.SSPowerups)
 	ent:SetNW2Bool( "HasProtect", true )
 
-	timer.Simple(self.PDuration, function()
+	timer.Create("ProtectTime"..ent:EntIndex(), self.PDuration, 1, function()
 		ent:SetNW2Bool( "HasProtect", false )
 	end)
 end
