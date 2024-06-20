@@ -189,7 +189,7 @@ function GM:SpawnPickupOnDeath(ply, actWep)
 end
 
 function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
-	if attacker:Frags() >= cvar_max_frags:GetInt() then
+	if self:GetState() == STATE_GAME_PROGRESS and attacker:Frags() >= cvar_max_frags:GetInt() then
 		self:GameEnd()
 	end
 end
