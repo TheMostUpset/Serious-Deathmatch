@@ -47,13 +47,14 @@ hook.Add("HUDPaint", "SSPowerupsHUD", function()
 			surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
 			local timebar = (v - CT) / 34
 			local scale = math.floor(ammosize * timebar)
-			surface.SetDrawColor(0, 255, 0, 220)
-			if timebar < 0.2 then
-				surface.SetDrawColor(255, 0, 0, 220)
-			end
-			if SeriousHUD:GetSkin() == 2 then
-				local hudg = 255 * timebar
-				surface.SetDrawColor(255, hudg, 0, 220)
+			if SeriousHUD:GetSkin() == 1 then
+				local r, g, b = SeriousHUD:GetColor()
+				surface.SetDrawColor(r, g, b, 220)
+				if timebar < 0.2 then
+					surface.SetDrawColor(255, 0, 0, 220)
+				end
+			elseif SeriousHUD:GetSkin() == 2 then
+				surface.SetDrawColor(255, 255 * timebar, 0, 220)
 			end
 			surface.DrawRect(iconpos + ammosize / 1.375, ammoy+ammosize-scale-3, ammosize / 4.75, scale)
 			
