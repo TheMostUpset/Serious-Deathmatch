@@ -24,6 +24,7 @@ STATE_GAME_END = 3
 
 include( "shared_killfeed.lua" )
 include( "shared_gibs.lua" )
+include("player_ext.lua")
 
 function GM:GetState()
 	return GetGlobalInt("State")

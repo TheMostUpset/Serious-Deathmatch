@@ -9,7 +9,7 @@ end
 
 function ENT:Pickup(ent)
     local duration = CurTime() + self.PDuration
-	ent:SetNW2Float("PickupTime", duration)
+	-- ent:SetNW2Float("PickupTime", duration)
     ent.SSPowerups.Speed = duration
     -- if self.PDuration >= 3 then
         -- ent.SSPowerups.SpeedOut = duration - 3		
@@ -19,11 +19,10 @@ function ENT:Pickup(ent)
 
     self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
 	
-    self:SendToClient(ent, ent.SSPowerups)
-	ent:SetNW2Bool( "HasSSpeed", true )
+	-- ent:SetNW2Bool( "HasSSpeed", true )
 
 	timer.Create("SeriousSpeedTime"..ent:EntIndex(), self.PDuration, 1, function()
-		ent:SetNW2Bool( "HasSSpeed", false )
+		-- ent:SetNW2Bool( "HasSSpeed", false )
 		ent.SSPowerups.Speed = nil
 		GAMEMODE:UpdatePlayerSpeed(ent)
 	end)

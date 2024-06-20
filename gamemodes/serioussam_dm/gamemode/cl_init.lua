@@ -120,7 +120,7 @@ hook.Add("CalcView", "ThirdpersonView", function(ply, origin, angles, fov)
 end)
 
 hook.Add("CalcView", "SeriousSpeedPowerup", function(ply, origin, angles, fov)
-	if ply:GetNW2Bool("HasSSpeed", false) then
+	if ply:HasSeriousSpeed() then
 		fov = fov + 10
 	
 		local view = {}
@@ -156,7 +156,7 @@ function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, 
 	end
 	
 	local owner = Weapon:GetOwner()
-	if IsValid(owner) and owner:GetNW2Bool("HasSSpeed", false) then
+	if IsValid(owner) and owner:HasSeriousSpeed() then
 		vm_origin = vm_origin - vm_angles:Up()
 	end
 
@@ -170,7 +170,7 @@ local inv_mat = Material("models/powerups/invisibility")
 local protect_mat = Material("models/serioussam/powerups/gold")
 
 hook.Add("PostDrawViewModel", "glowy_vm", function(viewmodel, ply)
-    if not ply:GetNW2Bool( "HasSDMG", false ) then
+    if not ply:HasSeriousDamage() then
         return
     end
     if not drawing then
@@ -186,11 +186,11 @@ hook.Add("PostDrawViewModel", "glowy_vm", function(viewmodel, ply)
 end)
 
 
-hook.Add("PreDrawViewModel", "invis_vm", function(vm, wep)
-    if not wep:GetNW2Bool( "HasInvis", false ) then
+hook.Add("PreDrawViewModel", "invis_vm", function(vm, ply)
+    if not ply:HasInvisibility() then
         return
     end
-    if IsValid(wep) then
+    if IsValid(ply) then
         render.SetBlend(0.4)
 		render.OverrideBlend( false )
     end
@@ -199,7 +199,7 @@ end)
 local undomodelblend = false
 function GM:PrePlayerDraw(ply)
 	if !IsValid(LocalPlayer()) then return end
-    if ply:GetNW2Bool( "HasInvis", false ) then
+    if ply:HasInvisibility() then
         render.SetBlend(0.2)
 		undomodelblend = true
     end
@@ -213,7 +213,7 @@ function GM:PostPlayerDraw(ply)
 end
 
 hook.Add("PostDrawViewModel", "gold_vm", function(viewmodel, ply)
-    if not ply:GetNW2Bool( "HasProtect", false ) then
+    if not ply:HasProtect() then
         return
     end
     if not drawing then
@@ -229,7 +229,7 @@ hook.Add("PostDrawViewModel", "gold_vm", function(viewmodel, ply)
 end)
 
 hook.Add("PostPlayerDraw", "glowy_pm", function(ply)
-    if not ply:GetNW2Bool( "HasSDMG", false ) then
+    if not ply:HasSeriousDamage() then
         return
     end
     if not drawing then
@@ -244,7 +244,7 @@ hook.Add("PostPlayerDraw", "glowy_pm", function(ply)
 end)
 
 hook.Add("PostPlayerDraw", "gold_pm", function(ply)
-    if not ply:GetNW2Bool( "HasProtect", false ) then
+    if not ply:HasProtect() then
         return
     end
     if not drawing then

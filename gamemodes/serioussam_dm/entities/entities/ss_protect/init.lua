@@ -18,12 +18,11 @@ function ENT:Pickup(ent)
 	-- end
 	
 	self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
-	self:SendToClient(ent, ent.SSPowerups)
-	ent:SetNW2Bool( "HasProtect", true )
+	-- ent:SetNW2Bool( "HasProtect", true )
 
-	timer.Create("ProtectTime"..ent:EntIndex(), self.PDuration, 1, function()
-		ent:SetNW2Bool( "HasProtect", false )
-	end)
+	-- timer.Create("ProtectTime"..ent:EntIndex(), self.PDuration, 1, function()
+		-- ent:SetNW2Bool( "HasProtect", false )
+	-- end)
 end
 
 hook.Add("PlayerShouldTakeDamage", "SSPowerups_Protect", function(ply)

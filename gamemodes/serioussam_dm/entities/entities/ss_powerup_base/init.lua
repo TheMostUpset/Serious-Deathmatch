@@ -56,6 +56,7 @@ function ENT:Touch(ent)
 			self.ReEnabled = CurTime() + self.RespawnTime
 		end
 		self:Pickup(ent)
+		self:SendToClient(ent, ent.SSPowerups)
 		self:SendPickupMsg(ent, self.PrintName)
 	end
 end
@@ -72,23 +73,19 @@ local function netBroadcast(ply, t)
 	net.Start("SSPowerupsClient")
 	net.WriteEntity(ply)
 	net.WriteTable(t)
-	net.Broadcast()
-	
+	net.Broadcast()	
 end
 
 function ENT:SendToClient(ply, t)
-	netBroadcast(ply, t)
-	
+	netBroadcast(ply, t)	
 end
 
 
 
 hook.Add("PlayerDeath", "QuakePlayerDeath", function(ply)
 	if ply.SSPowerups then
-		table.Empty(ply.SSPowerups)
-	
-		netBroadcast(ply, ply.SSPowerups)
-		
+		table.Empty(ply.SSPowerups)	
+		netBroadcast(ply, ply.SSPowerups)		
 		ply.SSPowerups = nil
 	end
 end)

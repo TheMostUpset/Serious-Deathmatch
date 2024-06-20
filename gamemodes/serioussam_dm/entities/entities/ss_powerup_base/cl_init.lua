@@ -7,35 +7,26 @@ net.Receive("SSPowerupsClient", function()
 	end
 end)
 
-local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
-local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
-local protect = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability")
-local speed = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
+local icons = {
+	["SeriousDamage"] = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage"),
+	["Invisibility"] = surface.GetTextureID("vgui/serioussam/hud/pinvisibility"),
+	["Protect"] = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability"),
+	["Speed"] = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
+}
 
-local function AddPowerupOverlay(pTime, col)
-	local currentTime = CurTime()
-	drawing = false
-	local t = LocalPlayer().SSPowerups
-
+hook.Add("HUDPaint", "SSPowerupsHUD", function()
 	local client = LocalPlayer()
-	local awep = client:GetActiveWeapon()
+	local t = client.SSPowerups
+    if !t then return end
+	
+	-- local hasSDMG = t.SeriousDamage and t.SeriousDamage > CurTime()
+	-- local hasInvis = t.Invisibility and t.Invisibility > CurTime()
+	-- local hasProtect = t.Protect and t.Protect > CurTime()
+	-- local hasSSpeed = t.Speed and t.Speed > CurTime()
 	
 	local size = ScrH() / 14.75
 	local gap_screen = ScrH() / 14
-	local gap_rect = 7
 	local y = ScrH() - size - gap_screen
-	local armor_y = y * .908
-	local widerect_w = size * 2.42
-	local widerectleft_x = size + gap_screen + gap_rect
-	local text_align_y = size / 5
-
-	local cntr = widerectleft_x + widerect_w + ScrW() / 8 - 52
-	local ammorectx = cntr + size + gap_rect
-	local ammoiconrectx = ammorectx + widerect_w + gap_rect
-	local elapsedTime = RealTime()
-	local hudr, hudg, hudb = 90, 120, 180
-	local rect, recta = 0, 160
-	local armor = client:Alive() and client:Armor() or 0
 	local ammosize = size/1.25
 	local ammoy = y+ammosize/4
 	local icon_gap = 5.5
@@ -44,54 +35,26 @@ local function AddPowerupOverlay(pTime, col)
 	local powerupx = ScrH() / 14.75 /1.25
 	local powerupy = ScrH() / 14.75 /1.25
 	
+	local frame_r, frame_g, frame_b = SeriousHUD:GetFrameColor()
 	
-
-	
-
-	if LocalPlayer():GetNW2Bool( "HasSDMG", false ) then
-	draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
-    surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
-    surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
-	surface.SetTexture(sdmg)
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)
-	elseif LocalPlayer():GetNW2Bool( "HasInvis", false ) then
-	draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
-    surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
-    surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
-	surface.SetTexture(invis)
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)
-	elseif LocalPlayer():GetNW2Bool( "HasProtect", false ) then
-	draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
-    surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
-    surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
-	surface.SetTexture(protect)
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)
-	elseif LocalPlayer():GetNW2Bool( "HasSSpeed", false ) then
-	draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
-    surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
-    surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
-	surface.SetTexture(speed)
-	surface.SetDrawColor(255, 255, 255, 255)
-	surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
-	surface.SetDrawColor(255, 255, 0, 220)
-	local timebar = LocalPlayer():GetNW2Float("PickupTime") - CurTime()
-    surface.DrawRect(iconpos + ammosize / 1.375, ammoy* 1.055 - math.floor(timebar)/1.7 - timebar, ammosize / 4.75, timebar* 1.7)
-    end
+	for k, v in pairs(t) do
+		if v > CurTime() then
+			draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
+			surface.SetDrawColor(Color(frame_r, frame_g, frame_b))
+			surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
+			surface.SetTexture(icons[k])
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
+			local timebar = (v - CT) / 30
+			local scale = math.floor(ammosize * timebar)
+			surface.SetDrawColor(255, 255, 0, 220)
+			surface.DrawRect(iconpos + ammosize / 1.375, ammoy+ammosize-scale, ammosize / 4.75, scale)
+			
+			iconpos = iconpos - powerupx - icon_gap
+		end
 	end
-
-
-
-hook.Add("HUDPaintBackground", "SSPowerupsHUD", function()
-	local t = LocalPlayer().SSPowerups
-    if !t then return end
-    AddPowerupOverlay(t.QuadDamage, Color(255, 0, 0, 25))
-	AddPowerupOverlay(t.Invisibility, Color(255, 0, 0, 25))
 	
 end)
-
 
 local function MakeLight(ply, col)
 	if !cvars.Bool("q1_cl_firelight") then return end
@@ -113,7 +76,6 @@ function ENT:Initialize()
 	self.Rotate = 0
 	self.RotateTime = RealTime()
 end
-
 
 function ENT:Draw()
 	self:SetRenderOrigin(self.OriginPos + Vector(0,0,math.sin(RealTime() * 6) *3.5))

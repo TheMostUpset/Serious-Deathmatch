@@ -8,6 +8,7 @@ AddCSLuaFile("shared.lua")
 AddCSLuaFile("shared_killfeed.lua")
 AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
+AddCSLuaFile("player_ext.lua")
 
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
@@ -94,8 +95,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 end
 
 function GM:PlayerDeath( ply, inflictor, attacker )
-	ply:SetNW2Bool( "HasInvis", false )
-	ply:SetNW2Bool( "HasSDMG", false )
+	-- ply:SetNW2Bool( "HasInvis", false )
+	-- ply:SetNW2Bool( "HasSDMG", false )
 	
 	-- Don't spawn for at least 2 seconds
 	ply.NextSpawnTime = CurTime() + 2

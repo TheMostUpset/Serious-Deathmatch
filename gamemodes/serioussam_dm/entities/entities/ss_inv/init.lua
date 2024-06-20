@@ -18,14 +18,13 @@ function ENT:Pickup(ent)
 	-- end
 	
 	self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
-	self:SendToClient(ent, ent.SSPowerups)
-	ent:SetNW2Bool( "HasInvis", true )
+	-- ent:SetNW2Bool( "HasInvis", true )
 	--ent:SetNoDraw(true) 
 	--ent:GetActiveWeapon():SetNoDraw(true)
 
-	timer.Create("InvisTime"..ent:EntIndex(), self.PDuration, 1, function()
-		ent:SetNW2Bool( "HasInvis", false )
-	end)
+	-- timer.Create("InvisTime"..ent:EntIndex(), self.PDuration, 1, function()
+		-- ent:SetNW2Bool( "HasInvis", false )
+	-- end)
 end
 
 -- hook.Add("PlayerPostThink", "SSPowerups_Invisibility", function(ply)
