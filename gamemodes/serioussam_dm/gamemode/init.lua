@@ -9,6 +9,8 @@ AddCSLuaFile("shared_killfeed.lua")
 AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 
+local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
+
 include("shared.lua")
 include("sb.lua")
 include("sv_mapvote_init.lua")
@@ -235,7 +237,23 @@ function GM:PlayerLoadout(ply)
    return true
 end
 
+function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
+	if !cvar_hitboxes:GetBool() then return end
 
+	-- More damage if we're shot in the head
+	if hitgroup == HITGROUP_HEAD then
+		dmginfo:ScaleDamage( 2 )
+	end
+	-- Less damage if we're shot in the arms or legs
+	if hitgroup == HITGROUP_LEFTARM or
+		hitgroup == HITGROUP_RIGHTARM or
+		 hitgroup == HITGROUP_LEFTLEG or
+		 hitgroup == HITGROUP_RIGHTLEG or
+		 hitgroup == HITGROUP_GEAR then
+
+		dmginfo:ScaleDamage( 0.25 )
+	end
+end
 
 function GM:OnDamagedByExplosion()
 end
