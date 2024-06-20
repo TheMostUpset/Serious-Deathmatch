@@ -31,8 +31,7 @@ function ENT:Initialize()
 	self:SetTrigger(true)
 	self:UseTriggerBounds(true, 24)
 	self.PDuration = ss_cvar_powerupduration:GetInt()
-	self:SetModelScale( self:GetModelScale() * 1.2, 1 )
-    self.StartPos = self:GetPos()
+	self:SetModelScale( 1.2, 1 )
 end
 
 function ENT:Think()
