@@ -269,12 +269,25 @@ function GM:GetFallDamage(ply, speed)
 	return 0
 end
 
+function GM:UpdatePlayerSpeed(ply, wep)
+	wep = wep or ply:GetActiveWeapon()
+	local hasSeriousSpeed = ply.SSPowerups and ply.SSPowerups.Speed and ply.SSPowerups.Speed > CurTime()
+	local mul = hasSeriousSpeed and 2 or 1
+	
+	ply:SetRunSpeed(PLAYER_RUNSPEED * mul)	
+   -- ply:SetSlowWalkSpeed( 380 )
+	if IsValid(wep) and wep:GetClass() == "weapon_ss_knife" then
+		ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE * mul)
+		ply:SetJumpPower(PLAYER_JUMPPOWER_KNIFE * mul)
+	else
+		ply:SetWalkSpeed(PLAYER_WALKSPEED * mul)
+		ply:SetJumpPower(PLAYER_JUMPPOWER * mul)
+	end   
+end
+
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
-	ply:SetWalkSpeed(PLAYER_WALKSPEED)
-	ply:SetJumpPower(PLAYER_RUNSPEED)
-	ply:SetRunSpeed(PLAYER_RUNSPEED)	
-   -- ply:SetSlowWalkSpeed( 380 )
+	self:UpdatePlayerSpeed(ply)
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
 	if player.GetCount() > 1 and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
@@ -312,13 +325,7 @@ end
 
 function GM:PlayerSwitchWeapon(ply, oldwep, newwep)
 	if ply:Alive() and IsValid(newwep) then
-		if newwep:GetClass() == "weapon_ss_knife" then
-			ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE)
-			ply:SetJumpPower(PLAYER_JUMPPOWER_KNIFE)
-		else
-			ply:SetWalkSpeed(PLAYER_WALKSPEED)
-			ply:SetJumpPower(PLAYER_JUMPPOWER)
-		end
+		self:UpdatePlayerSpeed(ply, newwep)
 	end
 end
 

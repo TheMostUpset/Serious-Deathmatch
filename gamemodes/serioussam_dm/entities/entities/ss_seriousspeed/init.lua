@@ -15,9 +15,7 @@ function ENT:Pickup(ent)
         -- ent.SSPowerups.SpeedOut = duration - 3		
     -- end
 	
-	ent:SetWalkSpeed(PLAYER_WALKSPEED * 2)
-	-- ent:SetJumpPower(PLAYER_RUNSPEED)
-	ent:SetRunSpeed(PLAYER_RUNSPEED * 2)
+	GAMEMODE:UpdatePlayerSpeed(ent)
 
     self:EmitSound("items/serioussam/powerup.wav", 75, 100, 1, CHAN_AUTO)
 	
@@ -26,10 +24,8 @@ function ENT:Pickup(ent)
 
 	timer.Create("SeriousSpeedTime"..ent:EntIndex(), self.PDuration, 1, function()
 		ent:SetNW2Bool( "HasSSpeed", false )
-		
-		ent:SetWalkSpeed(PLAYER_WALKSPEED)
-		-- ent:SetJumpPower(PLAYER_RUNSPEED)
-		ent:SetRunSpeed(PLAYER_RUNSPEED)
+		ent.SSPowerups.Speed = nil
+		GAMEMODE:UpdatePlayerSpeed(ent)
 	end)
 
 end

@@ -133,6 +133,37 @@ hook.Add("CalcView", "SeriousSpeedPowerup", function(ply, origin, angles, fov)
 	end
 end)
 
+function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, EyeAng )
+
+	if ( !IsValid( Weapon ) ) then return end
+
+	local vm_origin, vm_angles = EyePos, EyeAng
+
+	-- Controls the position of all viewmodels
+	local func = Weapon.GetViewModelPosition
+	if ( func ) then
+		local pos, ang = func( Weapon, EyePos*1, EyeAng*1 )
+		vm_origin = pos or vm_origin
+		vm_angles = ang or vm_angles
+	end
+
+	-- Controls the position of individual viewmodels
+	func = Weapon.CalcViewModelView
+	if ( func ) then
+		local pos, ang = func( Weapon, ViewModel, OldEyePos*1, OldEyeAng*1, EyePos*1, EyeAng*1 )
+		vm_origin = pos or vm_origin
+		vm_angles = ang or vm_angles
+	end
+	
+	local owner = Weapon:GetOwner()
+	if IsValid(owner) and owner:GetNW2Bool("HasSSpeed", false) then
+		vm_origin = vm_origin - vm_angles:Up()
+	end
+
+	return vm_origin, vm_angles
+
+end
+
 local drawing = false
 local sdmg_mat = Material("models/effects/serioussam/sdmg_overlay")
 local inv_mat = Material("models/powerups/invisibility")
