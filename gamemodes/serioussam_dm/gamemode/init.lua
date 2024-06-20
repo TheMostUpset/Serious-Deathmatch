@@ -290,6 +290,17 @@ function GM:UpdatePlayerSpeed(ply, wep)
 	end   
 end
 
+function GM:UpdatePowerupTable(ply)
+	for k, v in ipairs(player.GetAll()) do
+		if v.SSPowerups then
+			net.Start("SSPowerupsClient")
+			net.WriteEntity(v)
+			net.WriteTable(v.SSPowerups)
+			net.Send(ply)
+		end
+	end
+end
+
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
 	self:UpdatePlayerSpeed(ply)
