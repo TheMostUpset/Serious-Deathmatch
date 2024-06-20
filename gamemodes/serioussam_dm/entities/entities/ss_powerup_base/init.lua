@@ -55,7 +55,7 @@ function ENT:Touch(ent)
 			self:SetNoDraw(true)
 			self.ReEnabled = CurTime() + self.RespawnTime
 		end
-		self:Pickup(ent)		
+		self:Pickup(ent)
 		self:SendPickupMsg(ent, self.PrintName)
 	end
 end

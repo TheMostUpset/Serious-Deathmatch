@@ -4,11 +4,10 @@ include('shared.lua')
 ENT.model = "models/serioussam/powerups/sdmg.mdl"
 
 local function PowerupActive(ply)
-	return ply.SSPowerups and ply.SSPowerups.QuadDamage	
+	return ply.SSPowerups and ply.SSPowerups.QuadDamage	and ply.SSPowerups.QuadDamage > CurTime()
 end
 
 function ENT:Pickup(ent)
-	local pos = self:GetPos()
     local duration = CurTime() + self.PDuration
   
     ent.SSPowerups.QuadDamage = duration
@@ -23,13 +22,6 @@ function ENT:Pickup(ent)
 	timer.Simple(self.PDuration, function()
 		ent:SetNW2Bool( "HasSDMG", false )
 	end)
-	--[[
-    timer.Simple(180, function()
-    local ent = ents.Create("ss_seriousdmg")
-    ent:SetPos(pos)
-    ent:Spawn()
-    end)
-	--]]
 
 end
 

@@ -4,12 +4,10 @@ include('shared.lua')
 ENT.model = "models/serioussam/powerups/invulnerability.mdl"
 
 local function PowerupActive(ply)
-	return ply.SSPowerups and ply.SSPowerups.Protect	
+	return ply.SSPowerups and ply.SSPowerups.Protect and ply.SSPowerups.Protect > CurTime()
 end
 
 function ENT:Pickup(ent)
-    local pos = self:GetPos()
-    local duration = CurTime() + self.PDuration
 	if PowerupActive(ent) then return end
 	
 	local duration = CurTime() + self.PDuration
@@ -32,3 +30,16 @@ hook.Add("PlayerShouldTakeDamage", "SSPowerups_Protect", function(ply)
 	if !PowerupActive(ply) then return end
 	return false
 end)
+
+-- hook.Add("PlayerPostThink", "SSPowerups_Protect", function(ply)
+    -- if !PowerupActive(ply) then return end
+    
+    -- if ply.SSPowerups.ProtectOut and ply.SSPowerups.ProtectOut <= CurTime() then
+        -- ply.SSPowerups.ProtectOut = nil
+
+    -- end    
+    
+    -- if ply.SSPowerups.Protect <= CurTime() then
+        -- ply.SSPowerups.Protect = nil
+    -- end
+-- end)

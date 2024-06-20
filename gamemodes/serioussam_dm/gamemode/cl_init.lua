@@ -151,15 +151,21 @@ hook.Add("PreDrawViewModel", "invis_vm", function(vm, wep)
     end
 end)
 
-hook.Add("PrePlayerDraw", "invis_pm", function(ply)
-    if not ply:GetNW2Bool( "HasInvis", false ) then
-        return
-    end
-    if IsValid(ply) then
+local undomodelblend = false
+function GM:PrePlayerDraw(ply)
+	if !IsValid(LocalPlayer()) then return end
+    if ply:GetNW2Bool( "HasInvis", false ) then
         render.SetBlend(0.2)
-		render.OverrideBlend( false )
+		undomodelblend = true
     end
-end)
+end
+
+function GM:PostPlayerDraw(ply)
+	if undomodelblend then
+		render.SetBlend(1)
+		undomodelblend = false
+	end
+end
 
 hook.Add("PostDrawViewModel", "gold_vm", function(viewmodel, ply)
     if not ply:GetNW2Bool( "HasProtect", false ) then

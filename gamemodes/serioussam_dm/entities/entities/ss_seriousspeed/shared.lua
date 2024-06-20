@@ -1,6 +1,6 @@
 ENT.Type = "anim"
 ENT.Base = "ss_powerup_base"
-ENT.PrintName = "Invisibility"
+ENT.PrintName = "Serious Speed"
 ENT.Category = "Quake Powerups"
 ENT.Author = "Upset"
 ENT.Contact = ""

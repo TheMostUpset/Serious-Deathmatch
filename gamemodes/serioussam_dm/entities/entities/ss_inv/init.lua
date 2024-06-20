@@ -4,12 +4,10 @@ include('shared.lua')
 ENT.model = "models/serioussam/powerups/invisibility.mdl"
 
 local function PowerupActive(ply)
-	return ply.SSPowerups and ply.SSPowerups.Invisibility	
+	return ply.SSPowerups and ply.SSPowerups.Invisibility and ply.SSPowerups.Invisibility > CurTime()
 end
 
 function ENT:Pickup(ent)
-    local pos = self:GetPos()
-    local duration = CurTime() + self.PDuration
 	if PowerupActive(ent) then return end
 	
 	local duration = CurTime() + self.PDuration
@@ -29,3 +27,18 @@ function ENT:Pickup(ent)
 		ent:SetNW2Bool( "HasInvis", false )
 	end)
 end
+
+-- hook.Add("PlayerPostThink", "SSPowerups_Invisibility", function(ply)
+    -- if !PowerupActive(ply) then return end
+    
+    -- if ply.SSPowerups.InvisibilityOut and ply.SSPowerups.InvisibilityOut <= CurTime() then
+        -- ply.SSPowerups.InvisibilityOut = nil
+        -- if ply.inv3 then ply.inv3:Stop() end
+    -- end    
+    
+    -- if ply.SSPowerups.Invisibility <= CurTime() then
+        -- ply.SSPowerups.Invisibility = nil
+        --ply:SetNoDraw(false)
+
+    -- end
+-- end)
