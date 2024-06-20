@@ -80,12 +80,17 @@ function ENT:SendToClient(ply, t)
 	netBroadcast(ply, t)	
 end
 
-
-
-hook.Add("PlayerDeath", "QuakePlayerDeath", function(ply)
+local function ClearPowerups(ply)
 	if ply.SSPowerups then
 		table.Empty(ply.SSPowerups)	
 		netBroadcast(ply, ply.SSPowerups)		
 		ply.SSPowerups = nil
 	end
+end
+
+hook.Add("PlayerDeath", "SSPlayerDeath", function(ply)
+	ClearPowerups(ply)
+end)
+hook.Add("PlayerSpawn", "SSPlayerSpawn", function(ply)
+	ClearPowerups(ply)
 end)
