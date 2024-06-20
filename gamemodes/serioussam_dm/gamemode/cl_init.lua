@@ -157,7 +157,7 @@ function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, 
 	
 	local owner = Weapon:GetOwner()
 	if IsValid(owner) and owner:HasSeriousSpeed() then
-		vm_origin = vm_origin - vm_angles:Up()
+		vm_origin = vm_origin - vm_angles:Forward()*2
 	end
 
 	return vm_origin, vm_angles
