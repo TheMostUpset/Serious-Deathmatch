@@ -67,8 +67,67 @@ function GM:ShouldLockMovement()
 	return self:GetState() == STATE_GAME_PREPARE
 end
 
-function GM:Move(ply, mv)
-	return hook.Run("ShouldLockMovement")
+local INAIR
+
+function GM:SetupMove(pl, move)
+	if !pl:OnGround() then
+		INAIR = true
+	end
+	if hook.Run("ShouldLockMovement") then
+		move:SetMaxClientSpeed(0.1)
+	end
+end
+
+local function Accelerate(move, wishdir, wishspeed, accel)
+	local playerVelocity = move:GetVelocity()
+
+	local currentspeed = playerVelocity:Dot(wishdir)
+	local addspeed = wishspeed - currentspeed
+
+	if(addspeed <= 0) then return end
+
+	local accelspeed = accel * FrameTime() * wishspeed
+
+	if(accelspeed > addspeed) then
+		accelspeed = addspeed
+	end
+	
+	playerVelocity = playerVelocity + (wishdir * accelspeed)
+	move:SetVelocity(playerVelocity)
+end
+
+function GM:FinishMove(pl, move)
+	if INAIR then
+		local aim = move:GetMoveAngles()
+		local forward, right = aim:Forward(), aim:Right()
+		local fmove = move:GetForwardSpeed()
+		local smove = move:GetSideSpeed()
+		
+		forward[3], right[3] = 0, 0
+		forward:Normalize()
+		right:Normalize()
+
+		local wishvel = forward * fmove + right * smove
+		wishvel[3] = 0
+
+		local wishspeed = wishvel:Length()
+		local actualspeed = move:GetVelocity():Length()
+
+		local maxspeed = move:GetMaxSpeed()
+		if(wishspeed > maxspeed) then
+			wishvel = wishvel * (maxspeed / wishspeed)
+			wishspeed = maxspeed
+		end
+		if actualspeed > wishspeed then
+			wishspeed = wishspeed / 2
+		end
+
+		local wishdir = wishvel:GetNormal()
+
+		Accelerate(move, wishdir, wishspeed, 2)
+	
+		INAIR = nil
+	end
 end
 
 local nextStuckCheck = 0

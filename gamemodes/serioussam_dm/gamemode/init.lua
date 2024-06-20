@@ -31,7 +31,7 @@ PLAYER_JUMPPOWER_KNIFE = 330
 
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
-	RunConsoleCommand("sv_airaccelerate", "5")
+	RunConsoleCommand("sv_airaccelerate", "0")
 end
 
 -- хук который вызывается после создания всех энтитей, но игроков в этот момент еще может не быть
@@ -250,9 +250,9 @@ function GM:GameRestart()
 		v:Spawn()
 	end
 	
-	-- timer.Create(5, function()
+	timer.Simple(1, function()
 		self:GamePrepare()
-	-- end)
+	end)
 end
 
 function GM:GetFallDamage(ply, speed)
