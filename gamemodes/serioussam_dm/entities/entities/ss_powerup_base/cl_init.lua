@@ -39,16 +39,23 @@ hook.Add("HUDPaint", "SSPowerupsHUD", function()
 	
 	for k, v in pairs(t) do
 		if v > CurTime() then
-			draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 100))
+			draw.RoundedBox(0, iconpos, ammoy, powerupx, powerupy, Color(0, 0, 0, 160))
 			surface.SetDrawColor(Color(frame_r, frame_g, frame_b))
 			surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
 			surface.SetTexture(icons[k])
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
-			local timebar = (v - CT) / 30
+			local timebar = (v - CT) / 34
 			local scale = math.floor(ammosize * timebar)
-			surface.SetDrawColor(255, 255, 0, 220)
-			surface.DrawRect(iconpos + ammosize / 1.375, ammoy+ammosize-scale, ammosize / 4.75, scale)
+			surface.SetDrawColor(0, 255, 0, 220)
+			if timebar < 0.2 then
+				surface.SetDrawColor(255, 0, 0, 220)
+			end
+			if SeriousHUD:GetSkin() == 2 then
+				local hudg = 255 * timebar
+				surface.SetDrawColor(255, hudg, 0, 220)
+			end
+			surface.DrawRect(iconpos + ammosize / 1.375, ammoy+ammosize-scale-3, ammosize / 4.75, scale)
 			
 			iconpos = iconpos - powerupx - icon_gap
 		end
