@@ -8,6 +8,7 @@ include("cl_mapvote.lua")
 include("cl_menus.lua")
 include("cl_weaponselection.lua")
 
+musictable = {}
 local slotsFix = {
 	["weapon_ss_cannon"] = 5,
 	["weapon_ss_doubleshotgun"] = 2,
@@ -259,7 +260,7 @@ hook.Add("PostPlayerDraw", "gold_pm", function(ply)
 end)
 
 function GM:OnSpawnMenuOpen()
-	RunConsoleCommand("lastinv")
+	return true
 end
 
 function GM:ContextMenuOpen()
@@ -267,84 +268,38 @@ function GM:ContextMenuOpen()
 end
 
 
-function PlayRandomMusic()
+function StopMusic()
+	timer.Remove("looptimer")
+	RunConsoleCommand("stopsound")
+end
 
+function PlayMusic()
+	musictable = {
+		["sdm_red_station"] = "sound/music/redstation.ogg",
+		["sdm_desert_temple"] = "sound/music/redstation.ogg",
+		["sdm_sun_palace"] = "sound/music/sunpalace.ogg",
+		["sdm_little_trouble"] = "sound/music/littetrouble.ogg",
+		["sdm_brkeen_chevap"] = "sound/music/brkeen.ogg",
+		["sdm_lost_tomb"] = "sound/music/losttomb.ogg",
+		["sdm_hole_classic"] = "sound/music/holeclassic.ogg",
+	}
+	music = musictable[game.GetMap()]
 	if cvar_music:GetBool() then
-	if game.GetMap() == "sdm_desert_temple" or game.GetMap() == "sdm_red_station" then
-		sound.PlayFile("sound/music/redstation.ogg", "", function(station_dt, errorID, errorName)
-			if IsValid(station_dt) then
+		sound.PlayFile(music, "", function(station, errorID, errorName)
+			if IsValid(station) then
 				timer.Remove("looptimer")
-				station_dt:SetVolume(1)
-				station_dt:Play()
-				timer.Create("looptimer", station_dt:GetLength(), 1, function()
-					PlayRandomMusic()
+				station:SetVolume(1)
+				station:Play()
+				timer.Create("looptimer", station:GetLength(), 1, function()
+					PlayMusic()
 				end)
 			end
 		end)
-	end
-	if game.GetMap() == "sdm_sun_palace" then
-		sound.PlayFile("sound/music/sunpalace.ogg", "", function(station_sp, errorID, errorName)
-			if IsValid(station_sp) then
-				timer.Remove("looptimer")
-				station_sp:SetVolume(1)
-				station_sp:Play()
-				timer.Create("looptimer", station_sp:GetLength(), 1, function()
-					PlayRandomMusic()
-				end)
-			end
-		end)
-	end
-	if game.GetMap() == "sdm_little_trouble" then
-		sound.PlayFile("sound/music/littetrouble.ogg", "", function(station_lt, errorID, errorName)
-			if IsValid(station_lt) then
-				timer.Remove("looptimer")
-				station_lt:SetVolume(1)
-				station_lt:Play()
-				timer.Create("looptimer", station_lt:GetLength(), 1, function()
-					PlayRandomMusic()
-				end)
-			end
-		end)
-	end
-	if game.GetMap() == "sdm_brkeen_chevap" then
-		sound.PlayFile("sound/music/brkeen.ogg", "", function(station_bc, errorID, errorName)
-			if IsValid(station_bc) then
-				timer.Remove("looptimer")
-				station_bc:SetVolume(1)
-				station_bc:Play()
-				timer.Create("looptimer", station_bc:GetLength(), 1, function()
-					PlayRandomMusic()
-				end)
-			end
-		end)
-	end
-	if game.GetMap() == "sdm_lost_tomb" then
-		sound.PlayFile("sound/music/losttomb.ogg", "", function(station_bc, errorID, errorName)
-			if IsValid(station_bc) then
-				timer.Remove("looptimer")
-				station_bc:SetVolume(1)
-				station_bc:Play()
-				timer.Create("looptimer", station_bc:GetLength(), 1, function()
-					PlayRandomMusic()
-				end)
-			end
-		end)
-	end
-	if game.GetMap() == "sdm_hole_classic" then
-		sound.PlayFile("sound/music/holeclassic.ogg", "", function(station_bc, errorID, errorName)
-			if IsValid(station_bc) then
-				timer.Remove("looptimer")
-				station_bc:SetVolume(1)
-				station_bc:Play()
-				timer.Create("looptimer", station_bc:GetLength(), 1, function()
-					PlayRandomMusic()
-				end)
-			end
-		end)
-	end
 	end
 end
 
-hook.Add("Initialize", "PlayRandomMusicOnSpawn", PlayRandomMusic)
+
+
+hook.Add("Initialize", "PlayMusicOnSpawn", PlayMusic)
 
 
