@@ -68,6 +68,10 @@ function GM:StopMapMusic()
 	end
 end
 
+function GM:PostCleanupMap()
+	self:PlayMapMusic()
+end
+
 -- function GM:PlayerBindPress(ply, bind, pressed)
     -- if not pressed then return end
     -- bind = bind:lower()
@@ -152,25 +156,61 @@ function GM:CalcThirdpersonView(ply, pos, ang, fov)
 	end
 end
 
-hook.Add("CalcView", "ThirdpersonView", function(ply, origin, angles, fov)
+--[[---------------------------------------------------------
+	Name: CalcView
+	Allows override of the default view
+-----------------------------------------------------------]]
+function GM:CalcView( ply, origin, angles, fov, znear, zfar )
+
+	local Vehicle	= ply:GetVehicle()
+	local Weapon	= ply:GetActiveWeapon()
+	
+	if ply:HasSeriousSpeed() then
+		fov = fov + 10
+	end
+	
 	if thirdperson_enabled then
 		return GAMEMODE:CalcThirdpersonView(ply, origin, angles, fov)
 	end
-end)
 
-hook.Add("CalcView", "SeriousSpeedPowerup", function(ply, origin, angles, fov)
-	if ply:HasSeriousSpeed() then
-		fov = fov + 10
-	
-		local view = {}
+	local view = {
+		["origin"] = origin,
+		["angles"] = angles,
+		["fov"] = fov,
+		["znear"] = znear,
+		["zfar"] = zfar,
+		["drawviewer"] = false,
+	}
 
-		view.origin = origin
-		view.angles = angles
-		view.fov = fov
+	--
+	-- Let the vehicle override the view and allows the vehicle view to be hooked
+	--
+	if ( IsValid( Vehicle ) ) then return hook.Run( "CalcVehicleView", Vehicle, ply, view ) end
 
-		return view
+	--
+	-- Let drive possibly alter the view
+	--
+	if ( drive.CalcView( ply, view ) ) then return view end
+
+	--
+	-- Give the player manager a turn at altering the view
+	--
+	player_manager.RunClass( ply, "CalcView", view )
+
+	-- Give the active weapon a go at changing the view
+	if ( IsValid( Weapon ) ) then
+
+		local func = Weapon.CalcView
+		if ( func ) then
+			local origin, angles, fov = func( Weapon, ply, Vector( view.origin ), Angle( view.angles ), view.fov ) -- Note: Constructor to copy the object so the child function can't edit it.
+			view.origin, view.angles, view.fov = origin or view.origin, angles or view.angles, fov or view.fov
+		end
+
 	end
-end)
+
+	return view
+
+end
 
 function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, EyeAng )
 
