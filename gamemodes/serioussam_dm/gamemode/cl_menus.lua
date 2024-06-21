@@ -497,7 +497,7 @@ function OpenSettingsMenu()
 	end
 	Music_Button:SetSize(ScrW()/6.5, ScrH() / 20)
 	Music_Button:Center()
-	Music_Button:SetY(ScrH()/2.64)
+	Music_Button:SetY(ScrH()/2.6)
 	Music_Button:SetFont("MainMenu_Font")
 	Music_Button:SetTextColor(GetButtonColor())
 	Music_Button.Paint = function(self, w, h) 
