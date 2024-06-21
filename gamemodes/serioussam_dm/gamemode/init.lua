@@ -263,9 +263,13 @@ function GM:GameRestart()
 		v:Spawn()
 	end
 	
-	timer.Simple(1, function()
-		self:GamePrepare()
-	end)
+	if player.GetCount() > 1 then
+		timer.Simple(1, function()
+			if player.GetCount() > 1 then
+				self:GamePrepare()
+			end
+		end)
+	end
 end
 
 function GM:GetFallDamage(ply, speed)
@@ -313,8 +317,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerDisconnected(ply)
-	local state = self:GetState()
-	if player.GetCount() <= 2 and state != STATE_GAME_END then
+	if player.GetCount() <= 2 and self:GetState() != STATE_GAME_END then
 		self:ResetGameState()
 	end
 end
