@@ -94,10 +94,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 end
 
-function GM:PlayerDeath( ply, inflictor, attacker )
-	-- ply:SetNW2Bool( "HasInvis", false )
-	-- ply:SetNW2Bool( "HasSDMG", false )
-	
+function GM:PlayerDeath( ply, inflictor, attacker )	
 	-- Don't spawn for at least 2 seconds
 	ply.NextSpawnTime = CurTime() + 2
 	ply.DeathTime = CurTime()
@@ -249,10 +246,15 @@ function GM:GameEnd()
 	end)
 end
 
-function GM:GameRestart()
-	game.CleanUpMap()
+function GM:ResetGameState()
 	self:SetState(STATE_GAME_WARMUP)
 	SetGlobalFloat("GameTime", 0)
+	timer.Remove("TimerGameStart")
+end
+
+function GM:GameRestart()
+	game.CleanUpMap()
+	self:ResetGameState()
 	-- hook.Run("InitPostEntity")
 	for k, v in ipairs(player.GetAll()) do
 		v:KillSilent()
@@ -307,6 +309,13 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
 	if player.GetCount() > 1 and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
+	end
+end
+
+function GM:PlayerDisconnected(ply)
+	local state = self:GetState()
+	if player.GetCount() <= 2 and state != STATE_GAME_END then
+		self:ResetGameState()
 	end
 end
 
