@@ -508,87 +508,12 @@ function OpenSettingsMenu()
 	Music_Button.DoClick = function()
 		if !cvar_music:GetBool() then
 			Music_Button:SetText("DISABLE MUSIC")
-			timer.Remove("looptimer")
-			RunConsoleCommand("sdm_music", "1")
-
-			if game.GetMap() == "sdm_desert_temple" or game.GetMap() == "sdm_red_station" then
-				sound.PlayFile("sound/music/redstation.ogg", "", function(station_dt, errorID, errorName)
-					if IsValid(station_dt) then
-						timer.Remove("looptimer")
-						station_dt:SetVolume(1)
-						station_dt:Play()
-						timer.Create("looptimer", station_dt:GetLength(), 1, function()
-							PlayRandomMusic()
-						end)
-					end
-				end)
-			end
-			if game.GetMap() == "sdm_sun_palace" then
-				sound.PlayFile("sound/music/sunpalace.ogg", "", function(station_sp, errorID, errorName)
-					if IsValid(station_sp) then
-						timer.Remove("looptimer")
-						station_sp:SetVolume(1)
-						station_sp:Play()
-						timer.Create("looptimer", station_sp:GetLength(), 1, function()
-							PlayRandomMusic()
-						end)
-					end
-				end)
-			end
-			if game.GetMap() == "sdm_little_trouble" then
-				sound.PlayFile("sound/music/littetrouble.ogg", "", function(station_lt, errorID, errorName)
-					if IsValid(station_lt) then
-						timer.Remove("looptimer")
-						station_lt:SetVolume(1)
-						station_lt:Play()
-						timer.Create("looptimer", station_lt:GetLength(), 1, function()
-							PlayRandomMusic()
-						end)
-					end
-				end)
-			end
-			if game.GetMap() == "sdm_brkeen_chevap" then
-				sound.PlayFile("sound/music/brkeen.ogg", "", function(station_bc, errorID, errorName)
-					if IsValid(station_bc) then
-						timer.Remove("looptimer")
-						station_bc:SetVolume(1)
-						station_bc:Play()
-						timer.Create("looptimer", station_bc:GetLength(), 1, function()
-							PlayRandomMusic()
-						end)
-					end
-				end)
-			end
-			if game.GetMap() == "sdm_lost_tomb" then
-				sound.PlayFile("sound/music/losttomb.ogg", "", function(station_bc, errorID, errorName)
-					if IsValid(station_bc) then
-						timer.Remove("looptimer")
-						station_bc:SetVolume(1)
-						station_bc:Play()
-						timer.Create("looptimer", station_bc:GetLength(), 1, function()
-							PlayRandomMusic()
-						end)
-					end
-				end)
-			end
-			if game.GetMap() == "sdm_hole_classic" then
-				sound.PlayFile("sound/music/holeclassic.ogg", "", function(station_bc, errorID, errorName)
-					if IsValid(station_bc) then
-						timer.Remove("looptimer")
-						station_bc:SetVolume(1)
-						station_bc:Play()
-						timer.Create("looptimer", station_bc:GetLength(), 1, function()
-							PlayRandomMusic()
-						end)
-					end
-				end)
-			end
+			cvar_music:SetBool(true)
+			GAMEMODE:PlayMapMusic()
 		else
 			Music_Button:SetText("ENABLE MUSIC")
-			RunConsoleCommand("sdm_music", "0")
-			RunConsoleCommand("stopsound")
-			timer.Remove("looptimer")
-			
+			cvar_music:SetBool(false)
+			GAMEMODE:StopMapMusic()
 		end
 		surface.PlaySound("menus/press.wav")
 	end

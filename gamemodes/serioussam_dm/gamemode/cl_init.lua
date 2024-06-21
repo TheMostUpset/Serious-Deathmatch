@@ -8,7 +8,6 @@ include("cl_mapvote.lua")
 include("cl_menus.lua")
 include("cl_weaponselection.lua")
 
-musictable = {}
 local slotsFix = {
 	["weapon_ss_cannon"] = 5,
 	["weapon_ss_doubleshotgun"] = 2,
@@ -24,9 +23,48 @@ local slotsFix = {
 }
 
 function GM:InitPostEntity()
+	self:PlayMapMusic()
 	for class, slot in pairs(slotsFix) do
 		local wepEnt = weapons.GetStored(class)
 		if wepEnt then wepEnt.Slot = slot end
+	end
+end
+
+local lastMusicStation
+
+GM.MusicTable = {
+	["sdm_red_station"] = "sound/music/redstation.ogg",
+	["sdm_desert_temple"] = "sound/music/redstation.ogg",
+	["sdm_sun_palace"] = "sound/music/sunpalace.ogg",
+	["sdm_little_trouble"] = "sound/music/littetrouble.ogg",
+	["sdm_brkeen_chevap"] = "sound/music/brkeen.ogg",
+	["sdm_lost_tomb"] = "sound/music/losttomb.ogg",
+	["sdm_hole_classic"] = "sound/music/holeclassic.ogg",
+}
+
+function GM:PlayMapMusic()
+	local music = self.MusicTable[game.GetMap()]
+	if cvar_music:GetBool() and music then
+		sound.PlayFile(music, "", function(station, errorID, errorName)
+			if IsValid(station) then
+				timer.Remove("MusicLoopTimer")
+				station:SetVolume(1)
+				station:Play()
+				lastMusicStation = station
+				timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
+					PlayMusic()
+				end)
+			end
+		end)
+	end
+end
+
+function GM:StopMapMusic()
+	timer.Remove("MusicLoopTimer")
+	if lastMusicStation then
+		lastMusicStation:Stop()
+	else
+		RunConsoleCommand("stopsound")
 	end
 end
 
@@ -266,40 +304,3 @@ end
 function GM:ContextMenuOpen()
 	return true
 end
-
-
-function StopMusic()
-	timer.Remove("looptimer")
-	RunConsoleCommand("stopsound")
-end
-
-function PlayMusic()
-	musictable = {
-		["sdm_red_station"] = "sound/music/redstation.ogg",
-		["sdm_desert_temple"] = "sound/music/redstation.ogg",
-		["sdm_sun_palace"] = "sound/music/sunpalace.ogg",
-		["sdm_little_trouble"] = "sound/music/littetrouble.ogg",
-		["sdm_brkeen_chevap"] = "sound/music/brkeen.ogg",
-		["sdm_lost_tomb"] = "sound/music/losttomb.ogg",
-		["sdm_hole_classic"] = "sound/music/holeclassic.ogg",
-	}
-	music = musictable[game.GetMap()]
-	if cvar_music:GetBool() then
-		sound.PlayFile(music, "", function(station, errorID, errorName)
-			if IsValid(station) then
-				timer.Remove("looptimer")
-				station:SetVolume(1)
-				station:Play()
-				timer.Create("looptimer", station:GetLength(), 1, function()
-					PlayMusic()
-				end)
-			end
-		end)
-	end
-end
-
-
-
-hook.Add("Initialize", "PlayMusicOnSpawn", PlayMusic)
-
-
