@@ -52,7 +52,7 @@ function GM:PlayMapMusic()
 				station:Play()
 				lastMusicStation = station
 				timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
-					PlayMusic()
+					GAMEMODE:PlayMapMusic()
 				end)
 			end
 		end)
