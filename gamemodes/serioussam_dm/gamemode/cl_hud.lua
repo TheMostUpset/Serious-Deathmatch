@@ -1,9 +1,20 @@
 local endgamesoundplayed = false
-
+AnnouncerSoundPlayed = CurTime()
+local AnnouncerDelay = 1.5
 local playerTable = vgui.Create("DPanel")
 playerTable:SetPos(ScrW() / 2, 0)
 playerTable:SetSize(ScrW(), ScrH())
 playerTable.Players = {}
+local cvar_announcer = CreateClientConVar( "sdm_announcer_enabled", 1, true, false) 
+local announcer5 = false
+local announcer1 = false
+local announcer_lead = false
+local announcer_lostlead = false
+local frags_left1 = false
+local frags_left2 = false
+local frags_left3 = false
+
+
 
 function playerTable:Paint(w, h)
     surface.SetDrawColor(0, 0, 0, 0)
@@ -41,7 +52,47 @@ if SeriousHUD then
 		return true
 	end
 end
+function LeadingSound()
+--q3 code
+if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 then
+	if CurTime() < AnnouncerSoundPlayed then return end
+	if( LocalPlayer():Team() == TEAM_SPECTATOR ) then lead = false tied = false lost = false return end
+	
+	local killer = { }
+	for k,v in ipairs( player.GetAll() ) do
+		table.insert(killer, { k = v:Frags(), p = v } )		
+	end
+	table.SortByMember( killer, "k" )
+	if( #killer <= 1 ) then return end
 
+	 //taken
+	if( killer[1].p == LocalPlayer() and !lead and killer[2].p != LocalPlayer() and killer[1].k != killer[2].k ) then
+		lead = true 
+		tied = false
+		lost = false
+		surface.PlaySound("misc/serioussam/announcer/TakenTheLead.ogg")
+		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		//lost
+	elseif( killer[1].p != LocalPlayer() and !lost and killer[1].k != killer[2].k and (lead or tied) ) then
+		lost = true
+		lead = false
+		tied = false
+		surface.PlaySound("misc/serioussam/announcer/LostTheLead.ogg")
+		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		//tied
+	elseif( !tied and killer[1].k == killer[2].k ) then
+		if( LocalPlayer() == killer[2].p or LocalPlayer() == killer[1].p  ) then
+			tied = true
+			lead = false
+			lost = false
+			surface.PlaySound("misc/serioussam/announcer/TiedForALead.ogg")
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		end
+	end
+end
+end
+
+hook.Add("Think", "combat_sound", LeadingSound)
 function GM:GetHUDColor()
 	if SeriousHUD then
 		return SeriousHUD:GetColor()
@@ -116,6 +167,7 @@ end
 	
 function GM:HUDPaint()
 	local game_state = self:GetState()
+
 	
 	hook.Run( "HUDDrawTargetID" )
     playerTable:PaintManual()
@@ -126,7 +178,8 @@ function GM:HUDPaint()
 		if countdown < 0 then
 			countdown = 0
 		end
-		
+
+
 		local hudr, hudg, hudb = self:GetHUDColor()
 		local hudr_e, hudg_e, hudb_e = self:GetHUDColorFrame()
 		
@@ -149,6 +202,20 @@ function GM:HUDPaint()
 		if countdown <= 0 and !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )
 			endgamesoundplayed = true
+		end
+		
+		if cvar_announcer:GetInt() == 1 then
+		if countdown == 300 and !announcer5 then
+		if CurTime() < AnnouncerSoundPlayed then return end
+			announcer5 = true
+			surface.PlaySound( "misc/serioussam/announcer/FiveMinutesLeft.ogg" )
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		elseif countdown == 60 and !announcer1 then
+		if CurTime() < AnnouncerSoundPlayed then return end
+			announcer1 = true
+			surface.PlaySound( "misc/serioussam/announcer/OneMinuteLeft.ogg" )
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		end
 		end
 	end
 	
@@ -197,6 +264,25 @@ function GM:HUDPaint()
 				end
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
+				
+				if cvar_announcer:GetInt() == 1 then
+					if frags_left == 3 and !frags_left3 then
+					if CurTime() < AnnouncerSoundPlayed then return end
+						frags_left3 = true
+						surface.PlaySound( "misc/serioussam/announcer/ThreeFragsLeft.ogg" )
+						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+					elseif frags_left == 2 and !frags_left2 then
+					if CurTime() < AnnouncerSoundPlayed then return end
+						frags_left2 = true
+						surface.PlaySound( "misc/serioussam/announcer/TwoFragsLeft.ogg" )
+						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+					elseif frags_left == 1 and !frags_left1 then
+					if CurTime() < AnnouncerSoundPlayed then return end
+						frags_left1 = true
+						surface.PlaySound( "misc/serioussam/announcer/OneFragLeft.ogg" )	
+						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay						
+					end
+				end
 			end
 		end
 		if !LocalPlayer():Alive() then
@@ -205,6 +291,7 @@ function GM:HUDPaint()
 			draw.SimpleText( text, "Death_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
 			draw.SimpleText( text, "Death_Font", x, y, color_white, TEXT_ALIGN_CENTER)
 		end
+		
 	end
 end
 
