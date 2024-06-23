@@ -1,23 +1,3 @@
-local cvar_music = CreateClientConVar( "sdm_music", 1, true, false) 
-
-local MusicTable = {
-	["sdm_red_station"] = "music/redstation.ogg",
-	["sdm_desert_temple"] = "music/redstation.ogg",
-	["sdm_sun_palace"] = "music/sunpalace.ogg",
-	["sdm_little_trouble"] = "music/littetrouble.ogg",
-	["sdm_brkeen_chevap"] = "music/brkeen.ogg",
-	["sdm_lost_tomb"] = "music/losttomb.ogg",
-	["sdm_hole_classic"] = "music/holeclassic.ogg",
-}
-local maptablemusic = MusicTable[game.GetMap()]
-sound.Add( {
-	name = "map_music",
-	channel = CHAN_AUTO,
-	volume = 1.0,
-	level = 80,
-	pitch = {100, 100},
-	sound = maptablemusic
-} )
 include("shared.lua")
 include("sb.lua")
 include("cl_hud.lua")
@@ -48,57 +28,55 @@ function GM:InitPostEntity()
 	end
 end
 
+local cvar_music = CreateClientConVar( "sdm_music", 1, true, false, "Enable music on SSDM maps", 0, 1) 
 local lastMusicStation
-
---[[
-local MusicTable = {
-	["sdm_red_station"] = {file = "sound/music/redstation.ogg", dur = 74},
-	["sdm_desert_temple"] = {file = "sound/music/redstation.ogg", dur = 74},
-	["sdm_sun_palace"] = {file = "sound/music/sunpalace.ogg", dur = 72},
-	["sdm_little_trouble"] = {file = "sound/music/littetrouble.ogg", dur = 80},
-	["sdm_brkeen_chevap"] = {file = "sound/music/brkeen.ogg", dur = 84},
-	["sdm_lost_tomb"] = {file =  "sound/music/losttomb.ogg", dur = 92},
-	["sdm_hole_classic"] = {file = "sound/music/holeclassic.ogg", dur = 89},
+GM.MusicTable = {
+    ["sdm_red_station"] = "sound/music/redstation.ogg",
+    ["sdm_desert_temple"] = "sound/music/redstation.ogg",
+    ["sdm_sun_palace"] = "sound/music/sunpalace.ogg",
+    ["sdm_little_trouble"] = "sound/music/littetrouble.ogg",
+    ["sdm_brkeen_chevap"] = "sound/music/brkeen.ogg",
+    ["sdm_lost_tomb"] = "sound/music/losttomb.ogg",
+    ["sdm_hole_classic"] = "sound/music/holeclassic.ogg",
 }
-
-	local music = MusicTable[game.GetMap()]
-	for k,v in pairs(MusicTable) do
-		sound.Add({
-			name = k,
-			channel = CHAN_STATIC,
-			volume = 1,
-			level = 0,
-			pitch = 100,
-			sound = music
-		})
-		-- util.PrecacheSound(k)
-
-		if CLIENT then
-			MUSIC_TRACK_DURATION[k] = v.dur
+function GM:PlayMapMusic(volume)
+	local convarVal = cvar_music:GetFloat()
+	if convarVal > 0 then
+		local music = self.MusicTable[game.GetMap()]
+		if music then
+			volume = volume or convarVal
+			sound.PlayFile(music, "", function(station, errorID, errorName)
+				if IsValid(station) then
+					timer.Remove("MusicLoopTimer")
+					station:Play()
+					station:SetVolume(volume)
+					lastMusicStation = station
+					timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
+						GAMEMODE:PlayMapMusic()
+					end)
+				end
+			end)
 		end
 	end
---]]
-
-
-
-function GM:PlayMapMusic()
-	if cvar_music:GetBool() and music then
-		sound.PlayFile("map_music", "", function(station, errorID, errorName)
-			if IsValid(station) then
-				timer.Remove("MusicLoopTimer")
-				station:Play()
-				lastMusicStation = station
-				timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
-					self:PlayMapMusic()
-				end)
-			end
-		end)
-	end
 end
+cvars.AddChangeCallback("sdm_music", function(name, value_old, value_new)
+	value_new = tonumber(value_new)
+	value_old = tonumber(value_old)
+	if !isnumber(value_new) then return end
+	if value_new > 0 then
+		if value_old == 0 then
+			GAMEMODE:PlayMapMusic(value_new)
+		elseif lastMusicStation and IsValid(lastMusicStation) then
+			lastMusicStation:SetVolume(value_new)
+		end
+	else
+		GAMEMODE:StopMapMusic()
+	end
+end)
 
 function GM:StopMapMusic()
 	timer.Remove("MusicLoopTimer")
-	if lastMusicStation then
+	if lastMusicStation and IsValid(lastMusicStation) then
 		lastMusicStation:Stop()
 	else
 		RunConsoleCommand("stopsound")

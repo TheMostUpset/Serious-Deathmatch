@@ -509,11 +509,9 @@ function OpenSettingsMenu()
 		if !cvar_music:GetBool() then
 			Music_Button:SetText("DISABLE MUSIC")
 			cvar_music:SetBool(true)
-			GAMEMODE:PlayMapMusic()
 		else
 			Music_Button:SetText("ENABLE MUSIC")
 			cvar_music:SetBool(false)
-			GAMEMODE:StopMapMusic()
 		end
 		surface.PlaySound("menus/press.wav")
 	end
