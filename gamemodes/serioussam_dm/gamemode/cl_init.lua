@@ -1,3 +1,5 @@
+local cvar_music = CreateClientConVar( "sdm_music", 1, true, false, "Enable music on SSDM maps", 0, 1)
+
 include("shared.lua")
 include("sb.lua")
 include("cl_hud.lua")
@@ -28,16 +30,15 @@ function GM:InitPostEntity()
 	end
 end
 
-local cvar_music = CreateClientConVar( "sdm_music", 1, true, false, "Enable music on SSDM maps", 0, 1) 
 local lastMusicStation
 GM.MusicTable = {
-    ["sdm_red_station"] = "sound/music/redstation.ogg",
-    ["sdm_desert_temple"] = "sound/music/redstation.ogg",
-    ["sdm_sun_palace"] = "sound/music/sunpalace.ogg",
-    ["sdm_little_trouble"] = "sound/music/littetrouble.ogg",
-    ["sdm_brkeen_chevap"] = "sound/music/brkeen.ogg",
-    ["sdm_lost_tomb"] = "sound/music/losttomb.ogg",
-    ["sdm_hole_classic"] = "sound/music/holeclassic.ogg",
+    ["sdm_red_station"] = "redstation.ogg",
+    ["sdm_desert_temple"] = "redstation.ogg",
+    ["sdm_sun_palace"] = "sunpalace.ogg",
+    ["sdm_little_trouble"] = "littetrouble.ogg",
+    ["sdm_brkeen_chevap"] = "brkeen.ogg",
+    ["sdm_lost_tomb"] = "losttomb.ogg",
+    ["sdm_hole_classic"] = "holeclassic.ogg",
 }
 function GM:PlayMapMusic(volume)
 	local convarVal = cvar_music:GetFloat()
@@ -45,7 +46,7 @@ function GM:PlayMapMusic(volume)
 		local music = self.MusicTable[game.GetMap()]
 		if music then
 			volume = volume or convarVal
-			sound.PlayFile(music, "", function(station, errorID, errorName)
+			sound.PlayFile("sound/music/"..music, "", function(station, errorID, errorName)
 				if IsValid(station) then
 					timer.Remove("MusicLoopTimer")
 					station:Play()
