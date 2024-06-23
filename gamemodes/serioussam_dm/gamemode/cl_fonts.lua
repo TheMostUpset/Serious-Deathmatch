@@ -101,6 +101,8 @@ surface.CreateFont( "MainMenu_Font", {
 	outline = false,
 } )
 
+
+
 surface.CreateFont( "Vote_Font", {
 	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
@@ -116,8 +118,8 @@ surface.CreateFont( "Vote_Font2", {
 } )
 
 surface.CreateFont("MainMenu_font_small", {
-	font = "Franklin Gothic",
-	size = ScrH()/52,
+	font = "Mytupi",
+	size = ScrH()/18,
 	weight = 600,
 	blursize = 0,
 	shadow = true
