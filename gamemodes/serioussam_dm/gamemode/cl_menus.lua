@@ -19,6 +19,13 @@ function GetMMFColor()
 	return 240, 155, 0
 end
 
+function GetAccentColor()
+	if SeriousHUD and SeriousHUD:GetSkin() == 1 then
+		return 255, 255, 255
+	end
+	return 255, 190, 0
+end
+
 local function PaintBackground(self, w, h)
 	local skin = GAMEMODE:GetHUDSkin()
 	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
@@ -124,7 +131,7 @@ end
 function OpenSSMenu()
 
 	showGameUI = true
-	
+	local text = ""
 	EscMenu = vgui.Create("DFrame")
 	EscMenu:SetSize(ScrW(), ScrH())
 	EscMenu:Center()
@@ -138,6 +145,7 @@ function OpenSSMenu()
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("GAME", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH()-100, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 
@@ -151,20 +159,23 @@ function OpenSSMenu()
 	Continue_Button:SetY(ScrH()/2.58)
 	Continue_Button:SetFont("MainMenu_Font")
 	Continue_Button:SetTextColor(GetButtonColor())
-	Continue_Button.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		end
-		
-	end
+
 	Continue_Button.OnCursorEntered = function()
 		isFlashing = true
+		text = "return to game"
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Continue_Button.OnCursorExited = function()
 		isFlashing = false
+		text = ""
 		Continue_Button:SetTextColor(GetButtonColor())
+	end
+
+	Continue_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
 	end
 
 	Continue_Button.DoClick = function()
@@ -188,11 +199,13 @@ function OpenSSMenu()
 	end
 	Disconnect_Button.OnCursorEntered = function()
 		isFlashing = true
+		text = "stop currently running game"
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Disconnect_Button.OnCursorExited = function()
 		isFlashing = false
+		text = ""
 		Disconnect_Button:SetTextColor(GetButtonColor())
 	end
 
@@ -222,11 +235,13 @@ function OpenSSMenu()
 	end
 	Options_Button.OnCursorEntered = function()
 		isFlashing = true
+		text = "adjust playermodel, hud, and music volume"
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Options_Button.OnCursorExited = function()
 		isFlashing = false
+		text = ""
 		Options_Button:SetTextColor(GetButtonColor())
 	end
 
@@ -251,12 +266,14 @@ function OpenSSMenu()
 		end
 	end
 	LegacyM_Button.OnCursorEntered = function()
+		text = "return to normal menu"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	LegacyM_Button.OnCursorExited = function()
 		isFlashing = false
+		text = ""
 		LegacyM_Button:SetTextColor(GetButtonColor())
 	end
 
@@ -287,6 +304,7 @@ function OpenSSMenu()
 		end
 	end
 	Quit_Button.OnCursorEntered = function()
+		text = "exit game immediately"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -306,6 +324,7 @@ function OpenConfirmationMenu()
 	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
 	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
 	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
+	local text = ""
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
 		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
@@ -447,6 +466,7 @@ function OpenSettingsMenu()
 	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
 	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
 	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
+	local text = ""
 	showGameUI = true
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
@@ -463,6 +483,7 @@ function OpenSettingsMenu()
 	SettingsMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("OPTIONS", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH()-100, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
@@ -479,11 +500,13 @@ function OpenSettingsMenu()
 		end
 	end
 	Playermodel_Button.OnCursorEntered = function()
+		text = "change model for this player"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Playermodel_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		Playermodel_Button:SetTextColor(GetButtonColor())
 	end
@@ -507,11 +530,13 @@ function OpenSettingsMenu()
 		end
 	end
 	Music_Button.OnCursorEntered = function()
+		text = "adjust volume of in-game music"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Music_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		Music_Button:SetTextColor(GetButtonColor())
 	end
@@ -544,19 +569,27 @@ function OpenSettingsMenu()
 			if state == 0 then
 				RunConsoleCommand("ss_bob", "1")
 				Bob_Button:SetText("DISABLE BOBBING")
+				text = "disable weapon model bobbing"
 			elseif state == 1 then
 				RunConsoleCommand("ss_bob", "0")
 				Bob_Button:SetText("ENABLE BOBBING")
+				text = "enable weapon model bobbing"
 			end
 		end
 		surface.PlaySound("menus/press.wav")
 	end
 	Bob_Button.OnCursorEntered = function()
+	if GetConVar("ss_bob"):GetInt() == 1 then
+		text = "disable weapon model bobbing"
+	elseif GetConVar("ss_bob"):GetInt() == 0 then
+		text = "enable weapon model bobbing"
+	end
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Bob_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		Bob_Button:SetTextColor(GetButtonColor())
 	end
@@ -576,11 +609,13 @@ function OpenSettingsMenu()
 	end
 
 	Crosshair_Button.OnCursorEntered = function()
+		text = "change crosshair icon"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Crosshair_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		Crosshair_Button:SetTextColor(GetButtonColor())
 	end
@@ -694,20 +729,28 @@ function OpenSettingsMenu()
 				RunConsoleCommand("ss_hud_skin", "1")
 				HUD_Button:SetText("TSE HUD")
 				UpdateButtonsSkin(children, 1)
+				text = "change hud theme to TSE"
 			elseif skin == 1 then
 				RunConsoleCommand("ss_hud_skin", "2")	
 				HUD_Button:SetText("TFE HUD")
 				UpdateButtonsSkin(children, 2)
+				text = "change hud theme to TFE"
 			end
 		end
 		surface.PlaySound("menus/press.wav")
 	end
 	HUD_Button.OnCursorEntered = function()
-		isFlashing = true
+	if GetConVar("ss_hud_skin"):GetInt() == 2 then
+		text = "change hud theme to TFE"
+	elseif GetConVar("ss_hud_skin"):GetInt() == 1 then
+		text = "change hud theme to TSE"
+	end
+		isFlashing = true 
 		surface.PlaySound("menus/select.wav")
 	end
 
 	HUD_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		HUD_Button:SetTextColor(GetButtonColor())
 	end
@@ -728,11 +771,13 @@ function OpenSettingsMenu()
 		end
 	end
 	TFE_Color_Button.OnCursorEntered = function()
+		text = "adjust accent color of TFE hud skin"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	TFE_Color_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		TFE_Color_Button:SetTextColor(GetButtonColor())
 	end
@@ -752,11 +797,13 @@ function OpenSettingsMenu()
 	Back_Button.OnCursorEntered = function()
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
+		text = "return to previous menu"
 	end
 
 	Back_Button.OnCursorExited = function()
 		isFlashing = false
 		Back_Button:SetTextColor(GetButtonColor())
+		text = ""
 	end
 
 	Back_Button.DoClick = function()
@@ -784,19 +831,19 @@ end
 	end
 
 	Music_Volume.Paint = function(self, w, h)
-	text = Music_Volume.TextArea:GetText() * 100
+	local number = Music_Volume.TextArea:GetText() * 100
 		surface.SetDrawColor(SeriousHUD:GetFrameColor())
 		surface.DrawOutlinedRect(0,0,w,h)
 		hudr,hudg,hudb = GetMMFColor()
 		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)
-		surface.DrawRect(1,1,text*w/100-2,h-2)
-		draw.SimpleText( text.."%", "MainMenu_font_small", w/2,-6, Color(GetMMFColor()), TEXT_ALIGN_CENTER )
+		surface.DrawRect(1,1,number*w/100-2,h-2)
+		draw.SimpleText( number.."%", "MainMenu_font_small", w/2,-6, Color(GetMMFColor()), TEXT_ALIGN_CENTER )
 	end
 
 
 
 	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
-	TFE_Color_Mixer:SetSize(ScrW()/9, ScrW()/13)
+	TFE_Color_Mixer:SetSize(ScrW()/10, ScrH()/10)
 	TFE_Color_Mixer:Center()
 	TFE_Color_Mixer:SetY(ScrH()/1.25)
 	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
