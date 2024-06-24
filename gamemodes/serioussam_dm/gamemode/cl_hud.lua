@@ -20,7 +20,7 @@ local leadtied = "misc/serioussam/announcer/TiedForALead.ogg"
 local minutesleft5 = "misc/serioussam/announcer/FiveMinutesLeft.ogg"
 local minuteleft1 = "misc/serioussam/announcer/OneMinuteLeft.ogg"
 local fragsleft3 = "misc/serioussam/announcer/ThreeFragsLeft.ogg"
-local fragseleft2 = "misc/serioussam/announcer/TwoFragsLeft.ogg"
+local fragsleft2 = "misc/serioussam/announcer/TwoFragsLeft.ogg"
 local fragleft1 = "misc/serioussam/announcer/OneFragLeft.ogg"
 
 util.PrecacheSound(leadtaken)
@@ -29,7 +29,7 @@ util.PrecacheSound(leadtied)
 util.PrecacheSound(minutesleft5)
 util.PrecacheSound(minuteleft1)
 util.PrecacheSound(fragsleft3)
-util.PrecacheSound(fragseleft2)
+util.PrecacheSound(fragsleft2)
 util.PrecacheSound(fragleft1)
 
 function playerTable:Paint(w, h)
