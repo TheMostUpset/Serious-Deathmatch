@@ -41,6 +41,12 @@ GM.MusicTable = {
     ["sdm_hole_classic"] = "holeclassic.ogg",
 }
 function GM:PlayMapMusic(volume)
+	if lastMusicStation and IsValid(lastMusicStation) then
+		lastMusicStation:Stop()
+		lastMusicStation = nil
+		timer.Remove("MusicLoopTimer")
+	end
+	
 	local convarVal = cvar_music:GetFloat()
 	if convarVal > 0 then
 		local music = self.MusicTable[game.GetMap()]
@@ -48,7 +54,6 @@ function GM:PlayMapMusic(volume)
 			volume = volume or convarVal
 			sound.PlayFile("sound/music/"..music, "", function(station, errorID, errorName)
 				if IsValid(station) then
-					timer.Remove("MusicLoopTimer")
 					station:Play()
 					station:SetVolume(volume)
 					lastMusicStation = station
@@ -79,6 +84,7 @@ function GM:StopMapMusic()
 	timer.Remove("MusicLoopTimer")
 	if lastMusicStation and IsValid(lastMusicStation) then
 		lastMusicStation:Stop()
+		lastMusicStation = nil
 	else
 		RunConsoleCommand("stopsound")
 	end
