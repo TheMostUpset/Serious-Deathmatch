@@ -148,6 +148,10 @@ local function UpdateButtonsColor(t, col)
 	end
 end
 
+local EscMenu
+local SettingsMenu
+local ConfirmationMenu
+
 function OpenSSMenu()
 
 	showGameUI = true
@@ -361,7 +365,7 @@ function OpenConfirmationMenu()
 	end
 
 
-	local ConfirmationMenu = vgui.Create("DFrame")
+	ConfirmationMenu = vgui.Create("DFrame")
 	ConfirmationMenu:SetSize(ScrW()/2.01, ScrH()/4.5)
 	ConfirmationMenu:SetTitle("")
 	ConfirmationMenu:SetVisible(true)
@@ -492,7 +496,7 @@ function OpenSettingsMenu()
 		ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
 		detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 	end
-	local SettingsMenu = vgui.Create("DFrame")
+	SettingsMenu = vgui.Create("DFrame")
 	SettingsMenu:SetSize(ScrW(), ScrH())
 	SettingsMenu:Center()
 	SettingsMenu:SetTitle("")
@@ -1038,8 +1042,13 @@ hook.Add( "Think", "ESCMenuOverride", function()
 	if input.IsKeyDown(KEY_ESCAPE) and gui.IsGameUIVisible() then
 		gui.HideGameUI()
 		if not showGameUI then
-			showGameUI = true	
+			showGameUI = true
 			OpenSSMenu()
+		elseif SettingsMenu and SettingsMenu:IsVisible() then
+			SettingsMenu:Close()
+		elseif EscMenu and EscMenu:IsVisible() and (!ConfirmationMenu or !ConfirmationMenu:IsVisible()) then
+			EscMenu:Close()
+			showGameUI = false
 		end
 	end
 end )
