@@ -119,7 +119,7 @@ surface.CreateFont( "Vote_Font2", {
 
 surface.CreateFont("MainMenu_font_small", {
 	font = "Mytupi",
-	size = ScrH()/18,
+	size = ScrW()/32,
 	weight = 600,
 	blursize = 0,
 	shadow = true
