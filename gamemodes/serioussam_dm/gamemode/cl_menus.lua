@@ -9,6 +9,8 @@ local ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")
 local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
 local detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
+local sam = surface.GetTextureID("vgui/serioussam/mainmenu/sam")
+local pillar = surface.GetTextureID("vgui/serioussam/mainmenu/pillar")
 
 local cvar_music = GetConVar("sdm_music")
 
@@ -27,6 +29,7 @@ function GetAccentColor()
 end
 
 local function PaintBackground(self, w, h)
+	local fourbythree = ScrW() / ScrH()
 	local skin = GAMEMODE:GetHUDSkin()
 	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
 	
@@ -40,16 +43,35 @@ local function PaintBackground(self, w, h)
 	else
 		surface.SetTexture(ssbg)
 	end
-	surface.SetDrawColor(hudr, hudg, hudb, 145)
+	surface.SetDrawColor(hudr, hudg, hudb, 150)
 	local texW = 256
 	local texH = 256
 	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
 	if skin == 2 then
 		surface.DrawTexturedRect(0,0,w,h)
 	end
+	
+	if skin == 2 then
+	surface.SetDrawColor(255,255,255)
+	surface.SetTexture(sam)
+	if fourbythree < 1.5 then
+	surface.DrawTexturedRect(w/1.5, h/5.5, w/3.5, h/1.3)
+	else
+	surface.DrawTexturedRect(w/1.5, h/5.5, w/4.5, h/1.3)
+	end
+	
+	surface.SetDrawColor(255,255,255)
+	surface.SetTexture(pillar)
+	if fourbythree < 1.5 then
+	surface.DrawTexturedRect(w-w, h-h, w/6, h)
+	else
+	surface.DrawTexturedRect(w-w, h-h, w/8, h)
+	end
+	end
+
 	if skin == 1 then 
 	surface.SetTexture(grid_bg)
-	surface.SetDrawColor(hudr, hudg, hudb, 100)
+	surface.SetDrawColor(hudr, hudg, hudb, 200)
 	end
 	if skin == 2 then 
 		surface.SetDrawColor(0, 0, 0, 0)
@@ -62,16 +84,14 @@ local function PaintBackground(self, w, h)
 	if offset > w then
 		offset = 0
 	end
-
-
-
+	
 	local texW = 256
 	local texH = 128
 	local offsetX = math.sin(CurTime() * 1.5) * 30
 	local offsetY = math.cos(CurTime() * 1.5) * 30
 	if skin == 2 then
-		offsetX = math.sin(CurTime() * 1.5) * 10
-		offsetY = math.cos(CurTime() * 1.5) * 10
+		offsetX = math.sin(CurTime() * 0.6) * 28
+		offsetY = math.cos(CurTime() * 0.6) * 28
 	end
 	if skin == 2 then
 		surface.SetTexture(detailTexture_vtf_tse)
@@ -79,7 +99,7 @@ local function PaintBackground(self, w, h)
 		surface.SetTexture(detailTexture_vtf)
 	end
 	surface.SetDrawColor(hudr, hudg, hudb, 140)
-	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*4, h*4, 0, 0, w / texW, h / texH )
+	surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*5, h*5, 0, 0, w / texW, h / texH )
 end
 
 local function GetButtonColor()
@@ -153,7 +173,7 @@ function OpenSSMenu()
 
 	local Continue_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
-	Continue_Button:SetText("CONTINUE")
+	Continue_Button:SetText("RESUME")
 	Continue_Button:SetSize(ScrW()/8, ScrH()/20)
 	Continue_Button:Center()
 	Continue_Button:SetY(ScrH()/2.58)
@@ -835,7 +855,7 @@ function OpenSettingsMenu()
 		local number = Music_Volume.TextArea:GetText()
 		surface.SetDrawColor(SeriousHUD:GetFrameColor())
 		surface.DrawOutlinedRect(0,0,w,h)
-		local hudr, hudg, hudb = GetMMFColor()
+		local hudr,hudg,hudb = GetMMFColor()
 		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)
 		surface.DrawRect(1,1,number*w-2,h-2)
 		draw.SimpleText( (number*100).."%", "MainMenu_font_small", w/2,-6, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER )

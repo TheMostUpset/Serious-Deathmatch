@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
 	"$basetexture" "vgui/serioussam/mainmenu/MenuBack_detail"
-	"$alpha" "0.15"
+	"$alpha" "1"
 	"$vertexalpha" "1"
 }

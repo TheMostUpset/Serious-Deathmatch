@@ -13,8 +13,24 @@ local announcer_lostlead = false
 local frags_left1 = false
 local frags_left2 = false
 local frags_left3 = false
+local leadtaken = "misc/serioussam/announcer/TakenTheLead.ogg"
+local leadlost = "misc/serioussam/announcer/LostTheLead.ogg"
+local leadtied = "misc/serioussam/announcer/TiedForALead.ogg"
 
+local minutesleft5 = "misc/serioussam/announcer/FiveMinutesLeft.ogg"
+local minuteleft1 = "misc/serioussam/announcer/OneMinuteLeft.ogg"
+local fragsleft3 = "misc/serioussam/announcer/ThreeFragsLeft.ogg"
+local fragseleft2 = "misc/serioussam/announcer/TwoFragsLeft.ogg"
+local fragleft1 = "misc/serioussam/announcer/OneFragLeft.ogg"
 
+util.PrecacheSound(leadtaken)
+util.PrecacheSound(leadlost)
+util.PrecacheSound(leadtied)
+util.PrecacheSound(minutesleft5)
+util.PrecacheSound(minuteleft1)
+util.PrecacheSound(fragsleft3)
+util.PrecacheSound(fragseleft2)
+util.PrecacheSound(fragleft1)
 
 function playerTable:Paint(w, h)
     surface.SetDrawColor(0, 0, 0, 0)
@@ -70,14 +86,14 @@ if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 t
 		lead = true 
 		tied = false
 		lost = false
-		surface.PlaySound("misc/serioussam/announcer/TakenTheLead.ogg")
+		surface.PlaySound(leadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 		//lost
 	elseif( killer[1].p != LocalPlayer() and !lost and killer[1].k != killer[2].k and (lead or tied) ) then
 		lost = true
 		lead = false
 		tied = false
-		surface.PlaySound("misc/serioussam/announcer/LostTheLead.ogg")
+		surface.PlaySound(leadlost)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 		//tied
 	elseif( !tied and killer[1].k == killer[2].k ) then
@@ -85,7 +101,7 @@ if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 t
 			tied = true
 			lead = false
 			lost = false
-			surface.PlaySound("misc/serioussam/announcer/TiedForALead.ogg")
+			surface.PlaySound(leadtied)
 			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 		end
 	end
@@ -208,12 +224,12 @@ function GM:HUDPaint()
 		if countdown == 300 and !announcer5 then
 		if CurTime() < AnnouncerSoundPlayed then return end
 			announcer5 = true
-			surface.PlaySound( "misc/serioussam/announcer/FiveMinutesLeft.ogg" )
+			surface.PlaySound( minutesleft5 )
 			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 		elseif countdown == 60 and !announcer1 then
 		if CurTime() < AnnouncerSoundPlayed then return end
 			announcer1 = true
-			surface.PlaySound( "misc/serioussam/announcer/OneMinuteLeft.ogg" )
+			surface.PlaySound( minuteleft1 )
 			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 		end
 		end
@@ -269,17 +285,17 @@ function GM:HUDPaint()
 					if frags_left == 3 and !frags_left3 then
 					if CurTime() < AnnouncerSoundPlayed then return end
 						frags_left3 = true
-						surface.PlaySound( "misc/serioussam/announcer/ThreeFragsLeft.ogg" )
+						surface.PlaySound( fragsleft3 )
 						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 					elseif frags_left == 2 and !frags_left2 then
 					if CurTime() < AnnouncerSoundPlayed then return end
 						frags_left2 = true
-						surface.PlaySound( "misc/serioussam/announcer/TwoFragsLeft.ogg" )
+						surface.PlaySound( fragsleft2 )
 						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 					elseif frags_left == 1 and !frags_left1 then
 					if CurTime() < AnnouncerSoundPlayed then return end
 						frags_left1 = true
-						surface.PlaySound( "misc/serioussam/announcer/OneFragLeft.ogg" )	
+						surface.PlaySound( fragleft1 )	
 						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay						
 					end
 				end
