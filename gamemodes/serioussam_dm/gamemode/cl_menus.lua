@@ -812,9 +812,10 @@ function OpenSettingsMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 
-function SKIN:PaintNumSlider( panel, w, h )
-return
-end
+	function SKIN:PaintNumSlider( panel, w, h )
+		return
+	end
+	
 	local Music_Volume = vgui.Create( "DNumSlider", SettingsMenu )
 	Music_Volume:SetX(ScrW()/2.33)
 	Music_Volume:SetY(ScrH() / 2.34)
@@ -831,13 +832,13 @@ end
 	end
 
 	Music_Volume.Paint = function(self, w, h)
-	local number = Music_Volume.TextArea:GetText() * 100
+		local number = Music_Volume.TextArea:GetText()
 		surface.SetDrawColor(SeriousHUD:GetFrameColor())
 		surface.DrawOutlinedRect(0,0,w,h)
-		hudr,hudg,hudb = GetMMFColor()
+		local hudr, hudg, hudb = GetMMFColor()
 		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)
-		surface.DrawRect(1,1,number*w/100-2,h-2)
-		draw.SimpleText( number.."%", "MainMenu_font_small", w/2,-6, Color(GetMMFColor()), TEXT_ALIGN_CENTER )
+		surface.DrawRect(1,1,number*w-2,h-2)
+		draw.SimpleText( (number*100).."%", "MainMenu_font_small", w/2,-6, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER )
 	end
 
 
