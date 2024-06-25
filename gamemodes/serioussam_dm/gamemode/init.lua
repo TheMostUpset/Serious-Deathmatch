@@ -60,6 +60,20 @@ function GM:Think()
 			self:OnGameTimerEnd()
 		end
 	end
+	if self:GetState() == STATE_GAME_PREPARE and GetGlobalFloat("GameTime") <= CurTime() then
+		self:GameStart()
+	end
+	if self:GetState() == STATE_GAME_END then
+		local getGameTime = GetGlobalFloat("GameTime")
+		if getGameTime > 0 and getGameTime <= CurTime() then
+			SetGlobalFloat("GameTime", 0)
+			if cvar_mapvote:GetBool() then
+				Mapvote.startVote(30)
+			else
+				self:GameRestart()
+			end
+		end
+	end
 end
 
 --[[---------------------------------------------------------
@@ -213,11 +227,7 @@ end
 
 function GM:GamePrepare()
 	self:SetState(STATE_GAME_PREPARE)
-	timer.Create("TimerGameStart", 5, 1, function()
-		if self:GetState() == STATE_GAME_PREPARE then
-			self:GameStart()
-		end
-	end)
+	SetGlobalFloat("GameTime", CurTime() + 5)
 end
 
 function GM:GameStart()
@@ -233,23 +243,16 @@ end
 
 function GM:GameEnd()
 	self:SetState(STATE_GAME_END)
+	SetGlobalFloat("GameTime", CurTime() + 5)
 	local winner = self:GetWinner()
 	if IsValid(winner) then
 		SetGlobalString("WinnerName", winner:Nick())
 	end
-	timer.Simple(5, function()
-		if cvar_mapvote:GetBool() then
-			Mapvote.startVote(30)
-		else
-			self:GameRestart()
-		end
-	end)
 end
 
 function GM:ResetGameState()
 	self:SetState(STATE_GAME_WARMUP)
 	SetGlobalFloat("GameTime", 0)
-	timer.Remove("TimerGameStart")
 end
 
 function GM:GameRestart()

@@ -189,11 +189,17 @@ function GM:HUDPaint()
     playerTable:PaintManual()
 	if self:ShouldDrawTimer() then
 		local timeLimit = cvar_max_time:GetInt()
-		local timer = "%02i:%02i"
 
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
+		if game_state == STATE_GAME_PREPARE then
+			countdown = GetGlobalFloat("GameTime") - CurTime()
+		end
 		if countdown < 0 then
 			countdown = 0
+		end
+		local timer = string.FormattedTime(countdown, "%02i:%02i")
+		if game_state == STATE_GAME_END then
+			timer = "00:00"
 		end
 
 
@@ -213,33 +219,24 @@ function GM:HUDPaint()
 		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
 		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
 
+		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
+		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
 	
-
-		if game_state == STATE_GAME_END then
-		draw.SimpleText("00:00", "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
-		draw.SimpleText("00:00", "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
-		else
-		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
-		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
-		end
-
-		if countdown <= 0 and !endgamesoundplayed then
+		if game_state > 1 and countdown <= 0 and !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )
 			endgamesoundplayed = true
 		end
 		
-		if cvar_announcer:GetInt() == 1 then
-		if countdown == 300 and !announcer5 then
-		if CurTime() < AnnouncerSoundPlayed then return end
-			announcer5 = true
-			surface.PlaySound( minutesleft5 )
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-		elseif countdown == 60 and !announcer1 then
-		if CurTime() < AnnouncerSoundPlayed then return end
-			announcer1 = true
-			surface.PlaySound( minuteleft1 )
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-		end
+		if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
+			if countdown == 300 and !announcer5 then
+				announcer5 = true
+				surface.PlaySound( minutesleft5 )
+				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			elseif countdown == 60 and !announcer1 then
+				announcer1 = true
+				surface.PlaySound( minuteleft1 )
+				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			end
 		end
 	end
 	
