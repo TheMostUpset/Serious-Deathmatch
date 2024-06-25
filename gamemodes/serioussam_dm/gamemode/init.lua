@@ -12,6 +12,7 @@ AddCSLuaFile("player_ext.lua")
 
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
+local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
 
 include("shared.lua")
 include("sb.lua")
@@ -266,9 +267,9 @@ function GM:GameRestart()
 		v:Spawn()
 	end
 	
-	if player.GetCount() > 1 then
+	if player.GetCount() >= cvar_minplayers:GetInt() then
 		timer.Simple(1, function()
-			if player.GetCount() > 1 then
+			if player.GetCount() >= cvar_minplayers:GetInt() then
 				self:GamePrepare()
 			end
 		end)
@@ -314,13 +315,13 @@ function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
 	self:UpdatePlayerSpeed(ply)
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
-	if player.GetCount() > 1 and self:GetState() == STATE_GAME_WARMUP then
+	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
 	end
 end
 
 function GM:PlayerDisconnected(ply)
-	if player.GetCount() <= 2 and self:GetState() != STATE_GAME_END then
+	if player.GetCount() <= cvar_minplayers:GetInt() and self:GetState() != STATE_GAME_END then
 		self:ResetGameState()
 	end
 end
