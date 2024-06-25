@@ -218,6 +218,22 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 	return self:GetState() != STATE_GAME_END
 end
 
+function GM:EntityTakeDamage(ent, dmginfo)
+	if ent.SS_Flamer_ignite and dmginfo:GetAttacker():GetClass() == "entityflame" then
+		local data = ent.SS_Flamer_ignite
+		if data[3] > CurTime() then
+			local attacker = data[1]
+			local inflictor = data[2]
+			if IsValid(attacker) then
+				dmginfo:SetAttacker(attacker)
+			end
+			if IsValid(inflictor) then
+				dmginfo:SetInflictor(inflictor)
+			end
+		end
+	end
+end
+
 function GM:StartGameTimer()
 	SetGlobalFloat("GameTime", CurTime()) -- создаем глобальный float с текущим временем
 end
