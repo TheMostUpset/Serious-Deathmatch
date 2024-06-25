@@ -8,11 +8,19 @@ playerTable.Players = {}
 local cvar_announcer = CreateClientConVar( "sdm_announcer_enabled", 1, true, false) 
 local announcer5 = false
 local announcer1 = false
-local announcer_lead = false
-local announcer_lostlead = false
+
 local frags_left1 = false
 local frags_left2 = false
 local frags_left3 = false
+
+local newround_in = false
+
+local three_in = false
+local two_in = false
+local one_in = false
+local fight_in = false
+
+
 local leadtaken = "misc/serioussam/announcer/TakenTheLead.ogg"
 local leadlost = "misc/serioussam/announcer/LostTheLead.ogg"
 local leadtied = "misc/serioussam/announcer/TiedForALead.ogg"
@@ -23,14 +31,29 @@ local fragsleft3 = "misc/serioussam/announcer/ThreeFragsLeft.ogg"
 local fragsleft2 = "misc/serioussam/announcer/TwoFragsLeft.ogg"
 local fragleft1 = "misc/serioussam/announcer/OneFragLeft.ogg"
 
+local newround = "misc/serioussam/announcer/NewRound.ogg"
+local three = "misc/serioussam/announcer/Three.ogg"
+local two = "misc/serioussam/announcer/Two.ogg"
+local one = "misc/serioussam/announcer/One.ogg"
+local fight = "misc/serioussam/announcer/Fight.ogg"
+
 util.PrecacheSound(leadtaken)
 util.PrecacheSound(leadlost)
 util.PrecacheSound(leadtied)
+
 util.PrecacheSound(minutesleft5)
 util.PrecacheSound(minuteleft1)
+
 util.PrecacheSound(fragsleft3)
 util.PrecacheSound(fragsleft2)
 util.PrecacheSound(fragleft1)
+
+util.PrecacheSound(newround)
+util.PrecacheSound(three)
+util.PrecacheSound(two)
+util.PrecacheSound(one)
+util.PrecacheSound(fight)
+
 
 function playerTable:Paint(w, h)
     surface.SetDrawColor(0, 0, 0, 0)
@@ -192,7 +215,45 @@ function GM:HUDPaint()
 
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
 		if game_state == STATE_GAME_PREPARE then
-			countdown = GetGlobalFloat("GameTime") - CurTime()
+			countdown = GetGlobalFloat("GameTime") - CurTime() + 1
+			if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
+			if !newround_in then
+			surface.PlaySound(newround)
+			newround_in = true
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			end
+			
+			timer.Simple(2, function()
+			if !three_in then
+			surface.PlaySound(three)
+			three_in = true
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			end
+			end)
+
+			timer.Simple(3, function()
+			if !two_in then
+			surface.PlaySound(two)
+			two_in = true
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			end
+			end)
+			
+			timer.Simple(4, function()
+			if !one_in then
+			surface.PlaySound(one)
+			one_in = true
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			end
+			end)
+			timer.Simple(5, function()
+			if !fight_in then
+			surface.PlaySound(fight)
+			fight_in = true
+			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+			end
+			end)
+			end
 		end
 		if countdown < 0 then
 			countdown = 0
