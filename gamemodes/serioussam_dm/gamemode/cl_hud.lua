@@ -20,6 +20,19 @@ local two_in = false
 local one_in = false
 local fight_in = false
 
+hook.Add("PostCleanupMap", "ResetAnnouncerVars", function()
+	announcer5 = false
+	announcer1 = false
+	frags_left1 = false
+	frags_left2 = false
+	frags_left3 = false
+	newround_in = false
+	three_in = false
+	two_in = false
+	one_in = false
+	fight_in = false
+end)
+
 
 local leadtaken = "misc/serioussam/announcer/TakenTheLead.ogg"
 local leadlost = "misc/serioussam/announcer/LostTheLead.ogg"
@@ -201,12 +214,11 @@ end
 local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
 
 function GM:ShouldDrawTimer()
-	return cvar_timer_enabled and cvar_timer_enabled:GetBool() and GetGlobalFloat("GameTime") > 0
+	return cvar_timer_enabled and cvar_timer_enabled:GetBool() and GetGlobalFloat("GameTime") > 0 and self:GetState() > 1
 end
 	
 function GM:HUDPaint()
 	local game_state = self:GetState()
-
 	
 	hook.Run( "HUDDrawTargetID" )
     playerTable:PaintManual()
@@ -214,47 +226,6 @@ function GM:HUDPaint()
 		local timeLimit = cvar_max_time:GetInt()
 
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
-		if game_state == STATE_GAME_PREPARE then
-			countdown = GetGlobalFloat("GameTime") - CurTime() + 1
-			if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
-			if !newround_in then
-			surface.PlaySound(newround)
-			newround_in = true
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-			
-			timer.Simple(2, function()
-			if !three_in then
-			surface.PlaySound(three)
-			three_in = true
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-			end)
-
-			timer.Simple(3, function()
-			if !two_in then
-			surface.PlaySound(two)
-			two_in = true
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-			end)
-			
-			timer.Simple(4, function()
-			if !one_in then
-			surface.PlaySound(one)
-			one_in = true
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-			end)
-			timer.Simple(5, function()
-			if !fight_in then
-			surface.PlaySound(fight)
-			fight_in = true
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-			end)
-			end
-		end
 		if countdown < 0 then
 			countdown = 0
 		end
@@ -283,17 +254,18 @@ function GM:HUDPaint()
 		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
 		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
 	
-		if game_state > 1 and countdown <= 0 and !endgamesoundplayed then
+		if countdown <= 0 and !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )
 			endgamesoundplayed = true
 		end
 		
 		if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
-			if countdown == 300 and !announcer5 then
+			local countdown_rnd = math.Round(countdown - .5)
+			if countdown_rnd == 300 and !announcer5 then
 				announcer5 = true
 				surface.PlaySound( minutesleft5 )
 				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			elseif countdown == 60 and !announcer1 then
+			elseif countdown_rnd == 60 and !announcer1 then
 				announcer1 = true
 				surface.PlaySound( minuteleft1 )
 				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
@@ -307,8 +279,37 @@ function GM:HUDPaint()
 		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_PREPARE then
+		local countdown = GetGlobalFloat("GameTime") - CurTime()
+		local countdown_rnd = math.Round(countdown + .6)
+		if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
+			if !newround_in then
+				surface.PlaySound(newround)
+				newround_in = true
+				AnnouncerSoundPlayed = CurTime() + .5
+			end
+			if countdown_rnd == 3 and !three_in then
+				surface.PlaySound(three)
+				three_in = true
+				AnnouncerSoundPlayed = CurTime() + .5
+			end
+			if countdown_rnd == 2 and !two_in then
+				surface.PlaySound(two)
+				two_in = true
+				AnnouncerSoundPlayed = CurTime() + .5
+			end
+			if countdown_rnd == 1 and !one_in then
+				surface.PlaySound(one)
+				one_in = true
+				AnnouncerSoundPlayed = CurTime() + .4
+			end
+			if countdown <= 0 and !fight_in then
+				surface.PlaySound(fight)
+				fight_in = true
+				AnnouncerSoundPlayed = CurTime() + 1
+			end
+		end		
 		local x, y = ScrW() / 2, ScrH() / 4
-		local text = "Game starts now..."
+		local text = "Game starts in...\n"..countdown_rnd
 		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_END then
@@ -347,19 +348,16 @@ function GM:HUDPaint()
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
 				
-				if cvar_announcer:GetInt() == 1 then
+				if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
 					if frags_left == 3 and !frags_left3 then
-					if CurTime() < AnnouncerSoundPlayed then return end
 						frags_left3 = true
 						surface.PlaySound( fragsleft3 )
 						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 					elseif frags_left == 2 and !frags_left2 then
-					if CurTime() < AnnouncerSoundPlayed then return end
 						frags_left2 = true
 						surface.PlaySound( fragsleft2 )
 						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 					elseif frags_left == 1 and !frags_left1 then
-					if CurTime() < AnnouncerSoundPlayed then return end
 						frags_left1 = true
 						surface.PlaySound( fragleft1 )	
 						AnnouncerSoundPlayed = CurTime() + AnnouncerDelay						
