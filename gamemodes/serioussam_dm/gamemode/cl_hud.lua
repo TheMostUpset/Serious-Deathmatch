@@ -275,7 +275,7 @@ function GM:HUDPaint()
 	
 	if game_state == STATE_GAME_WARMUP then
 		local x, y = ScrW() / 2, ScrH() / 4
-		local text = "Waiting for all players to connect"
+		local text = "Waiting for players..."
 		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_PREPARE then
@@ -309,7 +309,10 @@ function GM:HUDPaint()
 			end
 		end		
 		local x, y = ScrW() / 2, ScrH() / 4
-		local text = "Game starts in...\n"..countdown_rnd
+		local text = "New round starts in"
+		if countdown_rnd < 4 then
+		text = "New round starts in" .. " " .. countdown_rnd
+		end
 		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_END then

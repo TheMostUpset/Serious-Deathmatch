@@ -46,6 +46,13 @@
 			"type"		"Numeric"
 			"default"	"600"
 		}
+		6
+		{
+			"name"		"sdm_minplayers"
+			"text"		"Players for start"
+			"type"		"Numeric"
+			"default"	"2"
+		}
 
 		
 
