@@ -190,6 +190,7 @@ function GM:HUDPaint()
 	if self:ShouldDrawTimer() then
 		local timeLimit = cvar_max_time:GetInt()
 		local timer = "%02i:%02i"
+
 		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
 		if countdown < 0 then
 			countdown = 0
@@ -212,8 +213,15 @@ function GM:HUDPaint()
 		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
 		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
 
+	
+
+		if game_state == STATE_GAME_END then
+		draw.SimpleText("00:00", "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
+		draw.SimpleText("00:00", "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
+		else
 		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
-		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)		
+		draw.SimpleText(string.FormattedTime(countdown, "%02i:%02i"), "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
+		end
 
 		if countdown <= 0 and !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )
