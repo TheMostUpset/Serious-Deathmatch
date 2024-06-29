@@ -105,7 +105,7 @@ function SWEP:ViewModelDrawn(vm)
 	render.DrawBeam(pos - up * size, pos - right * size, width, 0, 1, col)	
 end
 
-SWEP.HoldType			= "crossbow"
+SWEP.HoldType			= "ar2"
 SWEP.Base				= "weapon_ss_base"
 SWEP.Category			= "Serious Sam"
 SWEP.Spawnable			= true
