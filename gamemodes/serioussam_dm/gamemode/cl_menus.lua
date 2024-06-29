@@ -507,7 +507,7 @@ function OpenSettingsMenu()
 	SettingsMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("OPTIONS", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH()-100, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH() - ScrH()/11, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
