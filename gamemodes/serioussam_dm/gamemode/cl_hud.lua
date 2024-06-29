@@ -103,6 +103,9 @@ if SeriousHUD then
 	function SeriousHUD:AmmoIconsEnabled()
 		return true
 	end
+	function SeriousHUD:DrawAmmo()
+		return !cvar_instagib:GetBool()
+	end
 end
 function LeadingSound()
 --q3 code

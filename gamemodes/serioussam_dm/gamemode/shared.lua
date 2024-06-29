@@ -7,6 +7,7 @@ GM.Website = "N/A"
 cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
 cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
+cvar_instagib = CreateConVar("sdm_instagib", 0, {FCVAR_REPLICATED, FCVAR_NOTIFY}, "Instagib mode", 0, 1)
 if !cvar_max_frags then
 	cvar_max_frags = CreateConVar("sdm_max_frags", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end

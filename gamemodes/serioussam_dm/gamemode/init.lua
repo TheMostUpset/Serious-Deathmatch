@@ -32,6 +32,17 @@ PLAYER_JUMPPOWER = 290
 PLAYER_WALKSPEED_KNIFE = 500
 PLAYER_JUMPPOWER_KNIFE = 330
 
+cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
+	value_new = tonumber(value_new)
+	-- value_old = tonumber(value_old)
+	if !isnumber(value_new) then return end
+	for k, ply in ipairs(player.GetAll()) do
+		ply:StripWeapons()
+		ply:StripAmmo()
+		GAMEMODE:PlayerLoadout(ply)
+	end
+end)
+
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
 	RunConsoleCommand("sv_airaccelerate", "5")
@@ -219,6 +230,9 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 end
 
 function GM:EntityTakeDamage(ent, dmginfo)
+	if cvar_instagib:GetBool() then
+		dmginfo:ScaleDamage(100)
+	end
 	if ent.SS_Flamer_ignite and dmginfo:GetAttacker():GetClass() == "entityflame" then
 		local data = ent.SS_Flamer_ignite
 		if data[3] > CurTime() then
@@ -343,11 +357,16 @@ function GM:PlayerDisconnected(ply)
 end
 
 function GM:PlayerLoadout(ply)
-   ply:Give('weapon_ss_knife')
-   ply:Give('weapon_ss_colt_dual')
-   ply:Give('weapon_ss_singleshotgun')
-   EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
-   return true
+	if cvar_instagib:GetBool() then
+		ply:Give("weapon_ss_railgun")
+		ply:Give("weapon_ss_knife")
+	else
+		ply:Give('weapon_ss_knife')
+		ply:Give('weapon_ss_colt_dual')
+		ply:Give('weapon_ss_singleshotgun')
+	end
+	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
+	return true
 end
 
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
