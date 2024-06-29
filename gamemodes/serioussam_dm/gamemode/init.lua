@@ -33,14 +33,13 @@ PLAYER_WALKSPEED_KNIFE = 500
 PLAYER_JUMPPOWER_KNIFE = 330
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
-	value_new = tonumber(value_new)
-	-- value_old = tonumber(value_old)
-	if !isnumber(value_new) then return end
+	value_new = tobool(value_new)
 	for k, ply in ipairs(player.GetAll()) do
 		ply:StripWeapons()
 		ply:StripAmmo()
 		GAMEMODE:PlayerLoadout(ply)
 	end
+	GAMEMODE:ToggleMapPickups(!value_new)
 end)
 
 function GM:Initialize()
@@ -61,6 +60,26 @@ function GM:InitPostEntity()
 	if weapon_ss_singleshotgun then weapon_ss_singleshotgun.Primary.AnimSpeed = 1.5 end
 	-- local ammo_base = scripted_ents.GetStored("ss_ammo_base")
 	-- if ammo_base then ammo_base.ModelScale = 10 end
+	
+	if cvar_instagib:GetBool() then
+		self:ToggleMapPickups(false)
+	end
+end
+
+function GM:ToggleMapPickups(on)
+	local pickups = ents.FindByClass("ss_*")
+	table.Add(pickups, ents.FindByClass("ss_health_*"))
+	table.Add(pickups, ents.FindByClass("ss_armor_*"))
+	table.Add(pickups, ents.FindByClass("ss_ammo_*"))
+	for k, v in pairs(pickups) do
+		if on then
+			v.Available = true
+			v:SetNoDraw(false)
+		else
+			v.Available = false
+			v:SetNoDraw(true)
+		end
+	end
 end
 
 -- вызывается каждый фрейм
@@ -295,6 +314,9 @@ function GM:GameRestart()
 	game.CleanUpMap()
 	self:ResetGameState()
 	-- hook.Run("InitPostEntity")
+	if cvar_instagib:GetBool() then
+		self:ToggleMapPickups(false)
+	end
 	for k, v in ipairs(player.GetAll()) do
 		v:KillSilent()
 		v:SetFrags(0)

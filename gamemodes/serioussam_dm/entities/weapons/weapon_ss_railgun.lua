@@ -54,19 +54,19 @@ function SWEP:PrimaryAttack()
 		})
 	end
 	
+	if tr.Hit then
+		local dmginfo = DamageInfo()
+		local attacker = self.Owner
+		if !IsValid(attacker) then attacker = self end
+		dmginfo:SetAttacker(attacker)
+		dmginfo:SetInflictor(self)
+		dmginfo:SetDamageType(DMG_ENERGYBEAM)
+		dmginfo:SetDamage(self.Primary.Damage)
+		dmginfo:SetDamageForce(self.Owner:GetUp() *2000 +self.Owner:GetForward() *20000)
+		dmginfo:SetDamagePosition(tr.HitPos)
+		tr.Entity:DispatchTraceAttack(dmginfo, tr)
+	end
 	if SERVER then
-		if tr.Hit then				
-			local dmginfo = DamageInfo()
-			local attacker = self.Owner
-			if !IsValid(attacker) then attacker = self end
-			dmginfo:SetAttacker(attacker)
-			dmginfo:SetInflictor(self)
-			dmginfo:SetDamageType(bit.bor(DMG_SHOCK, DMG_AIRBOAT))
-			dmginfo:SetDamage(self.Primary.Damage)
-			dmginfo:SetDamageForce(self.Owner:GetUp() *2000 +self.Owner:GetForward() *20000)
-			dmginfo:SetDamagePosition(tr.HitPos)
-			tr.Entity:TakeDamageInfo(dmginfo)
-		end
 		self.Owner:LagCompensation(false)
 	end
 
@@ -81,11 +81,11 @@ function SWEP:ViewModelDrawn(vm)
 	if !bone then return end
 	
 	local pos, ang = vm:GetBonePosition(bone)
-	pos = pos + vm:GetForward() * 8
+	pos = pos + vm:GetForward() * 5
 	local right, up = ang:Forward(), ang:Up()
-	local width = 6
-	local size = 4
-	local move = CurTime() * 2
+	local width = 8
+	local size = 2
+	local move = CurTime() * 10
 	
 	local firetime = CurTime() - self:GetNextPrimaryFire()
 	local colchange = math.Clamp(firetime*3 + 1.2, 0, 1)
