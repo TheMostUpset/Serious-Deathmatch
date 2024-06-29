@@ -219,6 +219,13 @@ local ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
 function GM:ShouldDrawTimer()
 	return cvar_timer_enabled and cvar_timer_enabled:GetBool() and GetGlobalFloat("GameTime") > 0 and self:GetState() > 1
 end
+
+local fragMsgNick = ""
+local fragMsgTime = 0
+net.Receive("PlayerFrag", function()
+	fragMsgNick = net.ReadString()
+	fragMsgTime = CurTime() + 2
+end)
 	
 function GM:HUDPaint()
 	local game_state = self:GetState()
@@ -376,8 +383,16 @@ function GM:HUDPaint()
 			local text = "Press FIRE to respawn"
 			draw.SimpleText( text, "Death_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
 			draw.SimpleText( text, "Death_Font", x, y, color_white, TEXT_ALIGN_CENTER)
-		end
-		
+		end		
+	end
+	if fragMsgTime > CurTime() then
+		local x, y = ScrW() / 2, ScrH() / 3
+		local text = "You fragged "..fragMsgNick
+		local font = "seriousHUDfont_fragsleft"
+		local fadeSpeed = 3
+		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
+		draw.SimpleText( text, font, x + 1.5, y + 1.5, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
+		draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)
 	end
 end
 

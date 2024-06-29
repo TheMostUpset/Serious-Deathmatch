@@ -20,7 +20,7 @@ include("sv_mapvote_init.lua")
 include("sv_mapvote_vote.lua")
 
 util.AddNetworkString("FMenu")
--- util.AddNetworkString("set")
+util.AddNetworkString("PlayerFrag")
 
 resource.AddFile( "resource/fonts/Mytupi.ttf" )
 resource.AddFile( "resource/fonts/Franklin Gothic Bold.ttf" )
@@ -219,8 +219,13 @@ function GM:SpawnPickupOnDeath(ply, actWep)
 end
 
 function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
-	if self:GetState() == STATE_GAME_PROGRESS and attacker:Frags() >= cvar_max_frags:GetInt() then
-		self:GameEnd()
+	if self:GetState() == STATE_GAME_PROGRESS then
+		net.Start("PlayerFrag")
+		net.WriteString(ply:Nick())
+		net.Send(attacker)
+		if attacker:Frags() >= cvar_max_frags:GetInt() then
+			self:GameEnd()
+		end
 	end
 end
 
