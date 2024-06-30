@@ -67,6 +67,8 @@ function GM:InitPostEntity()
 	if weapon_ss_singleshotgun then weapon_ss_singleshotgun.Primary.AnimSpeed = 1.5 end
 	-- local ammo_base = scripted_ents.GetStored("ss_ammo_base")
 	-- if ammo_base then ammo_base.ModelScale = 10 end
+
+	self:ReplacePickupEntities()
 	
 	if self:IsInstagib() then
 		self:ToggleMapPickups(false)
@@ -109,6 +111,68 @@ function GM:RestoreSDMGPickup()
 			sdmg:SetPos(v:GetPos())
 			sdmg:Spawn()
 			v:Remove()
+		end
+	end
+end
+
+local replaceQ3Ents = {
+	["q3_pickup_shotgun"] = "ss_pickup_doubleshotgun",
+	["q3_pickup_grenadelauncher"] = "ss_pickup_grenadel",
+	["q3_pickup_rocketlauncher"] = "ss_pickup_rocketl",
+	["q3_pickup_lightninggun"] = "ss_pickup_ghostbuster",
+	["q3_pickup_railgun"] = "ss_pickup_tommygun",
+	["q3_pickup_plasmagun"] = "ss_pickup_laser",
+	["q3_pickup_bfg10k"] = "ss_pickup_cannon",
+	["q3_pickup_chaingun"] = "ss_pickup_minigun",
+	["q3_pickup_machinegun_ammo"] = "ss_ammo_bullets",
+	["q3_pickup_shotgun_ammo"] = "ss_ammo_shells",
+	["q3_pickup_grenade_ammo"] = "ss_ammo_grenades",
+	["q3_pickup_rocket_ammo"] = "ss_ammo_rockets",
+	["q3_pickup_railgun_ammo"] = "ss_ammo_bullets",
+	["q3_pickup_plasma_ammo"] = "ss_ammo_electricity",
+	["q3_pickup_light_ammo"] = "ss_ammo_electricity",
+	["q3_pickup_chaingun_ammo"] = "ss_ammo_bullets",
+	["q3_pickup_armorred"] = "ss_armor_100",
+	["q3_pickup_armoryellow"] = "ss_armor_50",
+	["q3_pickup_armorgreen"] = "ss_armor_25",
+	["q3_pickup_armorshard"] = "ss_armor_1",
+	["q3_pickup_5hp"] = "ss_health_pill",
+	["q3_pickup_25hp"] = "ss_health_medium",
+	["q3_pickup_50hp"] = "ss_health_large",
+	["q3_item_health_mega"] = "ss_health_super"
+}
+function GM:ReplacePickupEntities()
+	if string.StartsWith(game.GetMap(), "q3") then
+		for k, ent in ipairs(ents.FindByClass("q3_*")) do
+			if replaceQ3Ents[ent:GetClass()] then
+				local newEnt = ents.Create(replaceQ3Ents[ent:GetClass()])
+				if IsValid(newEnt) then
+					newEnt:SetPos(ent:GetPos())
+					newEnt:Spawn()
+					ent:Remove()
+				end
+			end
+		end
+		if game.GetMap() == "q3dm2" then
+			local speed = ents.Create("ss_seriousspeed")
+			if IsValid(speed) then
+				speed:SetPos(Vector(-1920, -960, 5))
+				speed:Spawn()
+			end
+		end
+		if game.GetMap() == "q3dm17" then
+			local sdmg = ents.Create("ss_seriousdmg")
+			if IsValid(sdmg) then
+				sdmg:SetPos(Vector(115, 64, 1288))
+				sdmg:Spawn()
+			end
+		end
+		if game.GetMap() == "q3tourney7" then
+			local sdmg = ents.Create("ss_seriousdmg")
+			if IsValid(sdmg) then
+				sdmg:SetPos(Vector(-2240, -559, 3))
+				sdmg:Spawn()
+			end
 		end
 	end
 end
@@ -324,6 +388,7 @@ function GM:GameStart()
 	self:StartGameTimer()
 	self:SetState(STATE_GAME_PROGRESS)
 	game.CleanUpMap(true)
+	self:ReplacePickupEntities()
 	for k, v in ipairs(player.GetAll()) do
 		v:KillSilent()
 		v:SetFrags(0)
@@ -354,6 +419,7 @@ function GM:GameRestart()
 	game.CleanUpMap()
 	self:ResetGameState()
 	-- hook.Run("InitPostEntity")
+	self:ReplacePickupEntities()
 	if self:IsInstagib() then
 		self:ToggleMapPickups(false)
 		self:ReplaceSDMGPickup()
