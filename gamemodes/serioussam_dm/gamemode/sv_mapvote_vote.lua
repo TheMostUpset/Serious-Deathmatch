@@ -44,6 +44,7 @@ Mapvote.endVote = function()
 
 	timer.Simple(3, function()
 		if Mapvote.winningMap == game.GetMap() then
+			SetGlobalInt( "Mapvote_State", MAPVOTE_NOTVOTED )
 			GAMEMODE:GameRestart()
 		else
 			RunConsoleCommand("changelevel", Mapvote.winningMap)

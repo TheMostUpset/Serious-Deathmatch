@@ -7,7 +7,7 @@ GM.Website = "N/A"
 cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
 cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
-cvar_instagib = CreateConVar("sdm_instagib", 0, {FCVAR_REPLICATED, FCVAR_NOTIFY}, "Instagib mode", 0, 1)
+cvar_instagib = CreateConVar("sdm_instagib", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Instagib mode", 0, 1)
 if !cvar_max_frags then
 	cvar_max_frags = CreateConVar("sdm_max_frags", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
@@ -23,7 +23,11 @@ STATE_GAME_PREPARE = 1
 STATE_GAME_PROGRESS = 2
 STATE_GAME_END = 3
 
-include( "shared_killfeed.lua" )
+MAPVOTE_NOTVOTED  	= 0
+MAPVOTE_VOTING		= 1
+MAPVOTE_VOTED		= 2
+
+-- include( "shared_killfeed.lua" )
 include( "shared_gibs.lua" )
 include("player_ext.lua")
 
@@ -32,6 +36,10 @@ function GM:GetState()
 end
 function GM:SetState(num)
 	return SetGlobalInt("State", num)
+end
+
+function GM:IsActiveMapVote()
+	return GetGlobalInt("Mapvote_State") > 0
 end
 
 function GM:GetPlayersSortedByFrags()

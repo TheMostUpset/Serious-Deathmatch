@@ -5,7 +5,7 @@ AddCSLuaFile("cl_mapvote.lua")
 AddCSLuaFile("cl_menus.lua")
 AddCSLuaFile("cl_weaponselection.lua")
 AddCSLuaFile("shared.lua")
-AddCSLuaFile("shared_killfeed.lua")
+-- AddCSLuaFile("shared_killfeed.lua")
 AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 AddCSLuaFile("player_ext.lua")
@@ -33,6 +33,7 @@ PLAYER_WALKSPEED_KNIFE = 500
 PLAYER_JUMPPOWER_KNIFE = 330
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
+	if GAMEMODE:IsActiveMapVote() then return end
 	value_new = tobool(value_new)
 	for k, ply in ipairs(player.GetAll()) do
 		ply:StripWeapons()
@@ -288,6 +289,7 @@ end
 function GM:GameStart()
 	self:StartGameTimer()
 	self:SetState(STATE_GAME_PROGRESS)
+	game.CleanUpMap()
 	for k, v in ipairs(player.GetAll()) do
 		v:KillSilent()
 		v:SetFrags(0)
