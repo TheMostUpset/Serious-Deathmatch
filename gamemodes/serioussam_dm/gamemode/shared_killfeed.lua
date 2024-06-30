@@ -1,3 +1,5 @@
+--[[ comment that shit
+
 local NET_STRING = "killfeed_log";
 
 if CLIENT then
@@ -92,6 +94,9 @@ if SERVER then
     Sends a death notice to everyone
     @param {}
   ]]
+
+--[[ comment that shit
+
   local function SendDeathNotice(victim, inflictor, attacker)
     net.Start(NET_STRING)
 
@@ -177,4 +182,4 @@ if SERVER then
     player.killfeed_headshot = nil;
   end);
 end
-
+--]]
