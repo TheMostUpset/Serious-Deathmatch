@@ -1,5 +1,5 @@
 local showGameUI
-local yes = true
+
 local offset = 0
 local speed = 5
 local flashSpeed = 4
@@ -342,93 +342,6 @@ function OpenSSMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 end
-
---function OpenTeamMenu()
-	showGameUI = true
-	local text = ""
-	TeamMenu = vgui.Create("DFrame")
-	TeamMenu:SetSize(ScrW(), ScrH())
-	TeamMenu:Center()
-	TeamMenu:SetTitle("")
-	TeamMenu:ShowCloseButton( false )
-	TeamMenu:SetDraggable(false)
-	TeamMenu:SetMouseInputEnabled(false)
-	TeamMenu:MakePopup()
-
-
-	TeamMenu.Paint = function(self, w, h)
-		PaintBackground(self, w, h)
-		draw.SimpleText("CHOOSE TEAM", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH()-100, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-	end
-	
-	local RedTeam_Button = vgui.Create("DButton", TeamMenu)
-	local isFlashing = false
-	RedTeam_Button:SetText("JOIN RED")
-	RedTeam_Button:SetSize(ScrW()/8, ScrH()/20)
-	RedTeam_Button:Center()
-	RedTeam_Button:SetY(ScrH()/2.12)
-	RedTeam_Button:SetFont("MainMenu_Font")
-	RedTeam_Button:SetTextColor(GetButtonColor())
-
-	RedTeam_Button.OnCursorEntered = function()
-		isFlashing = true
-		text = "return to game"
-		surface.PlaySound("menus/select.wav")
-	end
-
-	RedTeam_Button.OnCursorExited = function()
-		isFlashing = false
-		text = ""
-		RedTeam_Button:SetTextColor(GetButtonColor())
-	end
-
-	RedTeam_Button.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		end
-	end
-
-	RedTeam_Button.DoClick = function()
-		TeamMenu:Close()
-		showGameUI = false
-		surface.PlaySound("menus/press.wav")
-	end
-	
-	local BlueTeam_Button = vgui.Create("DButton", TeamMenu)
-	local isFlashing = false
-	BlueTeam_Button:SetText("JOIN BLUE")
-	BlueTeam_Button:SetSize(ScrW()/8, ScrH()/20)
-	BlueTeam_Button:Center()
-	BlueTeam_Button:SetY(ScrH()/1.88)
-	BlueTeam_Button:SetFont("MainMenu_Font")
-	BlueTeam_Button:SetTextColor(GetButtonColor())
-
-	BlueTeam_Button.OnCursorEntered = function()
-		isFlashing = true
-		text = "return to game"
-		surface.PlaySound("menus/select.wav")
-	end
-
-	BlueTeam_Button.OnCursorExited = function()
-		isFlashing = false
-		text = ""
-		BlueTeam_Button:SetTextColor(GetButtonColor())
-	end
-
-	BlueTeam_Button.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		end
-	end
-
-	BlueTeam_Button.DoClick = function()
-		TeamMenu:Close()
-		showGameUI = false
-		surface.PlaySound("menus/press.wav")
-	end
---end
-
 
 function OpenConfirmationMenu()
 	showGameUI = true

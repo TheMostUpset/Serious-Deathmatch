@@ -226,6 +226,10 @@ net.Receive("PlayerFrag", function()
 	fragMsgNick = net.ReadString()
 	fragMsgTime = CurTime() + 2
 end)
+local fragByMsgNick = ""
+net.Receive("PlayerKilledBy", function()
+	fragByMsgNick = net.ReadString()
+end)
 	
 function GM:HUDPaint()
 	local game_state = self:GetState()
@@ -381,14 +385,24 @@ function GM:HUDPaint()
 		if !LocalPlayer():Alive() then
 			local x, y = ScrW() / 2, ScrH() / 4
 			local text = "Press FIRE to respawn"
-			draw.SimpleText( text, "Death_Font", x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
-			draw.SimpleText( text, "Death_Font", x, y, color_white, TEXT_ALIGN_CENTER)
+			local font = "Death_Font"
+			draw.SimpleText( text, font, x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
+			if fragByMsgNick != "" then
+				local y = ScrH() / 5
+				local text = "Fragged by "..fragByMsgNick
+				if fragByMsgNick == LocalPlayer():Nick() then
+					text = "You killed yourself, idiot"
+				end
+				draw.SimpleText( text, font, x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
+				draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
+			end
 		end		
 	end
 	if fragMsgTime > CurTime() then
-		local x, y = ScrW() / 2, ScrH() / 3
+		local x, y = ScrW() / 2, ScrH() / 3.5
 		local text = "You fragged "..fragMsgNick
-		local font = "seriousHUDfont_fragsleft"
+		local font = "Frag_Font"
 		local fadeSpeed = 3
 		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
 		draw.SimpleText( text, font, x + 1.5, y + 1.5, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)

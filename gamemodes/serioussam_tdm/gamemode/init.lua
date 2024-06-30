@@ -21,6 +21,7 @@ include("sv_mapvote_vote.lua")
 
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
+util.AddNetworkString("PlayerKilledBy")
 
 resource.AddFile( "resource/fonts/Mytupi.ttf" )
 resource.AddFile( "resource/fonts/Franklin Gothic Bold.ttf" )
@@ -41,6 +42,11 @@ cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 		GAMEMODE:PlayerLoadout(ply)
 	end
 	GAMEMODE:ToggleMapPickups(!value_new)
+	if value_new then	
+		GAMEMODE:ReplaceSDMGPickup()
+	else
+		GAMEMODE:RestoreSDMGPickup()
+	end
 end)
 
 function GM:Initialize()
@@ -62,13 +68,14 @@ function GM:InitPostEntity()
 	-- local ammo_base = scripted_ents.GetStored("ss_ammo_base")
 	-- if ammo_base then ammo_base.ModelScale = 10 end
 	
-	if cvar_instagib:GetBool() then
+	if self:IsInstagib() then
 		self:ToggleMapPickups(false)
+		self:ReplaceSDMGPickup()
 	end
 end
 
 function GM:ToggleMapPickups(on)
-	local pickups = ents.FindByClass("ss_*")
+	local pickups = ents.FindByClass("ss_pickup_*")
 	table.Add(pickups, ents.FindByClass("ss_health_*"))
 	table.Add(pickups, ents.FindByClass("ss_armor_*"))
 	table.Add(pickups, ents.FindByClass("ss_ammo_*"))
@@ -79,6 +86,29 @@ function GM:ToggleMapPickups(on)
 		else
 			v.Available = false
 			v:SetNoDraw(true)
+		end
+	end
+end
+
+function GM:ReplaceSDMGPickup()
+	local sdmg = ents.FindByClass("ss_seriousdmg")
+	for k,v in ipairs(sdmg) do
+		local speed = ents.Create("ss_seriousspeed")
+		if IsValid(speed) then
+			speed:SetPos(v:GetPos())
+			speed:Spawn()
+			v:Remove()
+		end
+	end
+end
+function GM:RestoreSDMGPickup()
+	local speed = ents.FindByClass("ss_seriousspeed")
+	for k,v in ipairs(speed) do
+		local sdmg = ents.Create("ss_seriousdmg")
+		if IsValid(sdmg) then
+			sdmg:SetPos(v:GetPos())
+			sdmg:Spawn()
+			v:Remove()
 		end
 	end
 end
@@ -132,6 +162,10 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		end
 
 	end
+	
+	net.Start("PlayerKilledBy")
+	net.WriteString(IsValid(attacker) and attacker:IsPlayer() and attacker:Nick() or "")
+	net.Send(ply)
 	
 	local actWep = ply:GetActiveWeapon()
 	if IsValid(actWep) then
@@ -255,7 +289,7 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 end
 
 function GM:EntityTakeDamage(ent, dmginfo)
-	if cvar_instagib:GetBool() then
+	if self:IsInstagib() then
 		dmginfo:ScaleDamage(100)
 	end
 	if ent.SS_Flamer_ignite and dmginfo:GetAttacker():GetClass() == "entityflame" then
@@ -289,12 +323,16 @@ end
 function GM:GameStart()
 	self:StartGameTimer()
 	self:SetState(STATE_GAME_PROGRESS)
-	game.CleanUpMap()
+	game.CleanUpMap(true)
 	for k, v in ipairs(player.GetAll()) do
 		v:KillSilent()
 		v:SetFrags(0)
 		v:SetDeaths(0)
 		v:Spawn()
+	end
+	if self:IsInstagib() then
+		self:ToggleMapPickups(false)
+		self:ReplaceSDMGPickup()
 	end
 end
 
@@ -316,8 +354,9 @@ function GM:GameRestart()
 	game.CleanUpMap()
 	self:ResetGameState()
 	-- hook.Run("InitPostEntity")
-	if cvar_instagib:GetBool() then
+	if self:IsInstagib() then
 		self:ToggleMapPickups(false)
+		self:ReplaceSDMGPickup()
 	end
 	for k, v in ipairs(player.GetAll()) do
 		v:KillSilent()
@@ -386,7 +425,7 @@ function GM:PlayerDisconnected(ply)
 end
 
 function GM:PlayerLoadout(ply)
-	if cvar_instagib:GetBool() then
+	if self:IsInstagib() then
 		ply:Give("weapon_ss_railgun")
 		ply:Give("weapon_ss_knife")
 	else

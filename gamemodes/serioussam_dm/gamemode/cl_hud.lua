@@ -400,9 +400,9 @@ function GM:HUDPaint()
 		end		
 	end
 	if fragMsgTime > CurTime() then
-		local x, y = ScrW() / 2, ScrH() / 3
+		local x, y = ScrW() / 2, ScrH() / 3.5
 		local text = "You fragged "..fragMsgNick
-		local font = "seriousHUDfont_fragsleft"
+		local font = "Frag_Font"
 		local fadeSpeed = 3
 		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
 		draw.SimpleText( text, font, x + 1.5, y + 1.5, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
