@@ -42,6 +42,10 @@ function GM:IsActiveMapVote()
 	return GetGlobalInt("Mapvote_State") > 0
 end
 
+function GM:IsInstagib()
+	return cvar_instagib:GetBool()
+end
+
 function GM:GetPlayersSortedByFrags()
 	local players = player.GetAll()
 	table.sort(players, function(a, b)
