@@ -33,7 +33,7 @@ PLAYER_WALKSPEED_KNIFE = 500
 PLAYER_JUMPPOWER_KNIFE = 330
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
-	if GAMEMODE:IsActiveMapVote() then return end
+	if GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
 	value_new = tobool(value_new)
 	for k, ply in ipairs(player.GetAll()) do
 		ply:StripWeapons()
