@@ -78,29 +78,3 @@ if CLIENT then
 		end
 	end)
 end
-
-local gibModels = {
-	["models/gibs/hgibs.mdl"] = "models/gibs/hghl1.mdl",
-}
-for _, model in pairs(gibModels) do
-	util.PrecacheModel(model)
-end
-local function FixGibModel(ent)
-	local mins, maxs = ent:GetCollisionBounds()
-	ent:SetModel(gibModels[ent:GetModel()])
-	ent:SetCollisionBounds(mins, maxs)
-end
-
-hook.Add("OnEntityCreated","SDMCoopGibs_OnEntityCreated",function()
-	if SERVER then
-		if IsValid(ent) then
-			if ent:GetClasdm() == "gib" then
-				timer.Simple(0, function()
-					if IsValid(ent) and gibModels[ent:GetModel()] then
-						FixGibModel(ent)
-					end
-				end)
-			end
-		end
-	end
-end)
