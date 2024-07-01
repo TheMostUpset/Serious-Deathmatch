@@ -15,13 +15,20 @@ end
 hook.Add( "Initialize", "Mapvote_Initialize", Mapvote.initialize )
 
 Mapvote.guiFunction = function()
-	local maps = net.ReadTable() 
+	local maps = net.ReadTable()
 	local mapcount = table.Count(maps)
-	PrintTable(maps)
+	-- PrintTable(maps)
+	
+	local block_height = 80
+	local mapicon_size = 64
+	if mapcount > 10 then
+		block_height = block_height - mapcount*1.5
+		mapicon_size = mapicon_size - mapcount*1.5
+	end
 	
 	Mapvote.frame = vgui.Create("DFrame") 	
 	Mapvote.frame:SetPos(100, 100)              
-	Mapvote.frame:SetSize(300, 400+mapcount*40)    
+	Mapvote.frame:SetSize(300, 128+mapcount*block_height)
 	Mapvote.frame:SetTitle("") 
 	Mapvote.frame:SetVisible(true)             
 	Mapvote.frame:SetDraggable(false)      
@@ -30,18 +37,26 @@ Mapvote.guiFunction = function()
 	Mapvote.frame:SetKeyboardInputEnabled(false)
 	Mapvote.frame.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 160))
-		draw.SimpleText("Map Vote", "Vote_Font", w/2 + 1, 16, color_black, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText("Map Vote", "Vote_Font", w/2, 15, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		local x, y = w/2, 15
+		draw.SimpleText("Map Vote", "Vote_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("Map Vote", "Vote_Font", x, y, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		surface.SetDrawColor(Color(SeriousHUD:GetFrameColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end	
 	
-	for i = 1,mapcount do
-		local button = vgui.Create("DButton",Mapvote.frame)
+	for i = 1, mapcount do
+		local x, y = 40, 32 + block_height*i
+		
+		local map_img = vgui.Create("DImage", Mapvote.frame)
+		map_img:SetPos(8, y - mapicon_size/8)
+		map_img:SetSize(mapicon_size, mapicon_size)		
+		map_img:SetImage("maps/thumb/"..maps[i]..".png")
+	
+		local button = vgui.Create("DButton", Mapvote.frame)
 		button:SetText("")
 		button:Center()
-		button:SetY(125 + 50*i)
-		button:SetX(25)
+		button:SetY(y)
+		button:SetX(x)
 		
 		button.DoClick = function()
 			net.Start("mapvote_castvote")
@@ -52,8 +67,8 @@ Mapvote.guiFunction = function()
 		end
 		button:SetSize(250, 45)
 		button.Paint = function(self, w, h)
-			draw.SimpleText( maps[i], "Vote_Font2", w/2 +1, 1, color_black, TEXT_ALIGN_CENTER)
-			draw.SimpleText( maps[i], "Vote_Font2", w/2, 0, color_white, TEXT_ALIGN_CENTER)
+			draw.SimpleText( maps[i], "Vote_Font2", x + 1, 1, color_black, TEXT_ALIGN_LEFT)
+			draw.SimpleText( maps[i], "Vote_Font2", x, 0, color_white, TEXT_ALIGN_LEFT)
 		end
 		button.OnCursorEntered = function()
 			surface.PlaySound("menus/select.wav")

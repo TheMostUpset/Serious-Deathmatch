@@ -2,7 +2,7 @@
 Mapvote = {}
 Mapvote.name = "Mapvote Base"
 Mapvote.mapFile = "seriousdm_maps.txt"
-Mapvote.mapPrefix = {"sdm_"}
+Mapvote.mapPrefix = {"sdm_", "q2", "q3"}
 Mapvote.players = {}
 Mapvote.tally = {}
 Mapvote.maps = {}
@@ -46,15 +46,14 @@ local function getMaps( filter )
 	filter = filter or Mapvote.mapPrefix
 	
 	local maps = {}
-
-	for k, v in pairs( file.Find( "maps/sdm_*.bsp", "GAME" ) ) do
-		local noextension = string.StripExtension(v)
-		local lowername = string.lower( noextension )
-		table.insert( maps, lowername )
-		-- for key, prefix in pairs( filter ) do
-			-- if string.find( lowername, "^"..prefix ) then table.insert( maps, string.Explode( ".", v )[1] ) end
-		-- end
-
+	
+	for key, prefix in pairs( filter ) do
+		-- if string.find( lowername, "^"..prefix ) then table.insert( maps, string.Explode( ".", v )[1] ) end
+		for _, mapfile in pairs( file.Find( "maps/"..prefix.."*.bsp", "GAME" ) ) do
+			local noextension = string.StripExtension(mapfile)
+			local lowername = string.lower( noextension )
+			table.insert( maps, lowername )
+		end
 	end
 	
 	-- adding user maps from data file (if any)

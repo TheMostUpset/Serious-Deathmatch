@@ -120,7 +120,7 @@ local replaceQ3Ents = {
 	["q3_pickup_grenadelauncher"] = "ss_pickup_grenadel",
 	["q3_pickup_rocketlauncher"] = "ss_pickup_rocketl",
 	["q3_pickup_lightninggun"] = "ss_pickup_ghostbuster",
-	["q3_pickup_railgun"] = "ss_pickup_tommygun",
+	["q3_pickup_railgun"] = "ss_pickup_sniper",
 	["q3_pickup_plasmagun"] = "ss_pickup_laser",
 	["q3_pickup_bfg10k"] = "ss_pickup_cannon",
 	["q3_pickup_chaingun"] = "ss_pickup_minigun",
@@ -128,7 +128,7 @@ local replaceQ3Ents = {
 	["q3_pickup_shotgun_ammo"] = "ss_ammo_shells",
 	["q3_pickup_grenade_ammo"] = "ss_ammo_grenades",
 	["q3_pickup_rocket_ammo"] = "ss_ammo_rockets",
-	["q3_pickup_railgun_ammo"] = "ss_ammo_bullets",
+	["q3_pickup_railgun_ammo"] = "ss_ammo_sniperrounds",
 	["q3_pickup_plasma_ammo"] = "ss_ammo_electricity",
 	["q3_pickup_light_ammo"] = "ss_ammo_electricity",
 	["q3_pickup_chaingun_ammo"] = "ss_ammo_bullets",
@@ -140,6 +140,58 @@ local replaceQ3Ents = {
 	["q3_pickup_25hp"] = "ss_health_medium",
 	["q3_pickup_50hp"] = "ss_health_large",
 	["q3_item_health_mega"] = "ss_health_super"
+}
+local replaceQ2Ents = {
+	["q2_pickup_shotgun"] = "ss_pickup_shotgun",
+	["q2_pickup_shotgun2"] = "ss_pickup_doubleshotgun",
+	["q2_pickup_machinegun"] = "ss_pickup_tommygun",
+	["q2_pickup_chaingun"] = "ss_pickup_minigun",
+	["q2_pickup_grenadel"] = "ss_pickup_grenadel",
+	["q2_pickup_rocket"] = "ss_pickup_rocketl",
+	["q2_pickup_railgun"] = "ss_pickup_sniper",
+	["q2_pickup_hyperb"] = "ss_pickup_laser",
+	["q2_pickup_bfg"] = "ss_pickup_cannon",
+	["q2_ammo_bullets"] = "ss_ammo_bullets",
+	["q2_ammo_shells"] = "ss_ammo_shells",
+	["q2_ammo_grenades"] = "ss_ammo_grenades",
+	["q2_ammo_rockets"] = "ss_ammo_rockets",
+	["q2_ammo_slugs"] = "ss_ammo_sniperrounds",
+	["q2_ammo_cells"] = "ss_ammo_electricity",
+	["q2_item_armor_body"] = "ss_armor_100",
+	["q2_item_armor_combat"] = "ss_armor_50",
+	["q2_item_armor_jacket"] = "ss_armor_25",
+	["q2_item_armor_shard"] = "ss_armor_1",
+	["q2_item_health_small"] = "ss_health_pill",
+	["q2_item_health"] = "ss_health_medium",
+	["q2_item_health_large"] = "ss_health_large",
+	["q2_item_health_mega"] = "ss_health_super"
+}
+local replaceUT99Ents = {
+	["ut99_pickup_biorifle"] = "ss_pickup_grenadel",
+	["ut99_pickup_shock"] = "ss_pickup_tommygun",
+	["ut99_pickup_pulsegun"] = "ss_pickup_laser",
+	["ut99_pickup_ripper"] = "ss_pickup_shotgun",
+	["ut99_pickup_minigun"] = "ss_pickup_minigun",
+	["ut99_pickup_flak"] = "ss_pickup_doubleshotgun",
+	["ut99_pickup_rocket"] = "ss_pickup_rocketl",
+	["ut99_pickup_rifle"] = "ss_pickup_sniper",
+	["ut99_pickup_redeemer"] = "ss_pickup_cannon",
+	["ut99_ammo_biosludge"] = "ss_ammo_grenades",
+	["ut99_ammo_shockcore"] = "ss_ammo_bullets",
+	["ut99_ammo_pulsecell"] = "ss_ammo_electricity",
+	["ut99_ammo_bladehopper"] = "ss_ammo_shells",
+	["ut99_ammo_minigun"] = "ss_ammo_bullets",
+	["ut99_ammo_flakshells"] = "ss_ammo_shells",
+	["ut99_ammo_rocketpack"] = "ss_ammo_rockets",
+	["ut99_ammo_bulletbox"] = "ss_ammo_sniperrounds",
+	["ut99_shieldbelt"] = "ss_armor_100",
+	["ut99_armor"] = "ss_armor_50",
+	["ut99_thighpads"] = "ss_armor_25",
+	["ut99_health_vial"] = "ss_health_pill",
+	["ut99_health_medkit"] = "ss_health_medium",
+	["ut99_health_box"] = "ss_health_super",
+	["ut99_udamage"] = "ss_seriousdmg",
+	["ut99_jumpboots"] = "ss_seriousspeed"
 }
 function GM:ReplacePickupEntities()
 	if string.StartsWith(game.GetMap(), "q3") then
@@ -172,6 +224,39 @@ function GM:ReplacePickupEntities()
 			if IsValid(sdmg) then
 				sdmg:SetPos(Vector(-2240, -559, 3))
 				sdmg:Spawn()
+			end
+		end
+	elseif string.StartsWith(game.GetMap(), "q2") then
+		for k, ent in ipairs(ents.FindByClass("q2_*")) do
+			if replaceQ2Ents[ent:GetClass()] then
+				local newEnt = ents.Create(replaceQ2Ents[ent:GetClass()])
+				if IsValid(newEnt) then
+					local pos = ent:GetPos()
+					if !string.StartsWith(ent:GetClass(), "q2_pickup_") then
+						pos = pos + Vector(0,0,8)
+					end
+					newEnt:SetPos(pos)
+					newEnt:Spawn()
+					ent:Remove()
+				end
+			end
+		end
+	else
+		for k, ent in ipairs(ents.FindByClass("ut99_*")) do
+			if replaceUT99Ents[ent:GetClass()] then
+				local newEnt = ents.Create(replaceUT99Ents[ent:GetClass()])
+				if IsValid(newEnt) then
+					local pos = ent:GetPos()
+					if ent:GetClass() != "ut99_udamage" and ent:GetClass() != "ut99_jumpboots" then
+						pos = pos + Vector(0,0,24)
+						if string.StartsWith(ent:GetClass(), "ut99_pickup_") then
+							pos = pos + Vector(0,0,8)
+						end
+					end
+					newEnt:SetPos(pos)
+					newEnt:Spawn()
+					ent:Remove()
+				end
 			end
 		end
 	end
@@ -531,8 +616,33 @@ function GM:PlayerSwitchWeapon(ply, oldwep, newwep)
 end
 
 function GM:ShowSpare2(ply)
-	net.Start("FMenu")
-	net.Send(ply)
+	-- net.Start("FMenu")
+	-- net.Send(ply)
+end
+
+function GM:AcceptInput(ent, input, activator, caller, value)
+	if ent:GetClass() == "info_teleport_destination" and caller:GetClass() == "trigger_teleport" and activator:IsValid() and activator:IsPlayer() then
+		-- caller:EmitSound("q3/teleout.wav", 85, 100)
+		activator:EmitSound("misc/serioussam/teleport.wav", 80, 100)
+		local ang = ent:GetAngles()
+		//local vel = activator:GetVelocity():Length2D()
+		activator:SetLocalVelocity(ang:Forward() * 350)
+		activator:ScreenFade(SCREENFADE.IN, Color(100, 100, 100, 200), .05, 0)
+		
+		local pos = activator:GetPos()
+		
+		-- local effectdata = EffectData()
+		-- effectdata:SetOrigin(pos)
+		-- util.Effect("q3spawneffect", effectdata, true, true)
+		
+		-- telefrag
+		local Ents = ents.FindInBox( pos + activator:OBBMins(), pos + activator:OBBMaxs() )
+		for k, v in pairs( Ents ) do
+			if IsValid( v ) && v != activator && v:IsPlayer() && v:Alive() then
+				v:TakeDamage(999, activator, ent)
+			end
+		end
+	end
 end
 
 --[[net.Receive( "set", function( len, ply ) -- len is the net message length, which we don't care about, ply is the player who sent it.
