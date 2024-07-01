@@ -83,9 +83,11 @@ function GM:ToggleMapPickups(on)
 	table.Add(pickups, ents.FindByClass("ss_ammo_*"))
 	for k, v in pairs(pickups) do
 		if on then
+			v.ReEnabled = nil
 			v.Available = true
 			v:SetNoDraw(false)
 		else
+			v.ReEnabled = nil
 			v.Available = false
 			v:SetNoDraw(true)
 		end
@@ -131,6 +133,7 @@ local replaceQ3Ents = {
 	["q3_pickup_railgun_ammo"] = "ss_ammo_sniperrounds",
 	["q3_pickup_plasma_ammo"] = "ss_ammo_electricity",
 	["q3_pickup_light_ammo"] = "ss_ammo_electricity",
+	["q3_pickup_bfg_ammo"] = "ss_ammo_cannonballs",
 	["q3_pickup_chaingun_ammo"] = "ss_ammo_bullets",
 	["q3_pickup_armorred"] = "ss_armor_100",
 	["q3_pickup_armoryellow"] = "ss_armor_50",
