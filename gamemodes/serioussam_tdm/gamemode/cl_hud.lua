@@ -400,7 +400,7 @@ function GM:HUDPaint()
 		end		
 	end
 	if fragMsgTime > CurTime() then
-		local x, y = ScrW() / 2, ScrH() / 3.5
+		local x, y = ScrW() / 2, ScrH() / 3.25
 		local text = "You fragged "..fragMsgNick
 		local font = "Frag_Font"
 		local fadeSpeed = 3
