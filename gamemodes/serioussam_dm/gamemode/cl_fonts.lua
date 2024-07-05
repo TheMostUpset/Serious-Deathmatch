@@ -135,6 +135,14 @@ surface.CreateFont( "Vote_Font2", {
 	weight = 0,
 } )
 
+surface.CreateFont("MainMenu_font_very_small", {
+	font = "Franklin Gothic",
+	size = ScrW()/52,
+	weight = 600,
+	blursize = 0,
+	shadow = true
+})
+
 surface.CreateFont("MainMenu_font_small", {
 	font = "Mytupi",
 	size = ScrW()/32,
