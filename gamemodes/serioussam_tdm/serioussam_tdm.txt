@@ -3,7 +3,7 @@
 	"base"		"base"
 	"title"		"Serious Team Deathmatch"
 	"category"	"pvp"
-	"maps"		"^sdm_"
+	"maps"		""
 	"menusystem"	"1"
 	"workshopid"	"3127352943"
 
