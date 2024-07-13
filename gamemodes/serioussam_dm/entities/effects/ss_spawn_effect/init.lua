@@ -1,15 +1,20 @@
 function EFFECT:Init(data)
+	self.Position = data:GetOrigin()
+	self.DieTime = FrameTime() + .5
+	self.Size = data:GetScale()
+end
+
+function EFFECT:Think()
+	self.DieTime = self.DieTime - FrameTime()
+	self.Size = self.Size + self.DieTime * 5
+	return self.DieTime > 0	
 end
 
 local mat = Material( "sprites/effects/serioussam/EffectBase" )
 
-local alpha = 0
-
 function EFFECT:Render()
+	local alpha = self.DieTime * 12
+	alpha = math.Clamp(alpha, 0, 1)
 	render.SetMaterial( mat )
-	local pos = LocalPlayer():GetPos()
-	alpha = ( CurTime() * -255 ) % 255
-	local tr = LocalPlayer():GetEyeTrace()
-
-	render.DrawQuadEasy( pos + Vector( 0, 0, 40 ), Vector( 0, 90, 0 ), ( CurTime() * 32 ) % 255, ( CurTime() * 32 ) % 255, Color( 255, 255, 255, alpha ) )
+	render.DrawSprite(self.Position, self.Size, self.Size, Color(255,255,255,255 * alpha))
 end

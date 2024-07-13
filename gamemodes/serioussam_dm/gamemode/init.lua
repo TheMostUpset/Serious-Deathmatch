@@ -588,7 +588,8 @@ function GM:PlayerLoadout(ply)
 	end
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
-	effectdata:SetOrigin(ply:GetPos())
+	effectdata:SetOrigin(ply:WorldSpaceCenter())
+	effectdata:SetScale(1)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	return true
 end
