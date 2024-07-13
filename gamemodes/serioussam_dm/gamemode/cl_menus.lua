@@ -178,7 +178,7 @@ function OpenSSMenu()
 	local Continue_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	Continue_Button:SetText("RESUME")
-	Continue_Button:SetSize(ScrW()/8, ScrH()/20)
+	Continue_Button:SetSize(ScrW()/12, ScrH()/20)
 	Continue_Button:Center()
 	Continue_Button:SetY(ScrH()/2.58)
 	Continue_Button:SetFont("MainMenu_Font")

@@ -169,7 +169,7 @@ function OpenSSMenu()
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("GAME", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH()-100, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/12, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 
@@ -178,7 +178,7 @@ function OpenSSMenu()
 	local Continue_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	Continue_Button:SetText("RESUME")
-	Continue_Button:SetSize(ScrW()/8, ScrH()/20)
+	Continue_Button:SetSize(ScrW()/12, ScrH()/20)
 	Continue_Button:Center()
 	Continue_Button:SetY(ScrH()/2.58)
 	Continue_Button:SetFont("MainMenu_Font")
@@ -507,7 +507,7 @@ function OpenSettingsMenu()
 	SettingsMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("OPTIONS", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_small", ScrW()/2, ScrH() - ScrH()/11, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH() - ScrH()/12, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)

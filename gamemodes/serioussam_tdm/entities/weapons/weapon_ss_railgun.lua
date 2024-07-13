@@ -13,8 +13,11 @@ end
 
 function SWEP:PrimaryAttack()
 	if !self:CanPrimaryAttack() then return end
-	
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	local delay = self.Primary.Delay
+	if self.Owner:HasSeriousSpeed() then
+		delay = delay / 1.5
+	end
+	self:SetNextPrimaryFire(CurTime() + delay)
 	self.Owner:SetAnimation(PLAYER_ATTACK1)
 	-- self:TakeAmmo()
 	self:WeaponSound()

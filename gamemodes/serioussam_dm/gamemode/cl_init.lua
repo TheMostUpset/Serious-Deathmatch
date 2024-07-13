@@ -266,6 +266,7 @@ function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, 
 
 end
 
+
 local drawing = false
 local sdmg_mat = Material("models/effects/serioussam/sdmg_overlay")
 local inv_mat = Material("models/powerups/invisibility")

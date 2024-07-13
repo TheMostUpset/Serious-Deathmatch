@@ -24,7 +24,6 @@ util.AddNetworkString("PlayerFrag")
 util.AddNetworkString("PlayerKilledBy")
 
 resource.AddFile( "resource/fonts/Mytupi.ttf" )
-resource.AddFile( "resource/fonts/Franklin Gothic Bold.ttf" )
 
 PLAYER_WALKSPEED = 380
 PLAYER_RUNSPEED = 250
@@ -588,6 +587,9 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_singleshotgun')
 	end
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
+	local effectdata = EffectData()
+	effectdata:SetOrigin(ply:GetPos())
+	util.Effect("ss_spawn_effect", effectdata, true, true)
 	return true
 end
 

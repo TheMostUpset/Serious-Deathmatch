@@ -77,20 +77,18 @@ function playerTable:Paint(w, h)
 
 	local hudr, hudg, hudb = GAMEMODE:GetHUDColorFrame()
 	local posY = 10
-	local posX = ScrW() / 2 / 1.2
-	
+	local posX = ScrW() / 2 / 1.04
+	local gap = 10 
     for _, ply in ipairs(self.Players) do
 		local nick, frags, deaths = ply:Nick(), ply:Frags(), ply:Deaths()
 		local frags_text = surface.GetTextSize(frags)
-
-		draw.SimpleText(nick, "Scoreboard_Font", posX + 1 - ply:Frags() - ply:Deaths(), posY + 1, color_black, TEXT_ALIGN_RIGHT)
-		draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2  / 1.04  + 1, posY +1, color_black, TEXT_ALIGN_RIGHT)
+		draw.SimpleText(nick .. "    " ..  frags .. "  /  " .. deaths, "Scoreboard_Font", posX + 1, posY +1, color_black, TEXT_ALIGN_RIGHT)
 		
-		draw.SimpleText(nick, "Scoreboard_Font", posX - ply:Frags() - ply:Deaths(), posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
+		
 		if ply == LocalPlayer() then
-		draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
+		draw.SimpleText(nick .. "    " .. frags .. "  /  " .. deaths, "Scoreboard_Font", posX, posY, Color(hudr, hudg, hudb), TEXT_ALIGN_RIGHT)
 		else
-		draw.SimpleText(frags .. "  /  " .. deaths, "Scoreboard_Font", ScrW() /2 / 1.04 , posY, color_white, TEXT_ALIGN_RIGHT)
+		draw.SimpleText(nick .. "    " .. frags .. "  /  " .. deaths, "Scoreboard_Font", posX, posY, color_white, TEXT_ALIGN_RIGHT)
 		end
 		
 		posY = posY + ScrH() / 28		

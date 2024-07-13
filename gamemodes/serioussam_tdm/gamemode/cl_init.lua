@@ -41,7 +41,6 @@ GM.MusicTable = {
     ["sdm_hole_classic"] = "holeclassic.ogg",
     ["sdm_crystal_march"] = "kukulkan.ogg",
 }
-
 function GM:PlayMapMusic(volume)
 	if lastMusicStation and IsValid(lastMusicStation) then
 		lastMusicStation:Stop()
@@ -266,6 +265,7 @@ function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, 
 	return vm_origin, vm_angles
 
 end
+
 
 local drawing = false
 local sdmg_mat = Material("models/effects/serioussam/sdmg_overlay")
