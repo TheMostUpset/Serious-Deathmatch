@@ -456,6 +456,9 @@ function GM:EntityTakeDamage(ent, dmginfo)
 			end
 		end
 	end
+	if dmginfo:GetInflictor():GetClass() == "point_hurt" and dmginfo:GetInflictor():GetName() == "worlddamage_sand" then
+		ent:SetLocalVelocity(Vector(0,0,250))
+	end
 end
 
 function GM:StartGameTimer()

@@ -168,7 +168,7 @@ function OpenSSMenu()
 
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
-		draw.SimpleText("GAME", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/12, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
@@ -177,7 +177,7 @@ function OpenSSMenu()
 
 	local Continue_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
-	Continue_Button:SetText("RESUME")
+	Continue_Button:SetText("#sdm_resume")
 	Continue_Button:SetSize(ScrW()/12, ScrH()/20)
 	Continue_Button:Center()
 	Continue_Button:SetY(ScrH()/2.58)
@@ -186,7 +186,7 @@ function OpenSSMenu()
 
 	Continue_Button.OnCursorEntered = function()
 		isFlashing = true
-		text = "return to game"
+		text = "#sdm_help_resume"
 		surface.PlaySound("menus/select.wav")
 	end
 
@@ -210,7 +210,7 @@ function OpenSSMenu()
 
 	local Disconnect_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
-	Disconnect_Button:SetText("STOP GAME")
+	Disconnect_Button:SetText("#sdm_disconnect")
 	Disconnect_Button:SetSize(ScrW()/8, ScrH()/20)
 	Disconnect_Button:Center()
 	Disconnect_Button:SetY(ScrH()/1.8)
@@ -223,7 +223,7 @@ function OpenSSMenu()
 	end
 	Disconnect_Button.OnCursorEntered = function()
 		isFlashing = true
-		text = "stop currently running game"
+		text = "#sdm_help_disconnect"
 		surface.PlaySound("menus/select.wav")
 	end
 
@@ -242,7 +242,7 @@ function OpenSSMenu()
 
 	local Options_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
-	Options_Button:SetText("OPTIONS")
+	Options_Button:SetText("#sdm_options")
 	Options_Button:SetSize(ScrW()/8, ScrH()/20)
 	Options_Button:Center()
 	Options_Button:SetY(ScrH()/2)
@@ -259,7 +259,7 @@ function OpenSSMenu()
 	end
 	Options_Button.OnCursorEntered = function()
 		isFlashing = true
-		text = "adjust playermodel, hud, and music volume"
+		text = "#sdm_help_options"
 		surface.PlaySound("menus/select.wav")
 	end
 
@@ -278,7 +278,7 @@ function OpenSSMenu()
 
 	local LegacyM_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
-	LegacyM_Button:SetText("LEGACY MENU")
+	LegacyM_Button:SetText("#sdm_lmenu")
 	LegacyM_Button:SetSize(ScrW()/6, ScrH()/20)
 	LegacyM_Button:Center()
 	LegacyM_Button:SetY(ScrH()/2.25)
@@ -290,7 +290,7 @@ function OpenSSMenu()
 		end
 	end
 	LegacyM_Button.OnCursorEntered = function()
-		text = "return to normal menu"
+		text = "#sdm_help_lmenu"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -313,7 +313,7 @@ function OpenSSMenu()
 
 	local Quit_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
-	Quit_Button:SetText("QUIT")
+	Quit_Button:SetText("#sdm_exitgame")
 	Quit_Button:SetSize(ScrW()/16, ScrH()/20)
 	Quit_Button:Center()
 	Quit_Button:SetY(ScrH()/1.635)
@@ -328,7 +328,7 @@ function OpenSSMenu()
 		end
 	end
 	Quit_Button.OnCursorEntered = function()
-		text = "exit game immediately"
+		text = "#sdm_help_exitgame"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -423,11 +423,11 @@ function OpenConfirmationMenu()
 		surface.SetDrawColor(hudr, hudg, hudb, 140)
 		surface.DrawTexturedRectUV( offsetX-50, offsetY-50, w*4, h*4, 0, 0, w / texW, h / texH )
 
-		draw.SimpleText("ARE YOU SERIOUS?", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#sdm_areyouserious", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	local YesButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
-	YesButton:SetText("YES")
+	YesButton:SetText("#sdm_yes")
 	YesButton:SetSize(ScrW() / 5 / YesButton:GetTextSize()*3.5, ScrH() / 20)
 	YesButton:SetX(ScrW() - ScrW()/1.25)
 	YesButton:SetY(ScrH()- ScrH()/1.15)
@@ -457,7 +457,7 @@ function OpenConfirmationMenu()
 	end
 	local NoButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
-	NoButton:SetText("NO")
+	NoButton:SetText("#sdm_no")
 	NoButton:SetSize(ScrW() / 5 / NoButton:GetTextSize()*3, ScrH() / 20)
 	NoButton:SetX(ScrW()/3.55)
 	NoButton:SetY(ScrH()- ScrH()/1.15)
@@ -512,7 +512,7 @@ function OpenSettingsMenu()
 
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	Playermodel_Button:SetText("PLAYERMODEL SELECTOR")
+	Playermodel_Button:SetText("#sdm_pmselect")
 	Playermodel_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Playermodel_Button:Center()
 	Playermodel_Button:SetY(ScrH()/6.5)
@@ -524,7 +524,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Playermodel_Button.OnCursorEntered = function()
-		text = "change model for this player"
+		text = "#sdm_help_pmselect"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -537,16 +537,11 @@ function OpenSettingsMenu()
 
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	if !cvar_music:GetBool() then
-		Music_Button:SetText("ENABLE MUSIC")
-	else
-		Music_Button:SetText("DISABLE MUSIC")
-	end
 	Music_Button:SetSize(ScrW()/6.5, ScrH() / 20)
 	Music_Button:Center()
 	Music_Button:SetY(ScrH()/2.69)
 	Music_Button:SetFont("MainMenu_Font")
-	Music_Button:SetText("MUSIC VOLUME")
+	Music_Button:SetText("#sdm_mvolume")
 	Music_Button:SetTextColor(GetButtonColor())
 	Music_Button.Paint = function(self, w, h) 
 		if isFlashing then
@@ -554,7 +549,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Music_Button.OnCursorEntered = function()
-		text = "adjust volume of in-game music"
+		text = "#sdm_help_mvolume"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -571,9 +566,9 @@ function OpenSettingsMenu()
 	local Bob_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	if GetConVarNumber("ss_bob") == 0 then
-		Bob_Button:SetText("ENABLE BOBBING")
+		Bob_Button:SetText("#sdm_enablebob")
 	elseif GetConVarNumber("ss_bob") == 1 then
-		Bob_Button:SetText("DISABLE BOBBING")
+		Bob_Button:SetText("#sdm_disablebob")
 	end
 	Bob_Button:SetSize(ScrW()/5.5, ScrH() / 20)
 	Bob_Button:Center()
@@ -592,21 +587,21 @@ function OpenSettingsMenu()
 			local state = cvar:GetInt()
 			if state == 0 then
 				RunConsoleCommand("ss_bob", "1")
-				Bob_Button:SetText("DISABLE BOBBING")
-				text = "disable weapon model bobbing"
+				Bob_Button:SetText("#sdm_disablebob")
+				text = "#sdm_help_disablebob"
 			elseif state == 1 then
 				RunConsoleCommand("ss_bob", "0")
-				Bob_Button:SetText("ENABLE BOBBING")
-				text = "enable weapon model bobbing"
+				Bob_Button:SetText("#sdm_enablebob")
+				text = "#sdm_help_enablebob"
 			end
 		end
 		surface.PlaySound("menus/press.wav")
 	end
 	Bob_Button.OnCursorEntered = function()
 	if GetConVar("ss_bob"):GetInt() == 1 then
-		text = "disable weapon model bobbing"
+		text = "#sdm_help_disablebob"
 	elseif GetConVar("ss_bob"):GetInt() == 0 then
-		text = "enable weapon model bobbing"
+		text = "#sdm_help_enablebob"
 	end
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -620,7 +615,7 @@ function OpenSettingsMenu()
 
 	local Crosshair_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	Crosshair_Button:SetText("CROSSHAIR")
+	Crosshair_Button:SetText("#sdm_crosshair")
 	Crosshair_Button:SetSize(ScrW()/8.5, ScrH() / 20)
 	Crosshair_Button:Center()
 	Crosshair_Button:SetY(ScrH()/1.825)
@@ -633,7 +628,7 @@ function OpenSettingsMenu()
 	end
 
 	Crosshair_Button.OnCursorEntered = function()
-		text = "change crosshair icon"
+		text = "#sdm_help_crosshair"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -728,9 +723,9 @@ function OpenSettingsMenu()
 	local HUD_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	if GAMEMODE:GetHUDSkin() == 2 then
-		HUD_Button:SetText("TFE HUD")
+		HUD_Button:SetText("#sdm_tfehud")
 	elseif GAMEMODE:GetHUDSkin() == 1 then
-		HUD_Button:SetText("TSE HUD")
+		HUD_Button:SetText("#sdm_tsehud")
 	end
 	HUD_Button:SetSize(ScrW()/11, ScrH() / 20)
 	HUD_Button:Center()
@@ -751,23 +746,23 @@ function OpenSettingsMenu()
 			table.Add(children, EscMenu:GetChildren())
 			if skin == 2 then
 				RunConsoleCommand("ss_hud_skin", "1")
-				HUD_Button:SetText("TSE HUD")
+				HUD_Button:SetText("#sdm_tsehud")
 				UpdateButtonsSkin(children, 1)
-				text = "change hud theme to TSE"
+				text = "#sdm_help_tsehud"
 			elseif skin == 1 then
 				RunConsoleCommand("ss_hud_skin", "2")	
-				HUD_Button:SetText("TFE HUD")
+				HUD_Button:SetText("#sdm_tfehud")
 				UpdateButtonsSkin(children, 2)
-				text = "change hud theme to TFE"
+				text = "#sdm_help_tfehud"
 			end
 		end
 		surface.PlaySound("menus/press.wav")
 	end
 	HUD_Button.OnCursorEntered = function()
 	if GetConVar("ss_hud_skin"):GetInt() == 2 then
-		text = "change hud theme to TFE"
+		text = "#sdm_help_tfehud"
 	elseif GetConVar("ss_hud_skin"):GetInt() == 1 then
-		text = "change hud theme to TSE"
+		text = "#sdm_help_tsehud"
 	end
 		isFlashing = true 
 		surface.PlaySound("menus/select.wav")
@@ -782,7 +777,7 @@ function OpenSettingsMenu()
 
 	local TFE_Color_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	TFE_Color_Button:SetText("TFE HUD COLOR")
+	TFE_Color_Button:SetText("#sdm_tfehudcolor")
 	TFE_Color_Button:SetSize(ScrW()/6.5, ScrH() / 20)
 	TFE_Color_Button:Center()
 	TFE_Color_Button:SetY(ScrH()/1.35)
@@ -795,7 +790,7 @@ function OpenSettingsMenu()
 		end
 	end
 	TFE_Color_Button.OnCursorEntered = function()
-		text = "adjust accent color of TFE hud skin"
+		text = "#sdm_help_tfehudcolor"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -808,7 +803,7 @@ function OpenSettingsMenu()
 
 	local Back_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	Back_Button:SetText("BACK")
+	Back_Button:SetText("#sdm_back")
 	Back_Button:SetSize(ScrW()/15, ScrH()/20)
 	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/11)
 	Back_Button:SetFont("MainMenu_Font")
@@ -821,7 +816,7 @@ function OpenSettingsMenu()
 	Back_Button.OnCursorEntered = function()
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
-		text = "return to previous menu"
+		text = "#sdm_help_back"
 	end
 
 	Back_Button.OnCursorExited = function()

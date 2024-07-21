@@ -288,7 +288,7 @@ function GM:HUDPaint()
 	
 	if game_state == STATE_GAME_WARMUP then
 		local x, y = ScrW() / 2, ScrH() / 4
-		local text = "Waiting for players..."
+		local text = "#sdm_waitplys"
 		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_PREPARE then
@@ -322,9 +322,9 @@ function GM:HUDPaint()
 			end
 		end		
 		local x, y = ScrW() / 2, ScrH() / 4
-		local text = "New round starts in"
+		local text = "#sdm_roundstart"
 		if countdown_rnd < 4 then
-		text = "New round starts in" .. " " .. countdown_rnd
+		text = language.GetPhrase( "sdm_roundstart" ) .. " " .. countdown_rnd
 		end
 		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
@@ -335,13 +335,13 @@ function GM:HUDPaint()
 		end
 		if !Mapvote.frame or !Mapvote.frame:IsVisible() then
 			local x, y = ScrW() / 2, ScrH() / 4
-			local text = "The game has ended!"
+			local text = "#sdm_gameend"
 			draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 			draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )			
 			
 			local winner = GetGlobalString("WinnerName")
 			if winner and string.len(winner) > 0 then
-				local text = winner.." wins!"
+				local text = winner.. " " .. language.GetPhrase( "sdm_wins" )
 				local x, y = ScrW() / 2, ScrH()/3.6
 				draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
 				draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
@@ -356,8 +356,8 @@ function GM:HUDPaint()
 			local max_frags = cvar_max_frags:GetInt()
 			local frags_left = math.min(max_frags - firstplayer:Frags(), max_frags)
 			if frags_left > 0 then
-				local text = "FRAGS LEFT: " .. frags_left
-				local x, y = ScrH() / 45, ScrH() /  13.5
+				local text = language.GetPhrase( "sdm_fragsleft" ) .. " " .. frags_left
+				local x, y = ScrH() / 80, ScrH() /  13.5
 				if !self:ShouldDrawTimer() then
 					y = ScrH() / 70
 				end
@@ -383,15 +383,15 @@ function GM:HUDPaint()
 		end
 		if !LocalPlayer():Alive() then
 			local x, y = ScrW() / 2, ScrH() / 4
-			local text = "Press FIRE to respawn"
+			local text = "#sdm_respawn"
 			local font = "Death_Font"
 			draw.SimpleText( text, font, x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
 			draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
 			if fragByMsgNick != "" then
 				local y = ScrH() / 5
-				local text = "Fragged by "..fragByMsgNick
+				local text = language.GetPhrase( "sdm_fraggedby" ) .. " " ..fragByMsgNick
 				if fragByMsgNick == LocalPlayer():Nick() then
-					text = "You killed yourself, idiot"
+					text = "#sdm_kys"
 				end
 				draw.SimpleText( text, font, x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
 				draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
@@ -400,7 +400,7 @@ function GM:HUDPaint()
 	end
 	if fragMsgTime > CurTime() then
 		local x, y = ScrW() / 2, ScrH() / 3.25
-		local text = "You fragged "..fragMsgNick
+		local text = language.GetPhrase( "sdm_youfragged" ) .. " " .. fragMsgNick
 		local font = "Frag_Font"
 		local fadeSpeed = 3
 		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
