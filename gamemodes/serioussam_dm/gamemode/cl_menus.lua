@@ -169,7 +169,7 @@ function OpenSSMenu()
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/12, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 
@@ -179,8 +179,6 @@ function OpenSSMenu()
 	local isFlashing = false
 	Continue_Button:SetText("#sdm_resume")
 	Continue_Button:SetSize(ScrW()/12, ScrH()/20)
-	Continue_Button:Center()
-	Continue_Button:SetY(ScrH()/2.58)
 	Continue_Button:SetFont("MainMenu_Font")
 	Continue_Button:SetTextColor(GetButtonColor())
 
@@ -207,13 +205,14 @@ function OpenSSMenu()
 		showGameUI = false
 		surface.PlaySound("menus/press.wav")
 	end
+	Continue_Button:SizeToContents()
+	Continue_Button:Center()
+	Continue_Button:SetY(ScrH()/2.58)
 
 	local Disconnect_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	Disconnect_Button:SetText("#sdm_disconnect")
 	Disconnect_Button:SetSize(ScrW()/8, ScrH()/20)
-	Disconnect_Button:Center()
-	Disconnect_Button:SetY(ScrH()/1.8)
 	Disconnect_Button:SetFont("MainMenu_Font")
 	Disconnect_Button:SetTextColor(GetButtonColor())
 	Disconnect_Button.Paint = function(self, w, h) 
@@ -239,13 +238,14 @@ function OpenSSMenu()
 		surface.PlaySound("menus/press.wav")
 		surface.PlaySound("menus/press.wav")
 	end
-
+	Disconnect_Button:SizeToContents()
+	Disconnect_Button:Center()
+	Disconnect_Button:SetY(ScrH()/1.8)
+	
 	local Options_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	Options_Button:SetText("#sdm_options")
 	Options_Button:SetSize(ScrW()/8, ScrH()/20)
-	Options_Button:Center()
-	Options_Button:SetY(ScrH()/2)
 	Options_Button:SetFont("MainMenu_Font")
 	if GetConVarNumber("ss_hud_skin") == 2 then
 		Options_Button:SetTextColor(GetButtonColor())
@@ -275,6 +275,9 @@ function OpenSSMenu()
 		surface.PlaySound("menus/press.wav")
 
 	end
+	Options_Button:SizeToContents()
+	Options_Button:Center()
+	Options_Button:SetY(ScrH()/2)
 
 	local LegacyM_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -309,7 +312,9 @@ function OpenSSMenu()
 	surface.PlaySound("menus/press.wav")
 
 	end
-
+	LegacyM_Button:SizeToContents()
+	LegacyM_Button:Center()
+	LegacyM_Button:SetY(ScrH()/2.25)
 
 	local Quit_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -341,6 +346,9 @@ function OpenSSMenu()
 		OpenConfirmationMenu()
 		surface.PlaySound("menus/press.wav")
 	end
+	Quit_Button:SizeToContents()
+	Quit_Button:Center()
+	Quit_Button:SetY(ScrH()/1.635)
 end
 
 function OpenConfirmationMenu()
@@ -428,9 +436,6 @@ function OpenConfirmationMenu()
 	local YesButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
 	YesButton:SetText("#sdm_yes")
-	YesButton:SetSize(ScrW() / 5 / YesButton:GetTextSize()*3.5, ScrH() / 20)
-	YesButton:SetX(ScrW() - ScrW()/1.25)
-	YesButton:SetY(ScrH()- ScrH()/1.15)
 	YesButton:SetFont("MainMenu_Font")
 	YesButton:SetTextColor(GetButtonColor())
 	YesButton.Paint = function(self, w, h) 
@@ -455,12 +460,14 @@ function OpenConfirmationMenu()
 
 		surface.PlaySound("menus/press.wav")
 	end
+	local w, h = ConfirmationMenu:GetSize()
+	YesButton:SizeToContents()
+	YesButton:SetX(w/2.45)
+	YesButton:SetY(h-h/2)
+	
 	local NoButton = vgui.Create("DButton", ConfirmationMenu)
 	local isFlashing = false
 	NoButton:SetText("#sdm_no")
-	NoButton:SetSize(ScrW() / 5 / NoButton:GetTextSize()*3, ScrH() / 20)
-	NoButton:SetX(ScrW()/3.55)
-	NoButton:SetY(ScrH()- ScrH()/1.15)
 	NoButton:SetFont("MainMenu_Font")
 	NoButton:SetTextColor(GetButtonColor())
 	NoButton.Paint = function(self, w, h) 
@@ -484,6 +491,10 @@ function OpenConfirmationMenu()
 		showGameUI = true
 		surface.PlaySound("menus/press.wav")
 	end
+	local w, h = ConfirmationMenu:GetSize()
+	NoButton:SizeToContents()
+	NoButton:SetX(w/1.95)
+	NoButton:SetY(h-h/2)
 end
 
 function OpenSettingsMenu()
@@ -506,16 +517,14 @@ function OpenSettingsMenu()
 
 	SettingsMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
-		draw.SimpleText("OPTIONS", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH() - ScrH()/12, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("#sdm_options", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH() - ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Playermodel_Button:SetText("#sdm_pmselect")
 	Playermodel_Button:SetSize(ScrW()/4, ScrH() / 20)
-	Playermodel_Button:Center()
-	Playermodel_Button:SetY(ScrH()/6.5)
 	Playermodel_Button:SetFont("MainMenu_Font")
 	Playermodel_Button:SetTextColor(GetButtonColor())
 	Playermodel_Button.Paint = function(self, w, h) 
@@ -534,12 +543,13 @@ function OpenSettingsMenu()
 		isFlashing = false
 		Playermodel_Button:SetTextColor(GetButtonColor())
 	end
-
+	Playermodel_Button:SizeToContents()
+	Playermodel_Button:Center()
+	Playermodel_Button:SetY(ScrH()/6.75)
+	
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Music_Button:SetSize(ScrW()/6.5, ScrH() / 20)
-	Music_Button:Center()
-	Music_Button:SetY(ScrH()/2.69)
 	Music_Button:SetFont("MainMenu_Font")
 	Music_Button:SetText("#sdm_mvolume")
 	Music_Button:SetTextColor(GetButtonColor())
@@ -559,10 +569,10 @@ function OpenSettingsMenu()
 		isFlashing = false
 		Music_Button:SetTextColor(GetButtonColor())
 	end
+	Music_Button:SizeToContents()
+	Music_Button:Center()
+	Music_Button:SetY(ScrH()/2.85)
 	
-
-
-
 	local Bob_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	if GetConVarNumber("ss_bob") == 0 then
@@ -570,9 +580,6 @@ function OpenSettingsMenu()
 	elseif GetConVarNumber("ss_bob") == 1 then
 		Bob_Button:SetText("#sdm_disablebob")
 	end
-	Bob_Button:SetSize(ScrW()/5.5, ScrH() / 20)
-	Bob_Button:Center()
-	Bob_Button:SetY(ScrH()/2.075)
 	Bob_Button:SetFont("MainMenu_Font")
 	Bob_Button:SetTextColor(GetButtonColor())
 
@@ -612,13 +619,13 @@ function OpenSettingsMenu()
 		isFlashing = false
 		Bob_Button:SetTextColor(GetButtonColor())
 	end
+	Bob_Button:SizeToContents()
+	Bob_Button:Center()
+	Bob_Button:SetY(ScrH()/2.125)
 
 	local Crosshair_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Crosshair_Button:SetText("#sdm_crosshair")
-	Crosshair_Button:SetSize(ScrW()/8.5, ScrH() / 20)
-	Crosshair_Button:Center()
-	Crosshair_Button:SetY(ScrH()/1.825)
 	Crosshair_Button:SetFont("MainMenu_Font")
 	Crosshair_Button:SetTextColor(GetButtonColor())
 	Crosshair_Button.Paint = function(self, w, h) 
@@ -638,9 +645,12 @@ function OpenSettingsMenu()
 		isFlashing = false
 		Crosshair_Button:SetTextColor(GetButtonColor())
 	end
+	Crosshair_Button:SizeToContents()
+	Crosshair_Button:Center()
+	Crosshair_Button:SetY(ScrH()/1.875)
 	
 	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)	-- Add image to Frame
-	Crosshair_Image:SetX(ScrW()/2.065)	-- Move it into frame
+	Crosshair_Image:SetX(ScrW()/2.075)	-- Move it into frame
 	Crosshair_Image:SetY(ScrH()/1.645)	-- Size it to 150x150
 	Crosshair_Image:SetSize(ScrW()/32, ScrW() / 32)
 	-- Set material relative to "garrysmod/materials/"
@@ -649,9 +659,6 @@ function OpenSettingsMenu()
 	local Forward_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Forward_Button:SetText(">")
-	Forward_Button:SetSize(ScrW()/80, ScrH() / 20)
-	Forward_Button:SetX(ScrW()/1.88)
-	Forward_Button:SetY(ScrH()/1.655)
 	Forward_Button:SetFont("MainMenu_Font")
 	Forward_Button:SetTextColor(GetButtonColor())
 
@@ -682,6 +689,9 @@ function OpenSettingsMenu()
 		Forward_Button:SetTextColor(GetButtonColor())
 	end
 	
+	Forward_Button:SizeToContents()
+	Forward_Button:SetX(ScrW()/1.9)
+	Forward_Button:SetY(ScrH()/1.7)
 
 	
 	local Backwards_Button = vgui.Create("DButton", SettingsMenu)
@@ -719,7 +729,11 @@ function OpenSettingsMenu()
 		isFlashing = false
 		Backwards_Button:SetTextColor(GetButtonColor())
 	end
-
+	
+	Backwards_Button:SizeToContents()
+	Backwards_Button:SetX(ScrW()/2.2)
+	Backwards_Button:SetY(ScrH()/1.7)
+	
 	local HUD_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	if GAMEMODE:GetHUDSkin() == 2 then
@@ -727,9 +741,6 @@ function OpenSettingsMenu()
 	elseif GAMEMODE:GetHUDSkin() == 1 then
 		HUD_Button:SetText("#sdm_tsehud")
 	end
-	HUD_Button:SetSize(ScrW()/11, ScrH() / 20)
-	HUD_Button:Center()
-	HUD_Button:SetY(ScrH()/1.475)
 	HUD_Button:SetFont("MainMenu_Font")
 	HUD_Button:SetTextColor(GetButtonColor())
 
@@ -774,13 +785,13 @@ function OpenSettingsMenu()
 		HUD_Button:SetTextColor(GetButtonColor())
 	end
 
+	HUD_Button:SizeToContents()
+	HUD_Button:Center()
+	HUD_Button:SetY(ScrH()/1.515)
 
 	local TFE_Color_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	TFE_Color_Button:SetText("#sdm_tfehudcolor")
-	TFE_Color_Button:SetSize(ScrW()/6.5, ScrH() / 20)
-	TFE_Color_Button:Center()
-	TFE_Color_Button:SetY(ScrH()/1.35)
 	TFE_Color_Button:SetFont("MainMenu_Font")
 	TFE_Color_Button:SetTextColor(GetButtonColor())
 
@@ -800,12 +811,14 @@ function OpenSettingsMenu()
 		isFlashing = false
 		TFE_Color_Button:SetTextColor(GetButtonColor())
 	end
+	
+	TFE_Color_Button:SizeToContents()
+	TFE_Color_Button:Center()
+	TFE_Color_Button:SetY(ScrH()/1.385)
 
 	local Back_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Back_Button:SetText("#sdm_back")
-	Back_Button:SetSize(ScrW()/15, ScrH()/20)
-	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/11)
 	Back_Button:SetFont("MainMenu_Font")
 	Back_Button:SetTextColor(GetButtonColor())
 	Back_Button.Paint = function(self, w, h) 
@@ -830,6 +843,9 @@ function OpenSettingsMenu()
 		showGameUI = true
 		surface.PlaySound("menus/press.wav")
 	end
+	
+	Back_Button:SizeToContents()
+	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
 
 	function SKIN:PaintNumSlider( panel, w, h )
 		return

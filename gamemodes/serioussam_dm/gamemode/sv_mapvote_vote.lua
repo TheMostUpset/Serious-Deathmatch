@@ -38,8 +38,8 @@ Mapvote.endVote = function()
 	Mapvote.winningMap = Mapvote.maps[nextmap]
 	
 	for k,v in pairs(player.GetAll()) do
-		v:PrintMessage( HUD_PRINTTALK, Mapvote.winningMap .. " " .. language.GetPhrase( "sdm_mapvote_chosen" ))
-		v:PrintMessage( HUD_PRINTTALK, (Mapvote.tally[nextmap] or 0) .. " " .. language.GetPhrase( "sdm_mapvote_votes" ))
+		v:PrintMessage( HUD_PRINTTALK, Mapvote.winningMap .. " " .. "#sdm_mapvote_chosen")
+		v:PrintMessage( HUD_PRINTTALK, (Mapvote.tally[nextmap] or 0) .. " " .. "#sdm_mapvote_votes")
 	end		
 
 	timer.Simple(3, function()
