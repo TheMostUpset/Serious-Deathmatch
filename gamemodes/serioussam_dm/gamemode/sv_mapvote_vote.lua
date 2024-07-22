@@ -30,17 +30,16 @@ Mapvote.endVote = function()
 	if not GetGlobalInt( "Mapvote_State" ) == MAPVOTE_VOTING then return end
 	SetGlobalInt( "Mapvote_State", MAPVOTE_VOTED )
 	
-	net.Start("mapvote_finish")
-	net.Broadcast()
-	
 	local nextmap = table.GetWinningKey(Mapvote.tally) or 1
 	
 	Mapvote.winningMap = Mapvote.maps[nextmap]
 	
-	for k,v in pairs(player.GetAll()) do
-		v:PrintMessage( HUD_PRINTTALK, Mapvote.winningMap .. " " .. "#sdm_mapvote_chosen")
-		v:PrintMessage( HUD_PRINTTALK, (Mapvote.tally[nextmap] or 0) .. " " .. "#sdm_mapvote_votes")
-	end		
+	if !Mapvote.winningMap then return end
+	
+	net.Start("mapvote_finish")
+	net.WriteString(Mapvote.winningMap)
+	net.WriteUInt(Mapvote.tally[nextmap] or 0, 7)
+	net.Broadcast()
 
 	timer.Simple(3, function()
 		if Mapvote.winningMap == game.GetMap() then
