@@ -524,7 +524,6 @@ function OpenSettingsMenu()
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Playermodel_Button:SetText("#sdm_pmselect")
-	Playermodel_Button:SetSize(ScrW()/4, ScrH() / 20)
 	Playermodel_Button:SetFont("MainMenu_Font")
 	Playermodel_Button:SetTextColor(GetButtonColor())
 	Playermodel_Button.Paint = function(self, w, h) 
@@ -545,7 +544,7 @@ function OpenSettingsMenu()
 	end
 	Playermodel_Button:SizeToContents()
 	Playermodel_Button:Center()
-	Playermodel_Button:SetY(ScrH()/6.75)
+	Playermodel_Button:SetY(ScrH()/6.95)
 	
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
