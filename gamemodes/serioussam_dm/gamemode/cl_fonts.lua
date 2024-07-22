@@ -102,9 +102,9 @@ surface.CreateFont( "GameEnd_Font", {
 
 
 surface.CreateFont( "MainMenu_Font", {
-	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	font = "My Font", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
-	size = ScrW()/24,
+	size = ScrW()/28,
 	weight = 0,
 	blursize = 0,
 	scanlines = 0,
@@ -117,22 +117,25 @@ surface.CreateFont( "MainMenu_Font", {
 	shadow = true,
 	additive = false,
 	outline = false,
+	extended = true,
 } )
 
 
 
 surface.CreateFont( "Vote_Font", {
-	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	font = "My Font", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
 	size = ScrW() / 32	,
 	weight = 0,
+	extended = true,
 } )
 
 surface.CreateFont( "Vote_Font2", {
-	font = "Mytupi", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	font = "My Font", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
-	size = ScrW() / 42	,
+	size = ScrW() / 42,
 	weight = 0,
+	extended = true,
 } )
 
 surface.CreateFont("MainMenu_font_very_small", {
@@ -140,13 +143,15 @@ surface.CreateFont("MainMenu_font_very_small", {
 	size = ScrW()/64,
 	weight = 800,
 	blursize = 0,
-	shadow = true
+	shadow = true,
+	extended = true,
 })
 
 surface.CreateFont("MainMenu_font_small", {
-	font = "Mytupi",
-	size = ScrW()/32,
+	font = "My Font",
+	size = ScrW()/38,
 	weight = 600,
 	blursize = 0,
-	shadow = true
+	shadow = true,
+	extended = true,
 })

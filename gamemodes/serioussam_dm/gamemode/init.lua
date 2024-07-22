@@ -23,7 +23,7 @@ util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
 util.AddNetworkString("PlayerKilledBy")
 
-resource.AddFile( "resource/fonts/Mytupi.ttf" )
+resource.AddFile( "resource/fonts/seriousmenu.ttf" )
 
 PLAYER_WALKSPEED = 380
 PLAYER_RUNSPEED = 250

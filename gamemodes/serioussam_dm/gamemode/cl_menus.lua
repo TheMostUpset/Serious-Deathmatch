@@ -570,7 +570,7 @@ function OpenSettingsMenu()
 	end
 	Music_Button:SizeToContents()
 	Music_Button:Center()
-	Music_Button:SetY(ScrH()/2.85)
+	Music_Button:SetY(ScrH()/2.785)
 	
 	local Bob_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -646,11 +646,11 @@ function OpenSettingsMenu()
 	end
 	Crosshair_Button:SizeToContents()
 	Crosshair_Button:Center()
-	Crosshair_Button:SetY(ScrH()/1.875)
+	Crosshair_Button:SetY(ScrH()/1.88)
 	
 	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)	-- Add image to Frame
 	Crosshair_Image:SetX(ScrW()/2.075)	-- Move it into frame
-	Crosshair_Image:SetY(ScrH()/1.645)	-- Size it to 150x150
+	Crosshair_Image:SetY(ScrH()/1.665)	-- Size it to 150x150
 	Crosshair_Image:SetSize(ScrW()/32, ScrW() / 32)
 	-- Set material relative to "garrysmod/materials/"
 	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
@@ -690,15 +690,12 @@ function OpenSettingsMenu()
 	
 	Forward_Button:SizeToContents()
 	Forward_Button:SetX(ScrW()/1.9)
-	Forward_Button:SetY(ScrH()/1.7)
+	Forward_Button:SetY(ScrH()/1.685)
 
 	
 	local Backwards_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
 	Backwards_Button:SetText("<")
-	Backwards_Button:SetSize(ScrW()/80, ScrH() / 20)
-	Backwards_Button:SetX(ScrW()/2.195)
-	Backwards_Button:SetY(ScrH()/1.655)
 	Backwards_Button:SetFont("MainMenu_Font")
 	Backwards_Button:SetTextColor(GetButtonColor())
 	
@@ -731,7 +728,7 @@ function OpenSettingsMenu()
 	
 	Backwards_Button:SizeToContents()
 	Backwards_Button:SetX(ScrW()/2.2)
-	Backwards_Button:SetY(ScrH()/1.7)
+	Backwards_Button:SetY(ScrH()/1.685)
 	
 	local HUD_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -872,7 +869,7 @@ function OpenSettingsMenu()
 		local hudr,hudg,hudb = GetMMFColor()
 		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)
 		surface.DrawRect(1,1,number*w-2,h-2)
-		draw.SimpleText( (number*100).."%", "MainMenu_font_small", w/2,-6, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER )
+		draw.SimpleText( (number*100).."%", "MainMenu_font_small", w/2,-1, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER )
 	end
 
 
