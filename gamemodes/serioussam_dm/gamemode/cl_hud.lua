@@ -82,7 +82,7 @@ function playerTable:Paint(w, h)
     for _, ply in ipairs(self.Players) do
 		local nick, frags, deaths = ply:Nick(), ply:Frags(), ply:Deaths()
 		local frags_text = surface.GetTextSize(frags)
-		draw.SimpleText(nick .. "    " ..  frags .. "  /  " .. deaths, "Scoreboard_Font", posX + 1, posY +1, color_black, TEXT_ALIGN_RIGHT)
+		draw.SimpleText(nick .. "    " ..  frags .. "  /  " .. deaths, "Scoreboard_Font", posX + 2, posY + 2, Color(0,0,0,150), TEXT_ALIGN_RIGHT)
 		
 		
 		if ply == LocalPlayer() then
@@ -293,7 +293,7 @@ function GM:HUDPaint()
 	if game_state == STATE_GAME_WARMUP then
 		local x, y = ScrW() / 2, ScrH() / 4
 		local text = "#sdm_waitplys"
-		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, "GameEnd_Font", x + 2, y + 2, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_PREPARE then
 		local countdown = GetGlobalFloat("GameTime") - CurTime()
@@ -365,7 +365,7 @@ function GM:HUDPaint()
 				if !self:ShouldDrawTimer() then
 					y = ScrH() / 70
 				end
-				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, color_black, TEXT_ALIGN_LEFT)
+				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
 				
 				if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
