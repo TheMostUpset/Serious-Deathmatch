@@ -27,8 +27,9 @@ Mapvote.guiFunction = function()
 	end
 	
 	Mapvote.frame = vgui.Create("DFrame") 	
-	Mapvote.frame:SetPos(100, 100)              
+	Mapvote.frame:Center()             
 	Mapvote.frame:SetSize(400, 128+mapcount*block_height)
+	print(Mapvote.frame:GetSize())
 	Mapvote.frame:SetTitle("") 
 	Mapvote.frame:SetVisible(true)             
 	Mapvote.frame:SetDraggable(false)      
@@ -48,9 +49,13 @@ Mapvote.guiFunction = function()
 		local x, y = 50, 32 + block_height*i
 		
 		local map_img = vgui.Create("DImage", Mapvote.frame)
-		map_img:SetPos(8, y - mapicon_size/8)
-		map_img:SetSize(mapicon_size, mapicon_size)		
+		map_img:SetPos(25, y - mapicon_size/64)
+		map_img:SetSize(mapicon_size, mapicon_size)
+		if file.Exists("maps/thumb/"..maps[i]..".png", "GAME") then
 		map_img:SetImage("maps/thumb/"..maps[i]..".png")
+		else
+		map_img:SetImage("icons/vgui/nomap.png")
+		end
 	
 		local button = vgui.Create("DButton", Mapvote.frame)
 		button:SetText("")
@@ -67,8 +72,8 @@ Mapvote.guiFunction = function()
 		end
 		button:SetSize(450, 45)
 		button.Paint = function(self, w, h)
-			draw.SimpleText( maps[i], "Vote_Font2", x + 1, 1, color_black, TEXT_ALIGN_LEFT)
-			draw.SimpleText( maps[i], "Vote_Font2", x, 0, color_white, TEXT_ALIGN_LEFT)
+			draw.SimpleText( maps[i], "Vote_Font2", x + 1, y - mapicon_size/64, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+			draw.SimpleText( maps[i], "Vote_Font2", x, y - mapicon_size/64, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 		end
 		button.OnCursorEntered = function()
 			surface.PlaySound("menus/select.wav")
