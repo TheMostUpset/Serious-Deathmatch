@@ -200,3 +200,11 @@ function GM:PlayerNoClip(ply, state)
 	
 	return cvars.Bool("sv_cheats")
 end
+
+function GM:OnEntityCreated(ent)
+	if ent.Base == "ss_pickup_base" and ent.SendPickupMsg then
+		function ent:SendPickupMsg(ply, msg, amount)
+			ply:OnSeriousItemPickedUp(self, msg, amount)
+		end
+	end
+end
