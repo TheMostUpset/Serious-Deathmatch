@@ -105,6 +105,10 @@ if SeriousHUD then
 	function SeriousHUD:DrawAmmo()
 		return !cvar_instagib:GetBool()
 	end
+	net.Receive("SSPickupText", function()
+		local msg, amount = net.ReadString(), net.ReadUInt(8)
+		SeriousHUD:ReceivePickupText(language.GetPhrase(msg), amount)
+	end)
 end
 function LeadingSound()
 --q3 code

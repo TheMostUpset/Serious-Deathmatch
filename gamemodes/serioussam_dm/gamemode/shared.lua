@@ -202,7 +202,7 @@ function GM:PlayerNoClip(ply, state)
 end
 
 function GM:OnEntityCreated(ent)
-	if ent.Base == "ss_pickup_base" and ent.SendPickupMsg then
+	if SERVER and ent.Type == "anim" and ent.SendPickupMsg then
 		function ent:SendPickupMsg(ply, msg, amount)
 			ply:OnSeriousItemPickedUp(self, msg, amount)
 		end

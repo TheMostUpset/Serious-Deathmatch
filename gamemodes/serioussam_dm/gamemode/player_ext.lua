@@ -47,7 +47,11 @@ if SERVER then
 		["Thompson"] = "#sdm_tommygun",	
 	}
 	function meta:OnSeriousItemPickedUp(ent, msg, amount)
-		msg = msg or entNameLocalization[ent.PrintName]
+		msg = msg or ent.PrintName
+		if !msg then return end
+		if entNameLocalization[msg] then
+			msg = entNameLocalization[msg]
+		end
 		amount = amount or 0
 		net.Start("SSPickupText")
 		net.WriteString(msg)
