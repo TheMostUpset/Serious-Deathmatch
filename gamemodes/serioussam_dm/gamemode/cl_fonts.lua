@@ -85,7 +85,7 @@ surface.CreateFont( "GameEnd_Font", {
 	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
 	size = ScrH() / 42,
-	weight = 0,
+	weight = 800,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,

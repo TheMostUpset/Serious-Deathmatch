@@ -44,7 +44,12 @@ if SERVER then
 		["Rocket Launcher"] = "#sdm_rocketl",
 		["Shotgun"] = "#sdm_pump",
 		["Sniper Rifle"] = "#sdm_sniper",
-		["Thompson"] = "#sdm_tommygun",	
+		["Thompson"] = "#sdm_tommygun",
+		
+		["Serious Damage"] = "#sdm_seriousdmg",
+		["Serious Speed"] = "#sdm_seriousspeed",
+		["Invulnerability"] = "#sdm_protect",
+		["Invisibility"] = "#sdm_inv",
 	}
 	function meta:OnSeriousItemPickedUp(ent, msg, amount)
 		msg = msg or ent.PrintName

@@ -330,7 +330,7 @@ function GM:HUDPaint()
 		if countdown_rnd < 4 then
 		text = language.GetPhrase( "sdm_roundstart" ) .. " " .. countdown_rnd
 		end
-		draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, "GameEnd_Font", x + 2, y + 2, color_black, TEXT_ALIGN_CENTER )
 		draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 	elseif game_state == STATE_GAME_END then
 		if !endgamesoundplayed then
@@ -340,14 +340,14 @@ function GM:HUDPaint()
 		if !Mapvote.frame or !Mapvote.frame:IsVisible() then
 			local x, y = ScrW() / 2, ScrH() / 4
 			local text = "#sdm_gameend"
-			draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
+			draw.SimpleText( text, "GameEnd_Font", x + 2, y + 2, color_black, TEXT_ALIGN_CENTER )
 			draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )			
 			
 			local winner = GetGlobalString("WinnerName")
 			if winner and string.len(winner) > 0 then
 				local text = winner.. " " .. language.GetPhrase( "sdm_wins" )
 				local x, y = ScrW() / 2, ScrH()/3.6
-				draw.SimpleText( text, "GameEnd_Font", x + 1, y + 1, color_black, TEXT_ALIGN_CENTER )
+				draw.SimpleText( text, "GameEnd_Font", x + 2, y + 2, color_black, TEXT_ALIGN_CENTER )
 				draw.SimpleText( text, "GameEnd_Font", x, y, color_white, TEXT_ALIGN_CENTER )
 			end
 		end
@@ -389,7 +389,7 @@ function GM:HUDPaint()
 			local x, y = ScrW() / 2, ScrH() / 4
 			local text = "#sdm_respawn"
 			local font = "Death_Font"
-			draw.SimpleText( text, font, x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, font, x + 2, y + 2, color_black, TEXT_ALIGN_CENTER)
 			draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
 			if fragByMsgNick != "" then
 				local y = ScrH() / 5
@@ -397,7 +397,7 @@ function GM:HUDPaint()
 				if fragByMsgNick == LocalPlayer():Nick() then
 					text = "#sdm_kys"
 				end
-				draw.SimpleText( text, font, x + 1.5, y + 1.5, color_black, TEXT_ALIGN_CENTER)
+				draw.SimpleText( text, font, x + 2, y + 2, color_black, TEXT_ALIGN_CENTER)
 				draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
 			end
 		end		
@@ -408,7 +408,7 @@ function GM:HUDPaint()
 		local font = "Frag_Font"
 		local fadeSpeed = 3
 		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
-		draw.SimpleText( text, font, x + 1.5, y + 1.5, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
+		draw.SimpleText( text, font, x + 2, y + 2, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
 		draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)
 	end
 end
