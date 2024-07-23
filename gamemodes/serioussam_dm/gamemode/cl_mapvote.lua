@@ -79,6 +79,6 @@ end
 
 net.Receive("mapvote_finish", function()
 	local name, votes = net.ReadString(), net.ReadUInt(7)
-	LocalPlayer():PrintMessage( HUD_PRINTTALK, name .. " " .. "#sdm_mapvote_chosen")
-	LocalPlayer():PrintMessage( HUD_PRINTTALK, votes .. " " .. "#sdm_mapvote_votes")
+	LocalPlayer():PrintMessage( HUD_PRINTTALK, name .. " " .. language.GetPhrase( "sdm_mapvote_chosen" ))
+	LocalPlayer():PrintMessage( HUD_PRINTTALK, votes .. " " .. language.GetPhrase( "sdm_mapvote_votes" ))
 end)
