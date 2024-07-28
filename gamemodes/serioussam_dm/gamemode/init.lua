@@ -25,12 +25,12 @@ util.AddNetworkString("PlayerKilledBy")
 
 resource.AddFile( "resource/fonts/seriousmenu.ttf" )
 
-PLAYER_WALKSPEED = 380
-PLAYER_RUNSPEED = 250
-PLAYER_JUMPPOWER = 290
+PLAYER_WALKSPEED = 430
+PLAYER_RUNSPEED = 300
+PLAYER_JUMPPOWER = 300
 
-PLAYER_WALKSPEED_KNIFE = 500
-PLAYER_JUMPPOWER_KNIFE = 330
+PLAYER_WALKSPEED_KNIFE = 530
+PLAYER_JUMPPOWER_KNIFE = 390
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 	if GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end

@@ -28,7 +28,7 @@ function GetAccentColor()
 	return 255, 190, 0
 end
 
-local function PaintBackground(self, w, h)
+function PaintBackground(self, w, h)
 	local fourbythree = ScrW() / ScrH()
 	local skin = GAMEMODE:GetHUDSkin()
 	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
@@ -102,14 +102,14 @@ local function PaintBackground(self, w, h)
 	surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*5, h*5, 0, 0, w / texW, h / texH )
 end
 
-local function GetButtonColor()
+function GetButtonColor()
 	if GAMEMODE:GetHUDSkin() == 1 then
 		return Color(GAMEMODE:GetHUDColor())
 	end
 	return Color(240, 155, 0)
 end
 
-local function ButtonFlashing(button)
+function ButtonFlashing(button)
 	local flashColor1 = Color(170, 85, 0)
 	local flashColor2 = Color(255, 200, 0)
 	if GAMEMODE:GetHUDSkin() == 1 then
@@ -126,7 +126,7 @@ local function ButtonFlashing(button)
 	button:SetTextColor(Color(r, g, b))
 end
 
-local function UpdateButtonsSkin(t, skin)
+function UpdateButtonsSkin(t, skin)
 	local col = Color(240, 155, 0, 255)
 	if skin == 1 then
 		local r, g, b = GetConVarNumber("ss_hud_color_r"), GetConVarNumber("ss_hud_color_g"), GetConVarNumber("ss_hud_color_b")
@@ -139,7 +139,7 @@ local function UpdateButtonsSkin(t, skin)
 	end
 end
 
-local function UpdateButtonsColor(t, col)
+function UpdateButtonsColor(t, col)
 	col = col or Color(240, 155, 0, 255)
 	for k, v in ipairs(t) do
 		if v:GetName() == "DButton" then
