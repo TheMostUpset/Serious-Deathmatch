@@ -110,6 +110,7 @@ if SeriousHUD then
 		SeriousHUD:ReceivePickupText(language.GetPhrase(msg), amount)
 	end)
 end
+
 function LeadingSound()
 --q3 code
 if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 then

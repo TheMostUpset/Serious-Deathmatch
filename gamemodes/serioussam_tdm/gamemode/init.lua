@@ -1,5 +1,7 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
+AddCSLuaFile("cl_hud.lua")
+AddCSLuaFile("cl_menus.lua")
 
 include( "shared.lua" )
 
@@ -38,8 +40,7 @@ function GM:PlayerLoadout(ply)
 		ply:Give("weapon_ss_knife")
 	else
 		ply:Give('weapon_ss_knife')
-		ply:Give('weapon_ss_colt_dual')
-		ply:Give('weapon_ss_singleshotgun')
+		ply:Give('weapon_ss_colt')
 	end
 	
 	ply:SetModel("models/pechenko_121/redrick.mdl")
@@ -231,4 +232,45 @@ function GM:PlayerSelectSpawn( pl, transiton )
 
 	return ChosenSpawnPoint
 
+end
+
+function GM:GameRestart()
+	game.CleanUpMap()
+	self:ResetGameState()
+	team.SetScore(TEAM_RED, 0)
+	team.SetScore(TEAM_BLUE, 0)
+	-- hook.Run("InitPostEntity")
+	self:ReplacePickupEntities()
+	if self:IsInstagib() then
+		self:ToggleMapPickups(false)
+		self:ReplaceSDMGPickup()
+	end
+	for k, v in ipairs(player.GetAll()) do
+		v:KillSilent()
+		v:SetFrags(0)
+		v:SetDeaths(0)
+		v:Spawn()
+	end
+	
+	if player.GetCount() >= GetConVarNumber("sdm_minplayers") then
+		timer.Simple(1, function()
+			if player.GetCount() >= GetConVarNumber("sdm_minplayers") then
+				self:GamePrepare()
+			end
+		end)
+	end
+end
+
+function GM:GameEnd()
+	self:SetState(STATE_GAME_END)
+	SetGlobalFloat("GameTime", CurTime() + 5)
+	local winner = self:GetWinner()
+	if IsValid(winner) then
+		SetGlobalString("WinnerName", winner:Team())
+			if winner:Team() == 1 then
+				SetGlobalString("WinnerName", "Red Team")
+			elseif winner:Team() == 2 then
+				SetGlobalString("WinnerName", "Blue Team")
+			end
+	end
 end

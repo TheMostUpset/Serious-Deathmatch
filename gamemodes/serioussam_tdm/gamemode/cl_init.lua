@@ -1,4 +1,6 @@
 include( "shared.lua" )
+include( "cl_hud.lua" )
+include("cl_menus.lua")
 
 function GM:SDMShowTeam()
 
@@ -19,7 +21,7 @@ function GM:SDMShowTeam()
 
 	TeamMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
-		draw.SimpleText("CHANGE TEAM", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("CHOOSE TEAM", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 
@@ -99,6 +101,43 @@ function GM:SDMShowTeam()
 			BLUE_Button:SizeToContents()
 			BLUE_Button:Center()
 			BLUE_Button:SetY(ScrH()/2)
+			
+			local SPEC_Button = vgui.Create("DButton", TeamMenu)
+			local isFlashing = false
+			SPEC_Button:SetText("JOIN SPECTATORS")
+			SPEC_Button:SetSize(ScrW()/12, ScrH()/20)
+			SPEC_Button:SetFont("MainMenu_Font")
+			SPEC_Button:SetTextColor(GetButtonColor())
+
+			SPEC_Button.OnCursorEntered = function()
+				isFlashing = true
+				text = "join spectators"
+				surface.PlaySound("menus/select.wav")
+			end
+
+			SPEC_Button.OnCursorExited = function()
+				isFlashing = false
+				text = ""
+				SPEC_Button:SetTextColor(GetButtonColor())
+			end
+
+			SPEC_Button.Paint = function(self, w, h) 
+				if isFlashing then
+					ButtonFlashing(self)
+				end
+			end
+
+			SPEC_Button.DoClick = function()
+				RunConsoleCommand("changeteam", TEAM_SPECTATOR)
+				TeamMenu:Close()
+				showGameUI = false
+				surface.PlaySound("menus/press.wav")
+			end
+
+			SPEC_Button:SizeToContents()
+			SPEC_Button:Center()
+			SPEC_Button:SetY(ScrH()/1.8)
+
 
 			if ( IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
 				Team:SetEnabled( false )
