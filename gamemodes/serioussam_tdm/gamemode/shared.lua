@@ -15,3 +15,5 @@ team.SetSpawnPoint(1, {"info_player_terrorist"})
 team.SetSpawnPoint(2, {"info_player_counterterrorist"})
 
 
+
+

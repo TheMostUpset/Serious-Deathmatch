@@ -615,6 +615,7 @@ function GM:PlayerLoadout(ply)
 	effectdata:SetScale(128)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	return true
+
 end
 
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
