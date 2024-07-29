@@ -1,10 +1,9 @@
 include( "shared.lua" )
-include( "cl_hud.lua" )
 
 function GM:SDMShowTeam()
 
 	if ( IsValid( self.TeamSelectFrame ) ) then return end
-	
+
 	-- Simple team selection box
 	showGameUI = true
 	local text = ""
@@ -19,16 +18,16 @@ function GM:SDMShowTeam()
 
 
 	TeamMenu.Paint = function(self, w, h)
-		--PaintBackground(self, w, h)
+		PaintBackground(self, w, h)
 		draw.SimpleText("CHANGE TEAM", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
-	
+
 	local AllTeams = team.GetAllTeams()
 	local y = 30
-	
+
 		if ( ID != TEAM_CONNECTING && ID != TEAM_UNASSIGNED ) then
-	
+
 			local RED_Button = vgui.Create("DButton", TeamMenu)
 			local isFlashing = false
 			RED_Button:SetText("JOIN RED")
@@ -55,16 +54,16 @@ function GM:SDMShowTeam()
 			end
 
 			RED_Button.DoClick = function()
-				RunConsoleCommand("changeteam", 1)
+				RunConsoleCommand("changeteam", TEAM_RED)
 				TeamMenu:Close()
 				showGameUI = false
 				surface.PlaySound("menus/press.wav")
 			end
-			
+
 			RED_Button:SizeToContents()
 			RED_Button:Center()
 			RED_Button:SetY(ScrH()/2.25)
-			
+
 			local BLUE_Button = vgui.Create("DButton", TeamMenu)
 			local isFlashing = false
 			BLUE_Button:SetText("JOIN BLUE")
@@ -91,22 +90,22 @@ function GM:SDMShowTeam()
 			end
 
 			BLUE_Button.DoClick = function()
-				RunConsoleCommand("changeteam", 2)
+				RunConsoleCommand("changeteam", TEAM_BLUE)
 				TeamMenu:Close()
 				showGameUI = false
 				surface.PlaySound("menus/press.wav")
 			end
-			
+
 			BLUE_Button:SizeToContents()
 			BLUE_Button:Center()
 			BLUE_Button:SetY(ScrH()/2)
-			
+
 			if ( IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
 				Team:SetEnabled( false )
 			end
-		
+
 		end
-		
+
 
 end
 
