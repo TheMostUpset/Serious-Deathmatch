@@ -207,7 +207,40 @@ function OpenSSMenu()
 	end
 	Continue_Button:SizeToContents()
 	Continue_Button:Center()
-	Continue_Button:SetY(ScrH()/2.58)
+	Continue_Button:SetY(ScrH()/2.9)
+	
+	local Team_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Team_Button:SetText("#sdm_changeteam")
+	Team_Button:SetSize(ScrW()/12, ScrH()/20)
+	Team_Button:SetFont("MainMenu_Font")
+	Team_Button:SetTextColor(GetButtonColor())
+
+	Team_Button.OnCursorEntered = function()
+		isFlashing = true
+		text = "#sdm_help_changeteam"
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Team_Button.OnCursorExited = function()
+		isFlashing = false
+		text = ""
+		Team_Button:SetTextColor(GetButtonColor())
+	end
+
+	Team_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+
+	Team_Button.DoClick = function()
+		OpenTeamMenu()
+		surface.PlaySound("menus/press.wav")
+	end
+	Team_Button:SizeToContents()
+	Team_Button:Center()
+	Team_Button:SetY(ScrH()/2.5)
 
 	local Disconnect_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -240,7 +273,7 @@ function OpenSSMenu()
 	end
 	Disconnect_Button:SizeToContents()
 	Disconnect_Button:Center()
-	Disconnect_Button:SetY(ScrH()/1.8)
+	Disconnect_Button:SetY(ScrH()/1.76)
 	
 	local Options_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -277,14 +310,11 @@ function OpenSSMenu()
 	end
 	Options_Button:SizeToContents()
 	Options_Button:Center()
-	Options_Button:SetY(ScrH()/2)
+	Options_Button:SetY(ScrH()/1.95)
 
 	local LegacyM_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	LegacyM_Button:SetText("#sdm_lmenu")
-	LegacyM_Button:SetSize(ScrW()/6, ScrH()/20)
-	LegacyM_Button:Center()
-	LegacyM_Button:SetY(ScrH()/2.25)
 	LegacyM_Button:SetFont("MainMenu_Font")
 	LegacyM_Button:SetTextColor(GetButtonColor())
 	LegacyM_Button.Paint = function(self, w, h) 
@@ -314,7 +344,7 @@ function OpenSSMenu()
 	end
 	LegacyM_Button:SizeToContents()
 	LegacyM_Button:Center()
-	LegacyM_Button:SetY(ScrH()/2.25)
+	LegacyM_Button:SetY(ScrH()/2.19)
 
 	local Quit_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -348,7 +378,7 @@ function OpenSSMenu()
 	end
 	Quit_Button:SizeToContents()
 	Quit_Button:Center()
-	Quit_Button:SetY(ScrH()/1.635)
+	Quit_Button:SetY(ScrH()/1.6)
 end
 
 function OpenConfirmationMenu()
@@ -1044,6 +1074,155 @@ function OpenSettingsMenu()
     
 end
 
+function OpenTeamMenu()
+
+	if ( IsValid( GAMEMODE.TeamSelectFrame ) ) then return end
+
+	-- Simple team selection box
+	showGameUI = true
+	local text = ""
+	TeamMenu = vgui.Create("DFrame")
+	TeamMenu:SetSize(ScrW(), ScrH())
+	TeamMenu:Center()
+	TeamMenu:SetTitle("")
+	TeamMenu:ShowCloseButton( false )
+	TeamMenu:SetDraggable(false)
+	TeamMenu:SetMouseInputEnabled(false)
+	TeamMenu:MakePopup()
+
+
+	TeamMenu.Paint = function(self, w, h)
+		PaintBackground(self, w, h)
+		draw.SimpleText("#sdm_changeteam", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
+
+	local AllTeams = team.GetAllTeams()
+	local y = 30
+
+		if ( ID != TEAM_CONNECTING && ID != TEAM_UNASSIGNED ) then
+
+			local RED_Button = vgui.Create("DButton", TeamMenu)
+			local isFlashing = false
+			RED_Button:SetText("#sdm_joinred")
+			RED_Button:SetSize(ScrW()/12, ScrH()/20)
+			RED_Button:SetFont("MainMenu_Font")
+			RED_Button:SetTextColor(GetButtonColor())
+
+			RED_Button.OnCursorEntered = function()
+				isFlashing = true
+				text = "#sdm_help_joinred"
+				surface.PlaySound("menus/select.wav")
+			end
+
+			RED_Button.OnCursorExited = function()
+				isFlashing = false
+				text = ""
+				RED_Button:SetTextColor(GetButtonColor())
+			end
+
+			RED_Button.Paint = function(self, w, h) 
+				if isFlashing then
+					ButtonFlashing(self)
+				end
+			end
+
+			RED_Button.DoClick = function()
+				RunConsoleCommand("changeteam", TEAM_RED)
+				TeamMenu:Close()
+				EscMenu:Close()
+				showGameUI = false
+				surface.PlaySound("menus/press.wav")
+			end
+
+			RED_Button:SizeToContents()
+			RED_Button:Center()
+			RED_Button:SetY(ScrH()/2.25)
+
+			local BLUE_Button = vgui.Create("DButton", TeamMenu)
+			local isFlashing = false
+			BLUE_Button:SetText("#sdm_joinblue")
+			BLUE_Button:SetSize(ScrW()/12, ScrH()/20)
+			BLUE_Button:SetFont("MainMenu_Font")
+			BLUE_Button:SetTextColor(GetButtonColor())
+
+			BLUE_Button.OnCursorEntered = function()
+				isFlashing = true
+				text = "#sdm_help_joinblue"
+				surface.PlaySound("menus/select.wav")
+			end
+
+			BLUE_Button.OnCursorExited = function()
+				isFlashing = false
+				text = ""
+				BLUE_Button:SetTextColor(GetButtonColor())
+			end
+
+			BLUE_Button.Paint = function(self, w, h) 
+				if isFlashing then
+					ButtonFlashing(self)
+				end
+			end
+
+			BLUE_Button.DoClick = function()
+				RunConsoleCommand("changeteam", TEAM_BLUE)
+				TeamMenu:Close()
+				EscMenu:Close()
+				showGameUI = false
+				surface.PlaySound("menus/press.wav")
+			end
+
+			BLUE_Button:SizeToContents()
+			BLUE_Button:Center()
+			BLUE_Button:SetY(ScrH()/2)
+			
+			local SPEC_Button = vgui.Create("DButton", TeamMenu)
+			local isFlashing = false
+			SPEC_Button:SetText("#sdm_joinspec")
+			SPEC_Button:SetSize(ScrW()/12, ScrH()/20)
+			SPEC_Button:SetFont("MainMenu_Font")
+			SPEC_Button:SetTextColor(GetButtonColor())
+
+			SPEC_Button.OnCursorEntered = function()
+				isFlashing = true
+				text = "#sdm_help_joinspec"
+				surface.PlaySound("menus/select.wav")
+			end
+
+			SPEC_Button.OnCursorExited = function()
+				isFlashing = false
+				text = ""
+				SPEC_Button:SetTextColor(GetButtonColor())
+			end
+
+			SPEC_Button.Paint = function(self, w, h) 
+				if isFlashing then
+					ButtonFlashing(self)
+				end
+			end
+
+			SPEC_Button.DoClick = function()
+				RunConsoleCommand("changeteam", TEAM_SPECTATOR)
+				TeamMenu:Close()
+				EscMenu:Close()
+				showGameUI = false
+				surface.PlaySound("menus/press.wav")
+			end
+
+			SPEC_Button:SizeToContents()
+			SPEC_Button:Center()
+			SPEC_Button:SetY(ScrH()/1.8)
+
+
+			if ( IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
+				Team:SetEnabled( false )
+			end
+
+		end
+
+
+end
+
 
 hook.Add( "Think", "ESCMenuOverride", function()
 	if input.IsKeyDown(KEY_ESCAPE) and gui.IsGameUIVisible() then
@@ -1051,6 +1230,8 @@ hook.Add( "Think", "ESCMenuOverride", function()
 		if not showGameUI then
 			showGameUI = true
 			OpenSSMenu()
+		elseif TeamMenu and TeamMenu:IsVisible() then
+			TeamMenu:Close()
 		elseif SettingsMenu and SettingsMenu:IsVisible() then
 			SettingsMenu:Close()
 		elseif EscMenu and EscMenu:IsVisible() and (!ConfirmationMenu or !ConfirmationMenu:IsVisible()) then
