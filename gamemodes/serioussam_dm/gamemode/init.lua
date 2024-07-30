@@ -22,6 +22,7 @@ include("sv_mapvote_vote.lua")
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
 util.AddNetworkString("PlayerKilledBy")
+util.AddNetworkString("ClientChatMessage")
 
 resource.AddFile( "resource/fonts/seriousmenu.ttf" )
 
@@ -648,6 +649,12 @@ end
 function GM:ShowSpare2(ply)
 	-- net.Start("FMenu")
 	-- net.Send(ply)
+end
+
+function GM:BroadcastChatMessage(text)
+	net.Start("ClientChatMessage")
+	net.WriteString(text)
+	net.Broadcast()
 end
 
 function GM:AcceptInput(ent, input, activator, caller, value)

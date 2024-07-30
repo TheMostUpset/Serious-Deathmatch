@@ -8,6 +8,13 @@ include("cl_mapvote.lua")
 include("cl_menus.lua")
 include("cl_weaponselection.lua")
 
+net.Receive("ClientChatMessage", function()
+	local msg = net.ReadString()
+	msg = language.GetPhrase(msg)
+	local col = Color(255, 220, 20)
+	chat.AddText(col, msg)
+end)
+
 local slotsFix = {
 	["weapon_ss_cannon"] = 5,
 	["weapon_ss_doubleshotgun"] = 2,
