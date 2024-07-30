@@ -59,5 +59,19 @@
 			"type"		"Numeric"
 			"default"	"2"
 		}
+		8
+		{
+			"name"		"sdm_friendlyfire"
+			"text"		"sdm_setting_friendlyfire"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		9
+		{
+			"name"		"sdm_friendlyfire_scale"
+			"text"		"sdm_setting_friendlyfire_scale"
+			"type"		"Numeric"
+			"default"	"0.25"
+		}
 	}
 }

@@ -13,6 +13,8 @@ AddCSLuaFile("player_ext.lua")
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
+local cvar_friendlyfire = CreateConVar("sdm_friendlyfire", 0, FCVAR_ARCHIVE, "Enable friendly fire", 0, 1)
+local cvar_friendlyfire_scale = CreateConVar("sdm_friendlyfire_scale", 0.25, FCVAR_ARCHIVE, "Scale of friendly fire damage", 0)
 
 include("shared.lua")
 include("sb.lua")
@@ -457,10 +459,21 @@ end
 
 -- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
+	if cvar_friendlyfire:GetInt() == 0 then
+	if ply:Team() == attacker:Team() then
+		return false
+	end
+	end
 	return self:GetState() != STATE_GAME_END
 end
 
 function GM:EntityTakeDamage(ent, dmginfo)
+	if cvar_friendlyfire:GetInt() == 1 then
+		if dmginfo:GetAttacker():IsPlayer() and ent:IsPlayer() and dmginfo:GetAttacker():Team() == ent:Team() then
+			dmginfo:ScaleDamage(cvar_friendlyfire_scale:GetFloat())
+		end
+	end
+	print(dmginfo)
 	if self:IsInstagib() then
 		dmginfo:ScaleDamage(100)
 	end

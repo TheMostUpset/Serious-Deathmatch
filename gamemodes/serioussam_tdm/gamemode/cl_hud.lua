@@ -36,9 +36,8 @@ hook.Add("PostCleanupMap", "ResetAnnouncerVars", function()
 end)
 
 
-local leadtaken = "misc/serioussam/announcer/TakenTheLead.ogg"
-local leadlost = "misc/serioussam/announcer/LostTheLead.ogg"
-local leadtied = "misc/serioussam/announcer/TiedForALead.ogg"
+local blueleadtaken = "misc/serioussam/announcer/BlueTeamLeads.ogg"
+local redleadtaken = "misc/serioussam/announcer/RedTeamLeads.ogg"
 
 local minutesleft5 = "misc/serioussam/announcer/FiveMinutesLeft.ogg"
 local minuteleft1 = "misc/serioussam/announcer/OneMinuteLeft.ogg"
@@ -51,23 +50,6 @@ local three = "misc/serioussam/announcer/Three.ogg"
 local two = "misc/serioussam/announcer/Two.ogg"
 local one = "misc/serioussam/announcer/One.ogg"
 local fight = "misc/serioussam/announcer/Fight.ogg"
-
-util.PrecacheSound(leadtaken)
-util.PrecacheSound(leadlost)
-util.PrecacheSound(leadtied)
-
-util.PrecacheSound(minutesleft5)
-util.PrecacheSound(minuteleft1)
-
-util.PrecacheSound(fragsleft3)
-util.PrecacheSound(fragsleft2)
-util.PrecacheSound(fragleft1)
-
-util.PrecacheSound(newround)
-util.PrecacheSound(three)
-util.PrecacheSound(two)
-util.PrecacheSound(one)
-util.PrecacheSound(fight)
 
 
 function teamsplayerTable:Paint(w, h)
@@ -131,41 +113,31 @@ function GetOppositeTeamFrags()
 end
 
 function LeadingSound()
---q3 code
 if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 then
 	if CurTime() < AnnouncerSoundPlayed then return end
-	if( LocalPlayer():Team() == TEAM_SPECTATOR ) then lead = false tied = false lost = false return end
+	if( LocalPlayer():Team() == TEAM_SPECTATOR ) then redlead = false bluelead = false return end
 	
+	--[[
 	local killer = { }
 	for k,v in ipairs( player.GetAll() ) do
 		table.insert(killer, { k = v:Frags(), p = v } )		
 	end
 	table.SortByMember( killer, "k" )
 	if( #killer <= 1 ) then return end
+	--]]
 
-	 //taken
-	if( killer[1].p == LocalPlayer() and !lead and killer[2].p != LocalPlayer() and killer[1].k != killer[2].k ) then
-		lead = true 
-		tied = false
-		lost = false
-		surface.PlaySound(leadtaken)
+	// red taken
+	if team.TotalFrags(1) > team.TotalFrags(2) and !redlead then
+		redlead = true 
+		surface.PlaySound(redleadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-		//lost
-	elseif( killer[1].p != LocalPlayer() and !lost and killer[1].k != killer[2].k and (lead or tied) ) then
-		lost = true
-		lead = false
-		tied = false
-		surface.PlaySound(leadlost)
+	end
+	
+	// blue taken
+	if team.TotalFrags(2) > team.TotalFrags(1) and !bluelead then
+		bluelead = true 
+		surface.PlaySound(blueleadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-		//tied
-	elseif( !tied and killer[1].k == killer[2].k ) then
-		if( LocalPlayer() == killer[2].p or LocalPlayer() == killer[1].p  ) then
-			tied = true
-			lead = false
-			lost = false
-			surface.PlaySound(leadtied)
-			AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-		end
 	end
 end
 end

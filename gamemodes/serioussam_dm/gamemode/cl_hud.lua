@@ -50,23 +50,6 @@ local two = "misc/serioussam/announcer/Two.ogg"
 local one = "misc/serioussam/announcer/One.ogg"
 local fight = "misc/serioussam/announcer/Fight.ogg"
 
-util.PrecacheSound(leadtaken)
-util.PrecacheSound(leadlost)
-util.PrecacheSound(leadtied)
-
-util.PrecacheSound(minutesleft5)
-util.PrecacheSound(minuteleft1)
-
-util.PrecacheSound(fragsleft3)
-util.PrecacheSound(fragsleft2)
-util.PrecacheSound(fragleft1)
-
-util.PrecacheSound(newround)
-util.PrecacheSound(three)
-util.PrecacheSound(two)
-util.PrecacheSound(one)
-util.PrecacheSound(fight)
-
 
 function playerTable:Paint(w, h)
     surface.SetDrawColor(0, 0, 0, 0)
