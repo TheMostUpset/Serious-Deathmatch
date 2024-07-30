@@ -64,4 +64,11 @@ if SERVER then
 		net.Send(self)
 	end
 	
+	function meta:ChatMessage(tbl)
+		if !istable(tbl) then tbl = {tbl} end
+		net.Start("ClientChatMessage")
+		net.WriteTable(tbl)
+		net.Send(self)
+	end
+	
 end

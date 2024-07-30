@@ -651,9 +651,10 @@ function GM:ShowSpare2(ply)
 	-- net.Send(ply)
 end
 
-function GM:BroadcastChatMessage(text)
+function GM:BroadcastChatMessage(tbl)
+	if !istable(tbl) then tbl = {tbl} end
 	net.Start("ClientChatMessage")
-	net.WriteString(text)
+	net.WriteTable(tbl)
 	net.Broadcast()
 end
 

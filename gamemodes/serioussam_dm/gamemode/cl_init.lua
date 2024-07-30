@@ -9,8 +9,12 @@ include("cl_menus.lua")
 include("cl_weaponselection.lua")
 
 net.Receive("ClientChatMessage", function()
-	local msg = net.ReadString()
-	msg = language.GetPhrase(msg)
+	local tbl = net.ReadTable()
+	local msg = ""
+	for i = 1, #tbl do
+		msg = msg.." "..language.GetPhrase(tbl[i])
+	end
+	msg = string.TrimLeft(msg)
 	local col = Color(255, 220, 20)
 	chat.AddText(col, msg)
 end)
