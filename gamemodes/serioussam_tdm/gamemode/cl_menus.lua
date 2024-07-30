@@ -1130,7 +1130,9 @@ function OpenTeamMenu()
 			RED_Button.DoClick = function()
 				RunConsoleCommand("changeteam", TEAM_RED)
 				TeamMenu:Close()
-				EscMenu:Close()
+				if EscMenu then
+					EscMenu:Close()
+				end
 				showGameUI = false
 				surface.PlaySound("menus/press.wav")
 			end
@@ -1167,7 +1169,9 @@ function OpenTeamMenu()
 			BLUE_Button.DoClick = function()
 				RunConsoleCommand("changeteam", TEAM_BLUE)
 				TeamMenu:Close()
-				EscMenu:Close()
+				if EscMenu then
+					EscMenu:Close()
+				end
 				showGameUI = false
 				surface.PlaySound("menus/press.wav")
 			end
@@ -1204,7 +1208,9 @@ function OpenTeamMenu()
 			SPEC_Button.DoClick = function()
 				RunConsoleCommand("changeteam", TEAM_SPECTATOR)
 				TeamMenu:Close()
-				EscMenu:Close()
+				if EscMenu then
+					EscMenu:Close()
+				end
 				showGameUI = false
 				surface.PlaySound("menus/press.wav")
 			end

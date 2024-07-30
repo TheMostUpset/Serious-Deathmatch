@@ -300,8 +300,13 @@ function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
 
 	end
 
-	PrintMessage( HUD_PRINTTALK, Format( "%s" .. " #sdm_joinedteam " .. "%s", ply:Nick(), team.GetName( newteam ) ) )
-
+	if ply:Team() == 1 then
+		self:BroadcastChatMessage({ply:Nick(), "#sdm_redjoinedteam", ""})
+	elseif ply:Team() == 2 then
+		self:BroadcastChatMessage({ply:Nick(), "#sdm_bluejoinedteam", ""})
+	elseif ply:Team() == 4 then
+		self:BroadcastChatMessage({ply:Nick(), "#sdm_specjoinedteam", ""})
+	end
 end
 
 function GM:PlayerCanJoinTeam( ply, teamid )
@@ -309,7 +314,7 @@ function GM:PlayerCanJoinTeam( ply, teamid )
 	local TimeBetweenSwitches = GAMEMODE.SecondsBetweenTeamSwitches or 10
 	if ( ply.LastTeamSwitch && RealTime() - ply.LastTeamSwitch < TimeBetweenSwitches ) then
 		ply.LastTeamSwitch = ply.LastTeamSwitch + 1
-		ply:ChatPrint( Format( "#sdm_timewait1" .. " " .. "%i" .. " " .. "#sdm_timewait2", ( TimeBetweenSwitches - ( RealTime() - ply.LastTeamSwitch ) ) + 1 ) )
+		ply:ChatPrint("#sdm_timewait")
 		return false
 	end
 
