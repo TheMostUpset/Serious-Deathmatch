@@ -460,7 +460,7 @@ end
 -- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	if cvar_friendlyfire:GetInt() == 0 then
-	if ply:Team() == attacker:Team() then
+	if ply:Team() == attacker:Team() and not attacker:Nick() == ply:Nick() then
 		return false
 	end
 	end
@@ -469,7 +469,7 @@ end
 
 function GM:EntityTakeDamage(ent, dmginfo)
 	if cvar_friendlyfire:GetInt() == 1 then
-		if dmginfo:GetAttacker():IsPlayer() and ent:IsPlayer() and dmginfo:GetAttacker():Team() == ent:Team() then
+		if dmginfo:GetAttacker():IsPlayer() and ent:IsPlayer() and dmginfo:GetAttacker():Team() == ent:Team() and not dmginfo:GetAttacker():Nick() == ent:Nick() then
 			dmginfo:ScaleDamage(cvar_friendlyfire_scale:GetFloat())
 		end
 	end
@@ -612,6 +612,10 @@ function GM:PlayerDisconnected(ply)
 	if player.GetCount() <= cvar_minplayers:GetInt() and self:GetState() != STATE_GAME_END then
 		self:ResetGameState()
 	end
+end
+
+function GM:PostCleanupMap()
+	self:ReplacePickupEntities()
 end
 
 function GM:PlayerLoadout(ply)
