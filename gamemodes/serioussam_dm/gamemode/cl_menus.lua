@@ -152,6 +152,22 @@ local EscMenu
 local SettingsMenu
 local ConfirmationMenu
 
+local cursor = Material("vgui/serioussam/hud/pointer")
+local cursor_tfe = Material("vgui/serioussam/hud/hud_tfe/pointer")
+
+function draw.CustomCursor(panel)
+	local material = cursor
+	if SeriousHUD:GetSkin() == 1 then
+		material = cursor_tfe
+	end
+	-- Paint the custom cursor
+	local cursorX, cursorY = panel:LocalCursorPos()
+
+	surface.SetDrawColor(255, 255, 255, 240)
+	surface.SetMaterial(material)
+	surface.DrawTexturedRect(cursorX, cursorY, 32, 32)
+end
+
 function OpenSSMenu()
 
 	showGameUI = true
@@ -164,6 +180,9 @@ function OpenSSMenu()
 	EscMenu:SetDraggable(false)
 	EscMenu:SetMouseInputEnabled(false)
 	EscMenu:MakePopup()
+	EscMenu:SetCursor("blank")
+	EscMenu:SetMouseInputEnabled(true)
+	EscMenu.Think  = nil
 
 
 	EscMenu.Paint = function(self, w, h)
@@ -183,6 +202,7 @@ function OpenSSMenu()
 	Continue_Button:SetTextColor(GetButtonColor())
 
 	Continue_Button.OnCursorEntered = function()
+		Continue_Button:SetCursor( "blank" )
 		isFlashing = true
 		text = "#sdm_help_resume"
 		surface.PlaySound("menus/select.wav")
@@ -221,6 +241,7 @@ function OpenSSMenu()
 		end
 	end
 	Disconnect_Button.OnCursorEntered = function()
+		Disconnect_Button:SetCursor( "blank" )
 		isFlashing = true
 		text = "#sdm_help_disconnect"
 		surface.PlaySound("menus/select.wav")
@@ -258,6 +279,7 @@ function OpenSSMenu()
 		end
 	end
 	Options_Button.OnCursorEntered = function()
+		Options_Button:SetCursor( "blank" )
 		isFlashing = true
 		text = "#sdm_help_options"
 		surface.PlaySound("menus/select.wav")
@@ -293,6 +315,7 @@ function OpenSSMenu()
 		end
 	end
 	LegacyM_Button.OnCursorEntered = function()
+		LegacyM_Button:SetCursor( "blank" )
 		text = "#sdm_help_lmenu"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -333,6 +356,7 @@ function OpenSSMenu()
 		end
 	end
 	Quit_Button.OnCursorEntered = function()
+		Quit_Button:SetCursor( "blank" )
 		text = "#sdm_help_exitgame"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -349,6 +373,16 @@ function OpenSSMenu()
 	Quit_Button:SizeToContents()
 	Quit_Button:Center()
 	Quit_Button:SetY(ScrH()/1.635)
+	
+	EscMenu.Paint = function(self, w, h)
+		PaintBackground(self, w, h)
+		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
+	EscMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
+	end
+	
 end
 
 function OpenConfirmationMenu()
@@ -362,6 +396,7 @@ function OpenConfirmationMenu()
 		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 	end
 	local DarkOverlayMenu = vgui.Create("DFrame")
+	DarkOverlayMenu:SetTitle("")
 	DarkOverlayMenu:SetSize(ScrW(), ScrH())
 	DarkOverlayMenu:SetPos(0, 0)
 	DarkOverlayMenu:MakePopup()
@@ -381,6 +416,74 @@ function OpenConfirmationMenu()
 	ConfirmationMenu:ShowCloseButton(false)
 	ConfirmationMenu:Center()
 	ConfirmationMenu:MakePopup()
+	ConfirmationMenu.Think = nil
+	ConfirmationMenu:SetCursor("blank")
+	
+	local YesButton = vgui.Create("DButton", ConfirmationMenu)
+	local isFlashing = false
+	YesButton:SetText("#sdm_yes")
+	YesButton:SetFont("MainMenu_Font")
+	YesButton:SetTextColor(GetButtonColor())
+	YesButton.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	YesButton.OnCursorEntered = function()
+		YesButton:SetCursor( "blank" )
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	YesButton.OnCursorExited = function()
+		isFlashing = false
+		YesButton:SetTextColor(GetButtonColor())
+	end
+
+	YesButton.DoClick = function()
+
+		RunConsoleCommand("gamemenucommand", "quit")
+
+
+		surface.PlaySound("menus/press.wav")
+	end
+	local w, h = ConfirmationMenu:GetSize()
+	YesButton:SizeToContents()
+	YesButton:SetX(w/2.45)
+	YesButton:SetY(h-h/2)
+	
+	local NoButton = vgui.Create("DButton", ConfirmationMenu)
+	local isFlashing = false
+	NoButton:SetText("#sdm_no")
+	NoButton:SetFont("MainMenu_Font")
+	NoButton:SetTextColor(GetButtonColor())
+	NoButton.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	NoButton.OnCursorEntered = function()
+		NoButton:SetCursor( "blank" )
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	NoButton.OnCursorExited = function()
+		isFlashing = false
+		NoButton:SetTextColor(GetButtonColor())
+	end
+
+	NoButton.DoClick = function()
+		ConfirmationMenu:Close()
+		DarkOverlayMenu:Close()
+		showGameUI = true
+		surface.PlaySound("menus/press.wav")
+	end
+	local w, h = ConfirmationMenu:GetSize()
+	NoButton:SizeToContents()
+	NoButton:SetX(w/1.95)
+	NoButton:SetY(h-h/2)
+	
 	ConfirmationMenu.Paint = function(self, w, h)
 		local hudr, hudg, hudb = GetMMFColor()
 		local offsetX = math.sin(CurTime() * 1.5) * -22
@@ -396,9 +499,9 @@ function OpenConfirmationMenu()
 		local texW = 256
 		local texH = 256
 		if GetConVarNumber("ss_hud_skin") == 2 then
-		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w-500, h-500, 0, 0, w / texW, h / texH )
+			surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w-500, h-500, 0, 0, w / texW, h / texH )
 		else
-		surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
+			surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
 		end
 		if GetConVarNumber("ss_hud_skin") == 2 then
 			surface.DrawTexturedRect(1,1,w-2,h-2)
@@ -433,68 +536,14 @@ function OpenConfirmationMenu()
 
 		draw.SimpleText("#sdm_areyouserious", "MainMenu_Font", w/2, h/3, Color(GetMMFColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
-	local YesButton = vgui.Create("DButton", ConfirmationMenu)
-	local isFlashing = false
-	YesButton:SetText("#sdm_yes")
-	YesButton:SetFont("MainMenu_Font")
-	YesButton:SetTextColor(GetButtonColor())
-	YesButton.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		end
-	end
-	YesButton.OnCursorEntered = function()
-		isFlashing = true
-		surface.PlaySound("menus/select.wav")
-	end
-
-	YesButton.OnCursorExited = function()
-		isFlashing = false
-		YesButton:SetTextColor(GetButtonColor())
-	end
-
-	YesButton.DoClick = function()
-
-		RunConsoleCommand("gamemenucommand", "quit")
-
-
-		surface.PlaySound("menus/press.wav")
-	end
-	local w, h = ConfirmationMenu:GetSize()
-	YesButton:SizeToContents()
-	YesButton:SetX(w/2.45)
-	YesButton:SetY(h-h/2)
 	
-	local NoButton = vgui.Create("DButton", ConfirmationMenu)
-	local isFlashing = false
-	NoButton:SetText("#sdm_no")
-	NoButton:SetFont("MainMenu_Font")
-	NoButton:SetTextColor(GetButtonColor())
-	NoButton.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		end
+	DarkOverlayMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
 	end
-	NoButton.OnCursorEntered = function()
-		isFlashing = true
-		surface.PlaySound("menus/select.wav")
+	
+	ConfirmationMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
 	end
-
-	NoButton.OnCursorExited = function()
-		isFlashing = false
-		NoButton:SetTextColor(GetButtonColor())
-	end
-
-	NoButton.DoClick = function()
-		ConfirmationMenu:Close()
-		DarkOverlayMenu:Close()
-		showGameUI = true
-		surface.PlaySound("menus/press.wav")
-	end
-	local w, h = ConfirmationMenu:GetSize()
-	NoButton:SizeToContents()
-	NoButton:SetX(w/1.95)
-	NoButton:SetY(h-h/2)
 end
 
 function OpenSettingsMenu()
@@ -514,12 +563,10 @@ function OpenSettingsMenu()
 	SettingsMenu:ShowCloseButton( false )
 	SettingsMenu:SetDraggable(false)
 	SettingsMenu:MakePopup()
+	SettingsMenu.Think = nil
+	SettingsMenu:SetCursor("blank")
 
-	SettingsMenu.Paint = function(self, w, h)
-		PaintBackground(self, w, h)
-		draw.SimpleText("#sdm_options", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH() - ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-	end
+
 
 	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -532,6 +579,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Playermodel_Button.OnCursorEntered = function()
+		Playermodel_Button:SetCursor("blank")
 		text = "#sdm_help_pmselect"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -558,6 +606,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Music_Button.OnCursorEntered = function()
+		Music_Button:SetCursor("blank")
 		text = "#sdm_help_mvolume"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -604,6 +653,7 @@ function OpenSettingsMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 	Bob_Button.OnCursorEntered = function()
+	Bob_Button:SetCursor("blank")
 	if GetConVar("ss_bob"):GetInt() == 1 then
 		text = "#sdm_help_disablebob"
 	elseif GetConVar("ss_bob"):GetInt() == 0 then
@@ -634,6 +684,7 @@ function OpenSettingsMenu()
 	end
 
 	Crosshair_Button.OnCursorEntered = function()
+		Crosshair_Button:SetCursor("blank")
 		text = "#sdm_help_crosshair"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -679,6 +730,7 @@ function OpenSettingsMenu()
 	end
 	
 	Forward_Button.OnCursorEntered = function()
+		Forward_Button:SetCursor("blank")
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -717,6 +769,7 @@ function OpenSettingsMenu()
 	end
 	
 	Backwards_Button.OnCursorEntered = function()
+	Backwards_Button:SetCursor("blank")
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -766,6 +819,7 @@ function OpenSettingsMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 	HUD_Button.OnCursorEntered = function()
+	HUD_Button:SetCursor("blank")
 	if GetConVar("ss_hud_skin"):GetInt() == 2 then
 		text = "#sdm_help_tfehud"
 	elseif GetConVar("ss_hud_skin"):GetInt() == 1 then
@@ -797,6 +851,7 @@ function OpenSettingsMenu()
 		end
 	end
 	TFE_Color_Button.OnCursorEntered = function()
+	TFE_Color_Button:SetCursor("blank")
 		text = "#sdm_help_tfehudcolor"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -823,6 +878,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Back_Button.OnCursorEntered = function()
+		Back_Button:SetCursor("blank")
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 		text = "#sdm_help_back"
@@ -844,6 +900,7 @@ function OpenSettingsMenu()
 	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
 
 	function SKIN:PaintNumSlider( panel, w, h )
+	panel:SetCursor("blank")
 		return
 	end
 	
@@ -891,6 +948,44 @@ function OpenSettingsMenu()
 	if GAMEMODE:GetHUDSkin() == 2 then return false end
 		UpdateButtonsColor(children, col)
 	end
+	
+	TFE_Color_Mixer:SetCursor("blank")
+	
+	TFE_Color_Mixer.txtR.OnCursorEntered = function()
+		TFE_Color_Mixer.txtR:SetCursor("blank")
+	end
+	
+	TFE_Color_Mixer.txtG.OnCursorEntered = function()
+		TFE_Color_Mixer.txtG:SetCursor("blank")
+	end
+	
+	TFE_Color_Mixer.txtB.OnCursorEntered = function()
+		TFE_Color_Mixer.txtB:SetCursor("blank")
+	end
+	
+	TFE_Color_Mixer.HSV.OnCursorEntered = function()
+		TFE_Color_Mixer.HSV:SetCursor("blank")
+	end
+	
+	TFE_Color_Mixer.RGB.OnCursorEntered = function()
+		TFE_Color_Mixer.RGB:SetCursor("blank")
+	end
+	
+	TFE_Color_Mixer.Alpha.OnCursorEntered = function()
+		TFE_Color_Mixer.Alpha:SetCursor("blank")
+	end
+	
+	TFE_Color_Mixer.WangsPanel.OnCursorEntered = function()
+		TFE_Color_Mixer.WangsPanel:SetCursor("blank")
+	end
+	
+	local children = SettingsMenu:GetChildren()
+	table.Add(children, EscMenu:GetChildren())
+	TFE_Color_Mixer.ValueChanged = function(self, col)
+	
+	if GAMEMODE:GetHUDSkin() == 2 then return false end
+		UpdateButtonsColor(children, col)
+	end
 
  
 	local buttonKleiner = vgui.Create("DImageButton", SettingsMenu)
@@ -908,6 +1003,10 @@ function OpenSettingsMenu()
 		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
 		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
+	end
+	
+	buttonKleiner.OnCursorEntered = function()
+		buttonKleiner:SetCursor("blank")
 	end
 
 	local buttonKleiner1 = vgui.Create("DImageButton", SettingsMenu)
@@ -927,7 +1026,10 @@ function OpenSettingsMenu()
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 	
-
+	buttonKleiner1.OnCursorEntered = function()
+		buttonKleiner1:SetCursor("blank")
+	end
+	
 	local buttonBarney = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney:SetImage("materials/icons/playermodels/redrick.png")
 	buttonBarney:SetSize(ScrW()/30, ScrW()/30)
@@ -945,7 +1047,10 @@ function OpenSettingsMenu()
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
-		
+	buttonBarney.OnCursorEntered = function()
+		buttonBarney:SetCursor("blank")
+	end
+	
 	local buttonBarney2 = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney2:SetImage("materials/icons/playermodels/redrick_skin1.png")
 	buttonBarney2:SetSize(ScrW()/30, ScrW()/30)
@@ -963,6 +1068,9 @@ function OpenSettingsMenu()
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
+	buttonBarney2.OnCursorEntered = function()
+		buttonBarney2:SetCursor("blank")
+	end
 		
 	local buttonBarney3 = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney3:SetImage("materials/icons/playermodels/redrick_skin2.png")
@@ -980,7 +1088,10 @@ function OpenSettingsMenu()
 		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
-
+	
+	buttonBarney3.OnCursorEntered = function()
+		buttonBarney3:SetCursor("blank")
+	end
 		
 	local buttonBarney4 = vgui.Create("DImageButton", SettingsMenu)
 	buttonBarney4:SetImage("materials/icons/playermodels/redrick_skin3.png")
@@ -998,10 +1109,10 @@ function OpenSettingsMenu()
 		surface.SetDrawColor(Color(GetMMFColor()))
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
-
-		
-
-        
+	
+	buttonBarney4.OnCursorEntered = function()
+		buttonBarney4:SetCursor("blank")
+	end
 
 	local buttonAlyx = vgui.Create("DImageButton", SettingsMenu)
 	buttonAlyx:SetImage("materials/icons/playermodels/beheadedben.png")
@@ -1020,8 +1131,9 @@ function OpenSettingsMenu()
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 
-	
-	SettingsMenu:MakePopup()
+	buttonAlyx.OnCursorEntered = function()
+		buttonAlyx:SetCursor("blank")
+	end
 	
 	local buttonSteve = vgui.Create("DImageButton", SettingsMenu)
 	buttonSteve:SetImage("materials/icons/playermodels/steelsteve.png")
@@ -1040,8 +1152,22 @@ function OpenSettingsMenu()
 		surface.DrawOutlinedRect(0, 0, w, h)
 	end
 	
+	buttonSteve.OnCursorEntered = function()
+		buttonSteve:SetCursor("blank")
+	end
+	
 	SettingsMenu:MakePopup()
     
+	SettingsMenu.Paint = function(self, w, h)
+		PaintBackground(self, w, h)
+		draw.SimpleText("#sdm_options", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH() - ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
+	
+	SettingsMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
+	end
+	
 end
 
 
