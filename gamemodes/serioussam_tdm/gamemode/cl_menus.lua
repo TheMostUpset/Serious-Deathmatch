@@ -151,6 +151,21 @@ end
 local EscMenu
 local SettingsMenu
 local ConfirmationMenu
+local customCursorMaterial = Material("vgui/serioussam/hud/pointer")
+
+function draw.CustomCursor(panel, material)
+	if SeriousHUD:GetSkin() == 1 then
+	customCursorMaterial = Material("vgui/serioussam/hud/hud_tfe/pointer")
+	elseif SeriousHUD:GetSkin() == 2 then
+	customCursorMaterial = Material("vgui/serioussam/hud/pointer")
+	end
+	-- Paint the custom cursor
+	local cursorX, cursorY = panel:LocalCursorPos()
+
+	surface.SetDrawColor(255, 255, 255, 240)
+	surface.SetMaterial(material)
+	surface.DrawTexturedRect(cursorX, cursorY, 32, 32)
+end
 
 function OpenSSMenu()
 
@@ -164,13 +179,7 @@ function OpenSSMenu()
 	EscMenu:SetDraggable(false)
 	EscMenu:SetMouseInputEnabled(false)
 	EscMenu:MakePopup()
-
-
-	EscMenu.Paint = function(self, w, h)
-		PaintBackground(self, w, h)
-		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-	end
+	EscMenu:SetCursor("blank")
 
 
 
@@ -379,6 +388,13 @@ function OpenSSMenu()
 	Quit_Button:SizeToContents()
 	Quit_Button:Center()
 	Quit_Button:SetY(ScrH()/1.6)
+	
+	EscMenu.Paint = function(self, w, h)
+		PaintBackground(self, w, h)
+		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.CustomCursor(self, customCursorMaterial)
+	end
 end
 
 function OpenConfirmationMenu()
@@ -1104,7 +1120,7 @@ function OpenTeamMenu()
 
 			local RED_Button = vgui.Create("DButton", TeamMenu)
 			local isFlashing = false
-			RED_Button:SetText("#sdm_joinred")
+			RED_Button:SetText(language.GetPhrase("sdm_joinred") .. " (" .. team.NumPlayers(TEAM_RED) .. ")")
 			RED_Button:SetSize(ScrW()/12, ScrH()/20)
 			RED_Button:SetFont("MainMenu_Font")
 			RED_Button:SetTextColor(GetButtonColor())
@@ -1143,7 +1159,7 @@ function OpenTeamMenu()
 
 			local BLUE_Button = vgui.Create("DButton", TeamMenu)
 			local isFlashing = false
-			BLUE_Button:SetText("#sdm_joinblue")
+			BLUE_Button:SetText(language.GetPhrase("sdm_joinblue") .. " (" .. team.NumPlayers(TEAM_BLUE) .. ")")
 			BLUE_Button:SetSize(ScrW()/12, ScrH()/20)
 			BLUE_Button:SetFont("MainMenu_Font")
 			BLUE_Button:SetTextColor(GetButtonColor())
@@ -1182,7 +1198,7 @@ function OpenTeamMenu()
 			
 			local SPEC_Button = vgui.Create("DButton", TeamMenu)
 			local isFlashing = false
-			SPEC_Button:SetText("#sdm_joinspec")
+			SPEC_Button:SetText(language.GetPhrase("sdm_joinspec") .. " (" .. team.NumPlayers(TEAM_SPECTATOR) .. ")")
 			SPEC_Button:SetSize(ScrW()/12, ScrH()/20)
 			SPEC_Button:SetFont("MainMenu_Font")
 			SPEC_Button:SetTextColor(GetButtonColor())
