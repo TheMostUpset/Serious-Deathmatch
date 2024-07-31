@@ -151,13 +151,13 @@ end
 local EscMenu
 local SettingsMenu
 local ConfirmationMenu
-local customCursorMaterial = Material("vgui/serioussam/hud/pointer")
 
-function draw.CustomCursor(panel, material)
+local cursor = Material("vgui/serioussam/hud/pointer")
+local cursor_tfe = Material("vgui/serioussam/hud/hud_tfe/pointer")
+function draw.CustomCursor(panel)
+	local material = cursor
 	if SeriousHUD:GetSkin() == 1 then
-	customCursorMaterial = Material("vgui/serioussam/hud/hud_tfe/pointer")
-	elseif SeriousHUD:GetSkin() == 2 then
-	customCursorMaterial = Material("vgui/serioussam/hud/pointer")
+		material = cursor_tfe
 	end
 	-- Paint the custom cursor
 	local cursorX, cursorY = panel:LocalCursorPos()
@@ -393,7 +393,9 @@ function OpenSSMenu()
 		PaintBackground(self, w, h)
 		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.CustomCursor(self, customCursorMaterial)
+	end
+	EscMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
 	end
 end
 
