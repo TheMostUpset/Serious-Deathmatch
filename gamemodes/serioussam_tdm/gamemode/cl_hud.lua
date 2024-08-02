@@ -111,6 +111,8 @@ function GetOppositeTeamFrags()
 	end
 end
 
+local fragMsgTime = 0
+local leadMsgTime = 0
 function LeadingSound()
 if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 then
 	if CurTime() < AnnouncerSoundPlayed then return end
@@ -130,6 +132,15 @@ if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 t
 		SetGlobalBool("redlead", true)
 		surface.PlaySound(redleadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		if leadMsgTime > CurTime() then
+			local x, y = ScrW() / 2, ScrH() / 2
+			local text = language.GetPhrase( "sdm_redteam_leads" ) .. " " .. fragMsgNick
+			local font = "Frag_Font"
+			local fadeSpeed = 3
+			local alpha = 255 * math.Clamp((leadMsgTime - CurTime())*fadeSpeed, 0, 1)
+			draw.SimpleText( text, font, x + 2, y + 2, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)
+		end
 	end
 	
 	// blue taken
@@ -137,6 +148,15 @@ if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 t
 		SetGlobalBool("bluelead", true)
 		surface.PlaySound(blueleadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+		if leadMsgTime > CurTime() then
+			local x, y = ScrW() / 2, ScrH() / 2
+			local text = language.GetPhrase( "sdm_blueteam_leads" ) .. " " .. fragMsgNick
+			local font = "Frag_Font"
+			local fadeSpeed = 3
+			local alpha = 255 * math.Clamp((leadMsgTime - CurTime())*fadeSpeed, 0, 1)
+			draw.SimpleText( text, font, x + 2, y + 2, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)
+		end
 	end
 end
 end
@@ -229,7 +249,7 @@ function GM:ShouldDrawTimer()
 end
 
 local fragMsgNick = ""
-local fragMsgTime = 0
+
 net.Receive("PlayerFrag", function()
 	fragMsgNick = net.ReadString()
 	fragMsgTime = CurTime() + 2
