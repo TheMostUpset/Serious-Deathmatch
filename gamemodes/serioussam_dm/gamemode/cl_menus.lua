@@ -670,7 +670,7 @@ function OpenSettingsMenu()
 	end
 	Bob_Button:SizeToContents()
 	Bob_Button:Center()
-	Bob_Button:SetY(ScrH()/2.125)
+	Bob_Button:SetY(ScrH()/2.1)
 
 	local Crosshair_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false

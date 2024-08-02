@@ -109,6 +109,13 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 			self:GameEnd()
 		end
 	end
+	
+	if team.TotalFrags(2) > team.TotalFrags(1) then
+		SetGlobalBool("bluelead", false)
+	elseif team.TotalFrags(1) > team.TotalFrags(2) then
+		SetGlobalBool("redlead", false)
+	end
+	
 end
 
 function GM:PlayerSelectSpawn( pl, transiton )

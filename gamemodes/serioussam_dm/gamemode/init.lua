@@ -28,12 +28,12 @@ util.AddNetworkString("ClientChatMessage")
 
 resource.AddFile( "resource/fonts/seriousmenu.ttf" )
 
-PLAYER_WALKSPEED = 430
+PLAYER_WALKSPEED = 400
 PLAYER_RUNSPEED = 300
 PLAYER_JUMPPOWER = 300
 
-PLAYER_WALKSPEED_KNIFE = 530
-PLAYER_JUMPPOWER_KNIFE = 390
+PLAYER_WALKSPEED_KNIFE = 500
+PLAYER_JUMPPOWER_KNIFE = 375
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 	if GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
@@ -473,7 +473,6 @@ function GM:EntityTakeDamage(ent, dmginfo)
 			dmginfo:ScaleDamage(cvar_friendlyfire_scale:GetFloat())
 		end
 	end
-	print(dmginfo)
 	if self:IsInstagib() then
 		dmginfo:ScaleDamage(100)
 	end

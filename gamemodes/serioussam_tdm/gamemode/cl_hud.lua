@@ -57,8 +57,7 @@ function teamsplayerTable:Paint(w, h)
     surface.DrawRect(0, 0, w, h)
 
     self.Players = GAMEMODE:GetPlayersSortedByFrags()
-
-
+	
 	local hudr, hudg, hudb = GAMEMODE:GetHUDColorFrame()
 	
 	local posY = 10
@@ -127,15 +126,15 @@ if GAMEMODE:GetState() == STATE_GAME_PROGRESS and cvar_announcer:GetInt() == 1 t
 	--]]
 
 	// red taken
-	if team.TotalFrags(1) > team.TotalFrags(2) and !redlead then
-		redlead = true 
+	if team.TotalFrags(1) > team.TotalFrags(2) and !GetGlobalBool("redlead", true) then
+		SetGlobalBool("redlead", true)
 		surface.PlaySound(redleadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 	end
 	
 	// blue taken
-	if team.TotalFrags(2) > team.TotalFrags(1) and !bluelead then
-		bluelead = true 
+	if team.TotalFrags(2) > team.TotalFrags(1) and !GetGlobalBool("bluelead", true) then
+		SetGlobalBool("bluelead", true)
 		surface.PlaySound(blueleadtaken)
 		AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
 	end
