@@ -363,6 +363,7 @@ function OpenSSMenu()
 	end
 
 	Quit_Button.OnCursorExited = function()
+		text = ""
 		isFlashing = false
 		Quit_Button:SetTextColor(GetButtonColor())
 	end
