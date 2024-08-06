@@ -1013,13 +1013,9 @@ function OpenTeamMenu()
 	TeamMenu:SetDraggable(false)
 	TeamMenu:SetMouseInputEnabled(false)
 	TeamMenu:MakePopup()
-
-
-	TeamMenu.Paint = function(self, w, h)
-		PaintBackground(self, w, h)
-		draw.SimpleText("#sdm_changeteam", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-	end
+	TeamMenu:SetCursor("blank")
+	TeamMenu:SetMouseInputEnabled(true)
+	TeamMenu.Think  = nil
 
 	local AllTeams = team.GetAllTeams()
 	local y = 30
@@ -1034,6 +1030,7 @@ function OpenTeamMenu()
 			RED_Button:SetTextColor(GetButtonColor())
 
 			RED_Button.OnCursorEntered = function()
+				RED_Button:SetCursor("blank")
 				isFlashing = true
 				text = "#sdm_help_joinred"
 				surface.PlaySound("menus/select.wav")
@@ -1073,6 +1070,7 @@ function OpenTeamMenu()
 			BLUE_Button:SetTextColor(GetButtonColor())
 
 			BLUE_Button.OnCursorEntered = function()
+				BLUE_Button:SetCursor("blank")
 				isFlashing = true
 				text = "#sdm_help_joinblue"
 				surface.PlaySound("menus/select.wav")
@@ -1112,6 +1110,7 @@ function OpenTeamMenu()
 			SPEC_Button:SetTextColor(GetButtonColor())
 
 			SPEC_Button.OnCursorEntered = function()
+				SPEC_Button:SetCursor("blank")
 				isFlashing = true
 				text = "#sdm_help_joinspec"
 				surface.PlaySound("menus/select.wav")
@@ -1143,6 +1142,38 @@ function OpenTeamMenu()
 			SPEC_Button:Center()
 			SPEC_Button:SetY(ScrH()/1.8)
 
+			local Back_Button = vgui.Create("DButton", TeamMenu)
+			local isFlashing = false
+			Back_Button:SetText("#sdm_back")
+			Back_Button:SetFont("MainMenu_Font")
+			Back_Button:SetTextColor(GetButtonColor())
+			Back_Button.Paint = function(self, w, h) 
+				if isFlashing then
+					ButtonFlashing(self)
+				end
+			end
+			Back_Button.OnCursorEntered = function()
+				Back_Button:SetCursor("blank")
+				isFlashing = true
+				surface.PlaySound("menus/select.wav")
+				text = "#sdm_help_back"
+			end
+
+			Back_Button.OnCursorExited = function()
+				isFlashing = false
+				Back_Button:SetTextColor(GetButtonColor())
+				text = ""
+			end
+
+			Back_Button.DoClick = function()
+				TeamMenu:Close()
+				showGameUI = true
+				surface.PlaySound("menus/press.wav")
+			end
+	
+			Back_Button:SizeToContents()
+			Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
+
 
 			if ( IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
 				Team:SetEnabled( false )
@@ -1150,7 +1181,15 @@ function OpenTeamMenu()
 
 		end
 
-
+	TeamMenu.Paint = function(self, w, h)
+		PaintBackground(self, w, h)
+		draw.SimpleText("#sdm_changeteam", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
+	
+	TeamMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
+	end
 end
 
 
