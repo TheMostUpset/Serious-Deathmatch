@@ -156,28 +156,34 @@ function GM:PlayerTick(ply, mv)
 	if SERVER then
 		-- CheckIfPlayerStuck который был в таймере
 		if ply:Alive() and (!ply.nextStuckCheck or ply.nextStuckCheck < CurTime()) then
+			ply.nextStuckCheck = CurTime() + 1 -- перепроверяем каждую секунду
 			if !ply:InVehicle() then
-				local Offset = Vector(5, 5, 5)
+				local Offset = Vector(2, 2, 2) -- This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
+				local pushDir = VectorRand()
+				for i = 1, 2 do
+					pushDir[i] = math.Round(pushDir[i])
+				end
+				pushDir[3] = 0
+				pushDir = pushDir * 200
 				local Stuck = false
 				
 				if ply.Stuck then
-					Offset = Vector(2, 2, 2) //This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
+					Offset = Vector(0, 0, 0)
+					ply.nextStuckCheck = CurTime() + .05 -- если действительно застряли, перепроеряем чаще
 				end
 
 				for _, ent in pairs(ents.FindInBox(ply:GetPos() + ply:OBBMins() + Offset, ply:GetPos() + ply:OBBMaxs() - Offset)) do
-					if IsValid(ent) and ent != ply and ent:IsPlayer() and ent:Alive() then
-					
-						ply:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-						ply:SetVelocity(Vector(-10, -10, 0) * 20)
-						
-						ent:SetVelocity(Vector(10, 10, 0) * 20)
-						
+					if IsValid(ent) and ent != ply and ent:IsPlayer() and ent:Alive() then						
+						ent:SetVelocity(-pushDir)
+						ent.nextStuckCheck = CurTime() + .05
 						Stuck = true
 					end
 				end
 			   
 				if Stuck then
 					ply.Stuck = true
+					ply:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+					ply:SetVelocity(pushDir)
 				else
 					ply.Stuck = false
 					if ply:GetCollisionGroup() != COLLISION_GROUP_PLAYER then
@@ -187,7 +193,6 @@ function GM:PlayerTick(ply, mv)
 			else
 				ply:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
 			end
-			ply.nextStuckCheck = CurTime() + .5 -- перепроверяем каждые полсекунды
 		end
 	end
 end
