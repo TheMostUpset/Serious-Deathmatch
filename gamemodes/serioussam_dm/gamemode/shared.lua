@@ -160,10 +160,6 @@ function GM:PlayerTick(ply, mv)
 				local Offset = Vector(5, 5, 5)
 				local Stuck = false
 				
-				if ply.Stuck == nil then
-					ply.Stuck = false
-				end
-				
 				if ply.Stuck then
 					Offset = Vector(2, 2, 2) //This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
 				end
@@ -180,13 +176,14 @@ function GM:PlayerTick(ply, mv)
 					end
 				end
 			   
-				if !Stuck then
+				if Stuck then
+					ply.Stuck = true
+				else
 					ply.Stuck = false
 					if ply:GetCollisionGroup() != COLLISION_GROUP_PLAYER then
 						ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
 					end
-				end
-				
+				end				
 			else
 				ply:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
 			end
