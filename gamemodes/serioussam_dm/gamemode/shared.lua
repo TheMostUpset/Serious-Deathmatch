@@ -144,7 +144,6 @@ function GM:FinishMove(pl, move)
 	end
 end
 
-local nextStuckCheck = 0
 function GM:PlayerTick(ply, mv)
 	-- AntiBunnyHop
 	if mv:KeyPressed(IN_JUMP) and ply:OnGround() then
@@ -156,7 +155,7 @@ function GM:PlayerTick(ply, mv)
 	end
 	if SERVER then
 		-- CheckIfPlayerStuck который был в таймере
-		if ply:Alive() and nextStuckCheck < CurTime() then
+		if ply:Alive() and (!ply.nextStuckCheck or ply.nextStuckCheck < CurTime()) then
 			if !ply:InVehicle() then
 				local Offset = Vector(5, 5, 5)
 				local Stuck = false
@@ -183,13 +182,15 @@ function GM:PlayerTick(ply, mv)
 			   
 				if !Stuck then
 					ply.Stuck = false
-					ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
+					if ply:GetCollisionGroup() != COLLISION_GROUP_PLAYER then
+						ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
+					end
 				end
 				
 			else
 				ply:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
 			end
-			nextStuckCheck = CurTime() + .5 -- перепроверяем каждые полсекунды
+			ply.nextStuckCheck = CurTime() + .5 -- перепроверяем каждые полсекунды
 		end
 	end
 end

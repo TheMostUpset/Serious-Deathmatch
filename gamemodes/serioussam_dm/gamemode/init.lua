@@ -755,21 +755,13 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
 			Blockers = Blockers + 1
 			
 			if ( bMakeSuitable ) then
-				v:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
-				v:SetAvoidPlayers(true)
+				v.nextStuckCheck = CurTime()				
 			end
-			
-			
-			--[[
-			if ( bMakeSuitable ) then
-				v:Kill()
-			end
-			--]]
 			
 		end
 	end
 
-	if ( bMakeSuitable ) then return true end
+	if ( bMakeSuitable ) then pl.nextStuckCheck = CurTime() return true end
 	if ( Blockers > 0 ) then return false end
 	return true
 
