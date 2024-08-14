@@ -53,6 +53,8 @@ function GM:PlayerLoadout(ply)
 		ply:SetSkin(1)
 	end
 	
+	ply.SpawnProtection = CurTime() + 3
+	
 	--get this shitass outta here asap
 	if player.GetCount() >=  GetConVarNumber("sdm_minplayers") and self:GetState() == STATE_GAME_WARMUP and team.NumPlayers(1) >= GetConVarNumber("sdm_minplayers") / 2 and team.NumPlayers(2) >= GetConVarNumber("sdm_minplayers") / 2  then
 		self:GamePrepare()
@@ -109,6 +111,7 @@ end
 
 -- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
+	if ply.SpawnProtection > CurTime() then return false end
 	if cvar_friendlyfire:GetInt() == 0 then
 		if ply:Team() == attacker:Team() and not attacker:Nick() == ply:Nick() then
 			return false

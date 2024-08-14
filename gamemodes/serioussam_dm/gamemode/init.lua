@@ -459,6 +459,7 @@ end
 
 -- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
+	if ply.SpawnProtection > CurTime() then return false end
 	return self:GetState() != STATE_GAME_END
 end
 
@@ -616,6 +617,9 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_colt_dual')
 		ply:Give('weapon_ss_singleshotgun')
 	end
+	
+	ply.SpawnProtection = CurTime() + 3
+	
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
 	effectdata:SetOrigin(ply:GetPos())
