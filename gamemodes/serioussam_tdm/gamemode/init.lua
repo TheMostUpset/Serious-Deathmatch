@@ -5,11 +5,14 @@ AddCSLuaFile("cl_menus.lua")
 
 include( "shared.lua" )
 
+local cvar_friendlyfire = CreateConVar("sdm_friendlyfire", 0, FCVAR_ARCHIVE, "Enable friendly fire", 0, 1)
+local cvar_friendlyfire_scale = CreateConVar("sdm_friendlyfire_scale", 0.25, FCVAR_ARCHIVE, "Scale of friendly fire damage", 0)
+
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
 	RunConsoleCommand("sv_airaccelerate", "5")
 end
-	
+
 function GM:SDMShowTeam( ply )
 
 	if ( !GAMEMODE.TeamBased ) then return end
@@ -79,7 +82,11 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		if ( attacker == ply ) then
 			local attackerteam = attacker:Team()
 			team.AddScore(attackerteam, -1)
-			attacker:AddFrags( -1 )			
+			attacker:AddFrags( -1 )
+		elseif ( attacker:Team() == ply:Team() ) then
+			local attackerteam = attacker:Team()
+			team.AddScore(attackerteam, -1)
+			attacker:AddFrags( -1 )
 		else
 			local attackerteam = attacker:Team()
 			team.AddScore(attackerteam, 1)
@@ -98,6 +105,43 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		self:SpawnPickupOnDeath(ply, actWep)
 	end
 
+end
+
+-- отключаем урон после конца игры, чтобы ничего не сломать
+function GM:PlayerShouldTakeDamage(ply, attacker)
+	if cvar_friendlyfire:GetInt() == 0 then
+		if ply:Team() == attacker:Team() and not attacker:Nick() == ply:Nick() then
+			return false
+		end
+	end
+	return self:GetState() != STATE_GAME_END
+end
+
+function GM:EntityTakeDamage(ent, dmginfo)
+	if cvar_friendlyfire:GetInt() == 1 then
+		if dmginfo:GetAttacker():IsPlayer() and ent:IsPlayer() and dmginfo:GetAttacker():Team() == ent:Team() and not dmginfo:GetAttacker():Nick() == ent:Nick() then
+			dmginfo:ScaleDamage(cvar_friendlyfire_scale:GetFloat())
+		end
+	end
+	if self:IsInstagib() then
+		dmginfo:ScaleDamage(100)
+	end
+	if ent.SS_Flamer_ignite and dmginfo:GetAttacker():GetClass() == "entityflame" then
+		local data = ent.SS_Flamer_ignite
+		if data[3] > CurTime() then
+			local attacker = data[1]
+			local inflictor = data[2]
+			if IsValid(attacker) then
+				dmginfo:SetAttacker(attacker)
+			end
+			if IsValid(inflictor) then
+				dmginfo:SetInflictor(inflictor)
+			end
+		end
+	end
+	if dmginfo:GetInflictor():GetClass() == "point_hurt" and dmginfo:GetInflictor():GetName() == "worlddamage_sand" then
+		ent:SetLocalVelocity(Vector(0,0,250))
+	end
 end
 
 function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)

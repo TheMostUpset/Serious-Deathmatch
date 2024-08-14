@@ -645,6 +645,7 @@ function OpenSettingsMenu()
 				RunConsoleCommand("ss_bob", "1")
 				Bob_Button:SetText("#sdm_disablebob")
 				text = "#sdm_help_disablebob"
+				Bob_Button:SizeToContents()
 			elseif state == 1 then
 				RunConsoleCommand("ss_bob", "0")
 				Bob_Button:SetText("#sdm_enablebob")
