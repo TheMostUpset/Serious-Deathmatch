@@ -2,9 +2,9 @@
 {
 	"$basetexture" "models/serioussam/powerups/gold"
 	"$bumpmap"	"models/serioussam/powerups/gold_normal"	
-	"$detail" "models/serioussam/powerups/gold_detail.vtf"	
-	"$detailscale" "0.9"
-	"$detailblendfactor".25
+	"$detail" "models/serioussam/powerups/gold_detail.vtf"
+	"$detailscale" "0.1"
+	"$detailblendfactor" 50
 	"$detailblendmode" 5
 	
 	"$rimlight" "1"

@@ -45,7 +45,7 @@ Mapvote.guiFunction = function()
 	end	
 	
 	for i = 1, mapcount do
-		local x, y = 40, 32 + block_height*i
+		local x, y = 64 + mapicon_size / 64, 32 + block_height*i
 		
 		local map_img = vgui.Create("DImage", Mapvote.frame)
 		map_img:SetPos(25, y - mapicon_size/64)

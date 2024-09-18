@@ -109,11 +109,10 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 end
 
--- отключаем урон после конца игры, чтобы ничего не сломать
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	if ply.SpawnProtection > CurTime() then return false end
 	if cvar_friendlyfire:GetInt() == 0 then
-		if ply:Team() == attacker:Team() and not attacker:Nick() == ply:Nick() then
+		if ply:Team() == attacker:Team() and attacker:IsPlayer() and not attacker:Nick() == ply:Nick() then 
 			return false
 		end
 	end

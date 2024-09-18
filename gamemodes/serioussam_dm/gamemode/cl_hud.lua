@@ -235,7 +235,11 @@ function GM:HUDPaint()
 			timer = "00:00"
 		end
 
-
+		if SeriousHUD:GetSkin() == 1 then
+			ITime = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/itimer")
+		elseif SeriousHUD:GetSkin() == 2 then
+			ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
+		end
 		local hudr, hudg, hudb = self:GetHUDColor()
 		local hudr_e, hudg_e, hudb_e = self:GetHUDColorFrame()
 		
