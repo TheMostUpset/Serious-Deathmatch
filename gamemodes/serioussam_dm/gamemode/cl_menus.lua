@@ -701,11 +701,10 @@ function OpenSettingsMenu()
 	Crosshair_Button:Center()
 	Crosshair_Button:SetY(ScrH()/1.88)
 	
-	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)	-- Add image to Frame
-	Crosshair_Image:SetX(ScrW()/2.075)	-- Move it into frame
-	Crosshair_Image:SetY(ScrH()/1.665)	-- Size it to 150x150
+	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)
+	Crosshair_Image:SetX(ScrW()/2.075)
+	Crosshair_Image:SetY(ScrH()/1.665)
 	Crosshair_Image:SetSize(ScrW()/32, ScrW() / 32)
-	-- Set material relative to "garrysmod/materials/"
 	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
 	
 	local Forward_Button = vgui.Create("DButton", SettingsMenu)
@@ -900,11 +899,6 @@ function OpenSettingsMenu()
 	
 	Back_Button:SizeToContents()
 	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
-
-	function SKIN:PaintNumSlider( panel, w, h )
-	panel:SetCursor("blank")
-		return
-	end
 	
 	local Music_Volume = vgui.Create( "DNumSlider", SettingsMenu )
 	Music_Volume:SetX(ScrW()/2.33)
@@ -916,9 +910,14 @@ function OpenSettingsMenu()
 	Music_Volume:SetDecimals( 2 )
 	Music_Volume:SetConVar( "sdm_music" )
 	Music_Volume:SetValue( cvar_music:GetFloat() )
+
 	Music_Volume.Label:SetVisible(false)
 	Music_Volume.TextArea:SetVisible(false)
-	Music_Volume.Slider.Knob.Paint = function()
+	Music_Volume.Slider.Knob.Paint = function(self)
+		self:SetCursor("blank")
+	end
+	Music_Volume.Slider.Paint = function(self)
+		self:SetCursor("blank")
 	end
 
 	Music_Volume.Paint = function(self, w, h)
@@ -932,15 +931,14 @@ function OpenSettingsMenu()
 	end
 
 
-
 	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
 	TFE_Color_Mixer:SetSize(ScrW()/10, ScrH()/10)
 	TFE_Color_Mixer:Center()
 	TFE_Color_Mixer:SetY(ScrH()/1.25)
-	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
-	TFE_Color_Mixer:SetAlphaBar(false) 			-- Show/hide the alpha bar 				DEF:true
-	TFE_Color_Mixer:SetWangs(true) 				-- Show/hide the R G B A indicators 	DEF:true
-	TFE_Color_Mixer:SetColor(Color(30,100,160)) 	-- Set the default color
+	TFE_Color_Mixer:SetPalette(false)
+	TFE_Color_Mixer:SetAlphaBar(false)
+	TFE_Color_Mixer:SetWangs(true)
+	TFE_Color_Mixer:SetColor(Color(30,100,160))
 	TFE_Color_Mixer:SetConVarR("ss_hud_color_r")
 	TFE_Color_Mixer:SetConVarG("ss_hud_color_g")
 	TFE_Color_Mixer:SetConVarB("ss_hud_color_b")
@@ -1172,18 +1170,21 @@ function OpenSettingsMenu()
 	
 end
 
-
-hook.Add( "Think", "ESCMenuOverride", function()
-	if input.IsKeyDown(KEY_ESCAPE) and gui.IsGameUIVisible() then
-		gui.HideGameUI()
-		if not showGameUI then
-			showGameUI = true
-			OpenSSMenu()
-		elseif SettingsMenu and SettingsMenu:IsVisible() then
-			SettingsMenu:Close()
-		elseif EscMenu and EscMenu:IsVisible() and (!ConfirmationMenu or !ConfirmationMenu:IsVisible()) then
-			EscMenu:Close()
-			showGameUI = false
-		end
+hook.Add( "OnPauseMenuShow", "SSMenu", function()
+	if not showGameUI then
+		showGameUI = true
+		OpenSSMenu()
 	end
+	if input.IsKeyDown(KEY_ESCAPE) and SettingsMenu and SettingsMenu:IsVisible() then
+		SettingsMenu:Close()
+	end
+	
+	--[[ needs to be fixed
+	elseif input.IsKeyDown(KEY_ESCAPE) and EscMenu and EscMenu:IsVisible() and not showGameUI then
+		showGameUI = true
+		EscMenu:Close()
+	end
+	--]]
+	
+	return false
 end )

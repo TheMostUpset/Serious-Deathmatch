@@ -612,7 +612,7 @@ function OpenSettingsMenu()
 	end
 	Music_Button:SizeToContents()
 	Music_Button:Center()
-	Music_Button:SetY(ScrH()/4)
+	Music_Button:SetY(ScrH()/4.15)
 	
 	function SKIN:PaintNumSlider( panel, w, h )
 	panel:SetCursor("blank")
@@ -621,7 +621,7 @@ function OpenSettingsMenu()
 
 	local Music_Volume = vgui.Create( "DNumSlider", SettingsMenu )
 	Music_Volume:SetX(ScrW()/2.33)
-	Music_Volume:SetY(ScrH() / 3.125)
+	Music_Volume:SetY(ScrH() / 3.2)
 	Music_Volume:SetSize( ScrW()/7.1, ScrH()/22 )
 	Music_Volume:SetText( "" )
 	Music_Volume:SetMin( 0 )
@@ -629,15 +629,14 @@ function OpenSettingsMenu()
 	Music_Volume:SetDecimals( 2 )
 	Music_Volume:SetConVar( "sdm_music" )
 	Music_Volume:SetValue( cvar_music:GetFloat() )
+
 	Music_Volume.Label:SetVisible(false)
-	Music_Volume.Think = nil
-	Music_Volume:SetCursor("blank")
 	Music_Volume.TextArea:SetVisible(false)
-	Music_Volume.Slider.Knob.Paint = function()
+	Music_Volume.Slider.Knob.Paint = function(self)
+		self:SetCursor("blank")
 	end
-	
-	Music_Volume.Slider.Knob.OnCursorEntered = function()
-		Music_Volume.Slider.Knob:SetCursor("blank")
+	Music_Volume.Slider.Paint = function(self)
+		self:SetCursor("blank")
 	end
 	
 	Music_Volume.Paint = function(self, w, h)
@@ -701,7 +700,7 @@ function OpenSettingsMenu()
 	end
 	Bob_Button:SizeToContents()
 	Bob_Button:Center()
-	Bob_Button:SetY(ScrH()/2.65)
+	Bob_Button:SetY(ScrH()/2.7)
 
 	local Crosshair_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -1194,19 +1193,24 @@ function OpenTeamMenu()
 end
 
 
-hook.Add( "Think", "ESCMenuOverride", function()
-	if input.IsKeyDown(KEY_ESCAPE) and gui.IsGameUIVisible() then
-		gui.HideGameUI()
-		if not showGameUI then
-			showGameUI = true
-			OpenSSMenu()
-		elseif TeamMenu and TeamMenu:IsVisible() then
-			TeamMenu:Close()
-		elseif SettingsMenu and SettingsMenu:IsVisible() then
-			SettingsMenu:Close()
-		elseif EscMenu and EscMenu:IsVisible() and (!ConfirmationMenu or !ConfirmationMenu:IsVisible()) then
-			EscMenu:Close()
-			showGameUI = false
-		end
+hook.Add( "OnPauseMenuShow", "SSMenu", function()
+	if not showGameUI then
+		showGameUI = true
+		OpenSSMenu()
 	end
+	if input.IsKeyDown(KEY_ESCAPE) and SettingsMenu and SettingsMenu:IsVisible() then
+		SettingsMenu:Close()
+	end
+	if input.IsKeyDown(KEY_ESCAPE) and TeamMenu and TeamMenu:IsVisible() then
+		TeamMenu:Close()
+	end
+	
+	--[[ needs to be fixed
+	elseif input.IsKeyDown(KEY_ESCAPE) and EscMenu and EscMenu:IsVisible() and not showGameUI then
+		showGameUI = true
+		EscMenu:Close()
+	end
+	--]]
+	
+	return false
 end )
