@@ -3,7 +3,6 @@ resource.AddWorkshop("3127352943")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_fonts.lua")
-AddCSLuaFile("cl_mapvote.lua")
 AddCSLuaFile("cl_menus.lua")
 AddCSLuaFile("cl_weaponselection.lua")
 AddCSLuaFile("shared.lua")
@@ -18,8 +17,6 @@ local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimu
 
 include("shared.lua")
 include("sb.lua")
-include("sv_mapvote_init.lua")
-include("sv_mapvote_vote.lua")
 
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
@@ -304,7 +301,7 @@ function GM:Think()
 		if getGameTime > 0 and getGameTime <= CurTime() then
 			SetGlobalFloat("GameTime", 0)
 			if cvar_mapvote:GetBool() then
-				Mapvote.startVote(30)
+				MapVote.Start(15, true, 16, {"q3", "q2", "sdm_"})
 			else
 				self:GameRestart()
 			end

@@ -4,7 +4,6 @@ include("shared.lua")
 include("sb.lua")
 include("cl_hud.lua")
 include("cl_fonts.lua")
-include("cl_mapvote.lua")
 include("cl_menus.lua")
 include("cl_weaponselection.lua")
 

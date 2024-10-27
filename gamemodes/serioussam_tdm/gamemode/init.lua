@@ -112,8 +112,12 @@ end
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	if ply.SpawnProtection > CurTime() then return false end
 	if cvar_friendlyfire:GetInt() == 0 then
-		if ply:Team() == attacker:Team() and attacker:IsPlayer() and not attacker:Nick() == ply:Nick() then 
-			return false
+		if attacker:IsPlayer() then		
+			if ply:Team() == attacker:Team() and attacker:IsPlayer() and not attacker:Nick() == ply:Nick() then 
+				return false
+			else
+				return true
+			end
 		end
 	end
 	return self:GetState() != STATE_GAME_END

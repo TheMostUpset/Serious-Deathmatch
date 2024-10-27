@@ -105,3 +105,27 @@ surface.CreateFont("MainMenu_font_small", {
 	shadow = true,
 	extended = true,
 })
+
+surface.CreateFont("RAM_VoteFont", {
+    font = "Arial Stretched",
+    size = ScrH()/32,
+    weight = 0,
+    antialias = true,
+    shadow = true,
+	extended = true,
+})
+
+surface.CreateFont("RAM_VoteFontCountdown", {
+    font = "Arial Stretched",
+    size = ScrH()/20,
+	weight = 600,
+	extended = true,
+	shadow = true,
+})
+
+surface.CreateFont("RAM_VoteSysButton", 
+{   font = "Marlett",
+    size = 13,
+    weight = 0,
+    symbol = true,
+})

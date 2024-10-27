@@ -325,7 +325,7 @@ function GM:HUDPaint()
 			surface.PlaySound( "misc/serioussam/boioing.wav" )
 			endgamesoundplayed = true
 		end
-		if !Mapvote.frame or !Mapvote.frame:IsVisible() then
+		if !MapVote.Canvas or !MapVote.Canvas:IsVisible() then
 			local x, y = ScrW() / 2, ScrH() / 4
 			local text = "#sdm_gameend"
 			draw.SimpleText( text, "GameEnd_Font", x + 2, y + 2, color_black, TEXT_ALIGN_CENTER )
