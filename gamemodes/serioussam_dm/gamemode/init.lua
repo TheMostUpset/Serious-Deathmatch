@@ -7,17 +7,16 @@ AddCSLuaFile("cl_menus.lua")
 AddCSLuaFile("cl_weaponselection.lua")
 AddCSLuaFile("shared.lua")
 -- AddCSLuaFile("shared_killfeed.lua")
+AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 AddCSLuaFile("player_ext.lua")
 
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
-local cvar_playermodel = CreateConVar("sdm_playermodel", "", FCVAR_ARCHIVE, "A model of a player", nil)
-local cvar_playermodel_skin = CreateConVar("sdm_playermodel_skin", 0, FCVAR_ARCHIVE, "A model of a player", 0)
-local cvar_playermodel_bodygroup = CreateConVar("sdm_playermodel_bodygroup", 0, FCVAR_ARCHIVE, "A model of a player", 0)
 
 include("shared.lua")
+include("sb.lua")
 
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
@@ -590,13 +589,9 @@ end
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
 	self:UpdatePlayerSpeed(ply)
-	ply:SetModel(cvar_playermodel:GetString())
-	if cvar_playermodel:GetString() != playermodel_list then
-		ply:SetModel("models/pechenko_121/samclassic.mdl")
-	end
-	ply:SetSkin(cvar_playermodel_skin:GetInt())
-	ply:SetBodygroup(cvar_playermodel_bodygroup:GetInt(), cvar_playermodel_bodygroup:GetInt())
-	
+	ply:SetModel(ply:GetInfo("sdm_playermodel"))
+	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
+	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
 	end
@@ -623,12 +618,15 @@ function GM:PlayerLoadout(ply)
 	end
 	
 	ply.SpawnProtection = CurTime() + 3
-	ply:SetModel(cvar_playermodel:GetString())
-	if string.GetPathFromFilename(cvar_playermodel:GetString()) != "models/pechenko_121/" then
-		ply:SetModel("models/pechenko_121/samclassic.mdl")
-	end
-	ply:SetSkin(cvar_playermodel_skin:GetInt())
-	ply:SetBodygroup(cvar_playermodel_bodygroup:GetInt(), cvar_playermodel_bodygroup:GetInt())
+	
+    util.AddNetworkString("PlayerModelMenu")
+    
+		
+    ply:SetModel(ply:GetInfo("sdm_playermodel"))
+	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
+	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
+
+	
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
 	effectdata:SetOrigin(ply:GetPos())
