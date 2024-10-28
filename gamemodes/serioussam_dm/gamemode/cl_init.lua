@@ -1,7 +1,6 @@
 local cvar_music = CreateClientConVar( "sdm_music", 1, true, false, "Enable music on SSDM maps", 0, 1)
 
 include("shared.lua")
-include("sb.lua")
 include("cl_hud.lua")
 include("cl_fonts.lua")
 include("cl_menus.lua")
