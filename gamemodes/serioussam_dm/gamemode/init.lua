@@ -589,9 +589,16 @@ end
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
 	self:UpdatePlayerSpeed(ply)
+	
 	ply:SetModel(ply:GetInfo("sdm_playermodel"))
+	
+	if string.GetPathFromFilename(GetConVar("sdm_playermodel"):GetString()) != "models/pechenko_121/" then
+		ply:SetModel("models/pechenko_121/samclassic.mdl")
+	end
+	
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
 	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
+	
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
 	end
@@ -618,14 +625,16 @@ function GM:PlayerLoadout(ply)
 	end
 	
 	ply.SpawnProtection = CurTime() + 3
-	
     util.AddNetworkString("PlayerModelMenu")
     
-		
-    ply:SetModel(ply:GetInfo("sdm_playermodel"))
+	ply:SetModel(ply:GetInfo("sdm_playermodel"))
+	
+	if string.GetPathFromFilename(GetConVar("sdm_playermodel"):GetString()) != "models/pechenko_121/" then
+		ply:SetModel("models/pechenko_121/samclassic.mdl")
+	end
+
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
 	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
-
 	
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
