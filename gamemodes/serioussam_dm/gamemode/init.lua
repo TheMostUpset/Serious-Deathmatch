@@ -590,6 +590,18 @@ function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
 	self:UpdatePlayerSpeed(ply)
 	
+	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
+		self:GamePrepare()
+	end
+	
+	ply:SetModel("models/pechenko_121/samclassic.mdl")
+	ply:SetSkin(0)
+	ply:SetBodygroup(0, 0)
+	
+	if ply:IsBot() then
+		return
+	end
+	
 	ply:SetModel(ply:GetInfo("sdm_playermodel"))
 	
 	if string.GetPathFromFilename(GetConVar("sdm_playermodel"):GetString()) != "models/pechenko_121/" then
@@ -598,10 +610,6 @@ function GM:PlayerInitialSpawn(ply)
 	
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
 	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
-	
-	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
-		self:GamePrepare()
-	end
 end
 
 function GM:PlayerDisconnected(ply)
@@ -623,26 +631,13 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_colt_dual')
 		ply:Give('weapon_ss_singleshotgun')
 	end
-	
-	ply.SpawnProtection = CurTime() + 3
-    util.AddNetworkString("PlayerModelMenu")
-    
-	ply:SetModel(ply:GetInfo("sdm_playermodel"))
-	
-	if string.GetPathFromFilename(GetConVar("sdm_playermodel"):GetString()) != "models/pechenko_121/" then
-		ply:SetModel("models/pechenko_121/samclassic.mdl")
-	end
 
-	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
-	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
-	
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
 	effectdata:SetOrigin(ply:GetPos())
 	effectdata:SetScale(128)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	return true
-
 end
 
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
