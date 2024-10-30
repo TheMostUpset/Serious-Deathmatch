@@ -609,7 +609,8 @@ function GM:PlayerInitialSpawn(ply)
 	end
 	
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
-	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), ply:GetInfo("sdm_playermodel_bodygroup"))
+	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), 1)
+	
 end
 
 function GM:PlayerDisconnected(ply)
@@ -631,6 +632,8 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_colt_dual')
 		ply:Give('weapon_ss_singleshotgun')
 	end
+
+	ply.SpawnProtection = CurTime() + 3
 
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
