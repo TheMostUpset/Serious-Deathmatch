@@ -411,7 +411,75 @@ function GM:PlayerDeathThink( ply )
 
 end
 
+local PLY = FindMetaTable("Player")
 
+function PLY:StopBlinking()
+	timer.Remove(self:SteamID().." blinking_timer")
+	timer.Remove(self:SteamID().." blinking_finished_timer")
+	local weps = self:GetWeapons()
+	local color = Color( 255, 255, 255, 255)
+	for k, wep in ipairs(weps) do
+		wep:SetColor(color)
+	end
+	self:SetColor(color) 
+	self.isAlphaGoUp = false
+end
+
+util.AddNetworkString("SetRenderGroup")
+util.AddNetworkString("StartBlinking")
+
+local ENT = FindMetaTable("Entity")
+
+function ENT:SetRenderGroup(RENDER_GROUP)
+	self.RenderGroup = RENDER_GROUP
+	net.Start("SetRenderGroup")
+	net.WriteEntity(self)
+	net.WriteInt(RENDER_GROUP, 5)
+	net.Broadcast()
+end
+
+hook.Add( "WeaponEquip", "WeaponSwitch", function( wep, ply )
+	timer.Simple(0.02, function()
+		wep:SetRenderMode( RENDERMODE_TRANSCOLOR )
+		wep:SetRenderGroup( RENDERGROUP_BOTH )
+	end)
+end)
+
+function PLY:StartBlinking()
+	self:StopBlinking()
+	net.Start("StartBlinking")
+	net.Send(self)
+	timer.Create(self:SteamID().." blinking_timer", 0.02, 150, function()
+		local wep = self:GetActiveWeapon()
+		if !self.isAlphaGoUp then
+			local color = self:GetColor()
+			local alpha = color.a - 10
+			color = Color(color.r, color.g, color.b, alpha)
+			self:SetColor(color)
+			wep:SetColor(color)
+			if alpha <= 5 then
+				self.isAlphaGoUp = true
+			end
+		else
+			local color = self:GetColor()
+			local alpha = color.a + 10
+			color = Color(color.r, color.g, color.b, alpha)
+			self:SetColor(color)
+			wep:SetColor(color)
+			self:SetColor(Color(color.r, color.g, color.b, alpha))
+			if alpha == 255 then
+				self.isAlphaGoUp = false
+			end
+		end
+	end)
+	timer.Create(self:SteamID().." blinking_finished_timer", 3.02, 1, function()
+		local weps = self:GetWeapons()
+		local color = Color( 255, 255, 255, 255)
+		for k, wep in ipairs(weps) do
+			wep:SetColor(color)
+		end
+	end)
+end
 
 
 local pickupTable = {
@@ -632,9 +700,10 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_colt_dual')
 		ply:Give('weapon_ss_singleshotgun')
 	end
-
+	
+	ply:SetRenderMode( RENDERMODE_TRANSCOLOR )
 	ply.SpawnProtection = CurTime() + 3
-
+	ply:StartBlinking()
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
 	effectdata:SetOrigin(ply:GetPos())

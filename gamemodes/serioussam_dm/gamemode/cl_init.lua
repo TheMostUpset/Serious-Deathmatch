@@ -148,7 +148,45 @@ end
 
 -- end)
 
+net.Receive("SetRenderGroup", function() 
+	local ent = net.ReadEntity()
+	local RENDER_GROUP = net.ReadInt(5)
+	ent.RenderGroup = RENDER_GROUP
+end)
 
+local isAlphaGoUp = false
+local alpha = 1
+local isMorgaet = false
+
+net.Receive("StartBlinking", function()
+	alpha = 1
+	timer.Create("blinking_timer", 0.02, 150, function()
+		if !isAlphaGoUp then
+			alpha = alpha - 0.039
+			if alpha <= 0.025 then
+				isAlphaGoUp = true
+				surface.PlaySound("misc/serioussam/powerupbeep.wav")
+			end
+		else
+			alpha = alpha + 0.039
+			if alpha >= 0.95 then
+				isAlphaGoUp = false
+				surface.PlaySound("misc/serioussam/powerupbeep.wav")
+			end
+		end
+	end)
+end)
+
+local drawing = false
+
+hook.Add("PreDrawViewModel", "blinking_vm", function(viewmodel, ply)
+    
+	if !timer.Exists("blinking_timer") or !ply:IsValid() or !viewmodel:IsValid() then return end
+	
+	render.SetBlend( alpha )
+    render.OverrideBlend( false )
+	
+end)
 
 local thirdperson_enabled = false
 function togglethirdperson()
