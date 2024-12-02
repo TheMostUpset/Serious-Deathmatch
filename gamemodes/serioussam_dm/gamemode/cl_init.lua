@@ -156,7 +156,6 @@ end)
 
 local isAlphaGoUp = false
 local alpha = 1
-local isMorgaet = false
 
 net.Receive("StartBlinking", function()
 	alpha = 1
@@ -176,8 +175,6 @@ net.Receive("StartBlinking", function()
 		end
 	end)
 end)
-
-local drawing = false
 
 hook.Add("PreDrawViewModel", "blinking_vm", function(viewmodel, ply)
     

@@ -129,3 +129,12 @@ surface.CreateFont("RAM_VoteSysButton",
     weight = 0,
     symbol = true,
 })
+
+surface.CreateFont("MainMenu_Font_32", 
+{   font = "Arial",
+    extended = true,
+	size = ScrW() / 64,
+	weight = 800,
+	antialias = true,
+	shadow = true
+})

@@ -973,8 +973,6 @@ function OpenSettingsMenu()
 	--	TFE_Color_Mixer.WangsPanel:SetCursor("blank")
 	--end
 	
-
-	
 	local children = SettingsMenu:GetChildren()
 	table.Add(children, EscMenu:GetChildren())
 	TFE_Color_Mixer.ValueChanged = function(self, col)

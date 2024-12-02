@@ -52,26 +52,26 @@ function PaintBackground(self, w, h)
 	end
 	
 	if skin == 2 then
-	surface.SetDrawColor(255,255,255)
-	surface.SetTexture(sam)
+		surface.SetDrawColor(255,255,255)
+		surface.SetTexture(sam)
 	if fourbythree < 1.5 then
-	surface.DrawTexturedRect(w/1.5, h/5.5, w/3.5, h/1.3)
+		surface.DrawTexturedRect(w/1.5, h/5.5, w/3.5, h/1.3)
 	else
-	surface.DrawTexturedRect(w/1.5, h/5.5, w/4.5, h/1.3)
+		surface.DrawTexturedRect(w/1.5, h/5.5, w/4.5, h/1.3)
 	end
 	
 	surface.SetDrawColor(255,255,255)
 	surface.SetTexture(pillar)
 	if fourbythree < 1.5 then
-	surface.DrawTexturedRect(w-w, h-h, w/6, h)
+		surface.DrawTexturedRect(w-w, h-h, w/6, h)
 	else
-	surface.DrawTexturedRect(w-w, h-h, w/8, h)
+		surface.DrawTexturedRect(w-w, h-h, w/8, h)
 	end
 	end
 
 	if skin == 1 then 
-	surface.SetTexture(grid_bg)
-	surface.SetDrawColor(hudr, hudg, hudb, 200)
+		surface.SetTexture(grid_bg)
+		surface.SetDrawColor(hudr, hudg, hudb, 125)
 	end
 	if skin == 2 then 
 		surface.SetDrawColor(0, 0, 0, 0)
@@ -98,8 +98,9 @@ function PaintBackground(self, w, h)
 	else
 		surface.SetTexture(detailTexture_vtf)
 	end
-	surface.SetDrawColor(hudr, hudg, hudb, 140)
+	surface.SetDrawColor(hudr, hudg, hudb, 125)
 	surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*5, h*5, 0, 0, w / texW, h / texH )
+	
 end
 
 function GetButtonColor()
@@ -548,15 +549,22 @@ function OpenConfirmationMenu()
 end
 
 function OpenSettingsMenu()
-	local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
-	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
-	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
+
+	local PoseAnimations = {
+		"pose_standing_01",
+		"pose_standing_02",
+		"pose_standing_03",
+		"pose_standing_04",
+	}
+	
+	local randompose = math.random(1, #PoseAnimations)
+	
+	local modelbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/ModelBack")
+	
 	local text = ""
+	
 	showGameUI = true
-	if GetConVarNumber("ss_hud_skin") == 2 then
-		ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
-		detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
-	end
+	
 	SettingsMenu = vgui.Create("DFrame")
 	SettingsMenu:SetSize(ScrW(), ScrH())
 	SettingsMenu:Center()
@@ -566,38 +574,92 @@ function OpenSettingsMenu()
 	SettingsMenu:MakePopup()
 	SettingsMenu.Think = nil
 	SettingsMenu:SetCursor("blank")
-
-
-
-	local Playermodel_Button = vgui.Create("DButton", SettingsMenu)
-	local isFlashing = false
-	Playermodel_Button:SetText("#sdm_pmselect")
-	Playermodel_Button:SetFont("MainMenu_Font")
-	Playermodel_Button:SetTextColor(GetButtonColor())
-	Playermodel_Button.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
+	
+	local ModelBack = vgui.Create("DImage", SettingsMenu)
+	ModelBack:SetX(ScrW()/1.545)
+	ModelBack:SetY(ScrH()/4.75)
+	ModelBack:SetSize(1024, 1024)
+	ModelBack.Paint = function(self, w, h)
+		local offsetx = math.sin(CurTime() * 1.5) * 30
+		local offsety = math.cos(CurTime()* 1.5) * 30
+		
+		local offsetx2 = math.sin(CurTime()* -0.5) * 15
+		local offsety2 = math.cos(CurTime()* -0.5) * 15
+	
+		local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
+		
+		if GAMEMODE:GetHUDSkin() == 2 then
+			modelbg = surface.GetTextureID("vgui/serioussam/mainmenu/ModelBack")
+		elseif GAMEMODE:GetHUDSkin() == 1 then
+			modelbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/ModelBack")
 		end
+		
+		
+		surface.SetDrawColor(GetMMFColor())
+		surface.DrawRect(0, 0, ScrW()/3.15+2, ScrW()/2.9+2)
+		surface.SetTexture( modelbg )
+		surface.DrawTexturedRect( 1, 1, ScrW()/3.15, ScrW()/2.9 )
+		
+		if GAMEMODE:GetHUDSkin() == 2 then
+			return
+		elseif GAMEMODE:GetHUDSkin() == 1 then
+			surface.SetTexture(ssbg)
+		end
+		
+		surface.SetDrawColor(hudr, hudg, hudb, 50)
+		local texW = 256
+		local texH = 256
+		surface.DrawTexturedRectUV( offsetx-48, offsety-48, 1024, 1024, 0, 0, 2048 / texW, 2048 / texH )
+		
+		surface.SetDrawColor(hudr, hudg, hudb, 25)
+		surface.DrawTexturedRectUV( offsetx2-48, offsety2-48, 1024, 1024, 0, 0, 2048 / texW, 2048 / texH )
 	end
-	Playermodel_Button.OnCursorEntered = function()
-		Playermodel_Button:SetCursor("blank")
-		text = "#sdm_help_pmselect"
-		isFlashing = true
-		surface.PlaySound("menus/select.wav")
+	
+	local ModelFrame = vgui.Create( "DModelPanel", SettingsMenu )
+	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
+	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
+	ModelFrame:SetX(ScrW()/1.675)
+	ModelFrame:SetY(ScrH()/8)
+	
+	function ModelFrame:LayoutEntity( Entity )		
+		ModelFrame:RunAnimation()
+		Entity:SetSequence(PoseAnimations[randompose])
+		Entity:SetSkin(GetConVarNumber("sdm_playermodel_skin"))
+		Entity:SetBodygroup(GetConVarNumber("sdm_playermodel_bodygroup"), GetConVarNumber("sdm_playermodel_bodygroup"))
+		Entity:SetModel(GetConVarString("sdm_playermodel"))
 	end
 
-	Playermodel_Button.OnCursorExited = function()
+	ModelFrame.OnCursorEntered = function()
+		ModelFrame:SetCursor("blank")
+	end
+
+	local ModelButton = vgui.Create( "DButton", SettingsMenu )
+	local isFlashing = false
+	ModelButton:SetText( "" )
+	ModelButton:SetPos( ScrW()/1.545, ScrH()/4.75 )
+	ModelButton:SetSize( ScrW()/3.125, ScrW()/2.65 )					
+	ModelButton.DoClick = function()		
+		OpenModelMenu()
+	end
+	
+	ModelButton.Paint = function(self, w, h)
+		draw.SimpleText( "Serious Sam", "MainMenu_Font_32", 0, ScrW()/2.85, GetButtonColor(), TEXT_ALIGN_LEFT )
+	end
+
+	ModelButton.OnCursorEntered = function()
+		ModelButton:SetCursor("blank")
+		text = "#sdm_help_pmselect"
+		surface.PlaySound("menus/select.wav")
+		isFlashing = true
+	end
+	
+	ModelButton.OnCursorExited = function()
 		text = ""
 		isFlashing = false
-		Playermodel_Button:SetTextColor(GetButtonColor())
 	end
-	Playermodel_Button:SizeToContents()
-	Playermodel_Button:Center()
-	Playermodel_Button:SetY(ScrH()/6.95)
 	
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
-	Music_Button:SetSize(ScrW()/6.5, ScrH() / 20)
 	Music_Button:SetFont("MainMenu_Font")
 	Music_Button:SetText("#sdm_mvolume")
 	Music_Button:SetTextColor(GetButtonColor())
@@ -607,7 +669,7 @@ function OpenSettingsMenu()
 		end
 	end
 	Music_Button.OnCursorEntered = function()
-		Music_Button:SetCursor("blank")
+		Music_Button:SetCursor( "blank" )
 		text = "#sdm_help_mvolume"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -620,7 +682,43 @@ function OpenSettingsMenu()
 	end
 	Music_Button:SizeToContents()
 	Music_Button:Center()
-	Music_Button:SetY(ScrH()/2.785)
+	Music_Button:SetY(ScrH()/4.15)
+	
+	function SKIN:PaintNumSlider( panel, w, h )
+	panel:SetCursor("blank")
+		return false
+	end
+
+	local Music_Volume = vgui.Create( "DNumSlider", SettingsMenu )
+	Music_Volume:SetX(ScrW()/2.33)
+	Music_Volume:SetY(ScrH() / 3.2)
+	Music_Volume:SetSize( ScrW()/7.1, ScrH()/22 )
+	Music_Volume:SetText( "" )
+	Music_Volume:SetMin( 0 )
+	Music_Volume:SetMax( 1 )
+	Music_Volume:SetDecimals( 2 )
+	Music_Volume:SetConVar( "sdm_music" )
+	Music_Volume:SetValue( cvar_music:GetFloat() )
+
+	Music_Volume.Label:SetVisible(false)
+	Music_Volume.TextArea:SetVisible(false)
+	Music_Volume.Slider.Knob.Paint = function(self)
+		self:SetCursor("blank")
+	end
+	Music_Volume.Slider.Paint = function(self)
+		self:SetCursor("blank")
+	end
+	
+	Music_Volume.Paint = function(self, w, h)
+		local number = Music_Volume.TextArea:GetText()
+		Music_Volume:SetCursor( "blank" )
+		surface.SetDrawColor(GetMMFColor())
+		surface.DrawOutlinedRect(0,0,w,h)
+		local hudr,hudg,hudb = GetMMFColor()
+		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)
+		surface.DrawRect(1,1,number*w-2,h-2)
+		draw.SimpleText( (number*100).."%", "MainMenu_font_small", w/2,-1, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER )
+	end
 	
 	local Bob_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -655,7 +753,7 @@ function OpenSettingsMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 	Bob_Button.OnCursorEntered = function()
-	Bob_Button:SetCursor("blank")
+	Bob_Button:SetCursor( "blank" )
 	if GetConVar("ss_bob"):GetInt() == 1 then
 		text = "#sdm_help_disablebob"
 	elseif GetConVar("ss_bob"):GetInt() == 0 then
@@ -672,7 +770,7 @@ function OpenSettingsMenu()
 	end
 	Bob_Button:SizeToContents()
 	Bob_Button:Center()
-	Bob_Button:SetY(ScrH()/2.1)
+	Bob_Button:SetY(ScrH()/2.7)
 
 	local Crosshair_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -686,7 +784,7 @@ function OpenSettingsMenu()
 	end
 
 	Crosshair_Button.OnCursorEntered = function()
-		Crosshair_Button:SetCursor("blank")
+		Crosshair_Button:SetCursor( "blank" )
 		text = "#sdm_help_crosshair"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -699,11 +797,11 @@ function OpenSettingsMenu()
 	end
 	Crosshair_Button:SizeToContents()
 	Crosshair_Button:Center()
-	Crosshair_Button:SetY(ScrH()/1.88)
+	Crosshair_Button:SetY(ScrH()/2.28)
 	
 	local Crosshair_Image = vgui.Create("DImage", SettingsMenu)
 	Crosshair_Image:SetX(ScrW()/2.075)
-	Crosshair_Image:SetY(ScrH()/1.665)
+	Crosshair_Image:SetY(ScrH()/1.975)
 	Crosshair_Image:SetSize(ScrW()/32, ScrW() / 32)
 	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
 	
@@ -731,7 +829,7 @@ function OpenSettingsMenu()
 	end
 	
 	Forward_Button.OnCursorEntered = function()
-		Forward_Button:SetCursor("blank")
+		Forward_Button:SetCursor( "blank" )
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -743,7 +841,7 @@ function OpenSettingsMenu()
 	
 	Forward_Button:SizeToContents()
 	Forward_Button:SetX(ScrW()/1.9)
-	Forward_Button:SetY(ScrH()/1.685)
+	Forward_Button:SetY(ScrH()/2)
 
 	
 	local Backwards_Button = vgui.Create("DButton", SettingsMenu)
@@ -770,7 +868,7 @@ function OpenSettingsMenu()
 	end
 	
 	Backwards_Button.OnCursorEntered = function()
-	Backwards_Button:SetCursor("blank")
+		Backwards_Button:SetCursor( "blank" )
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
@@ -781,8 +879,8 @@ function OpenSettingsMenu()
 	end
 	
 	Backwards_Button:SizeToContents()
-	Backwards_Button:SetX(ScrW()/2.2)
-	Backwards_Button:SetY(ScrH()/1.685)
+	Backwards_Button:SetX(ScrW()/2.189)
+	Backwards_Button:SetY(ScrH()/2)
 	
 	local HUD_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -820,7 +918,7 @@ function OpenSettingsMenu()
 		surface.PlaySound("menus/press.wav")
 	end
 	HUD_Button.OnCursorEntered = function()
-	HUD_Button:SetCursor("blank")
+	HUD_Button:SetCursor( "blank" )
 	if GetConVar("ss_hud_skin"):GetInt() == 2 then
 		text = "#sdm_help_tfehud"
 	elseif GetConVar("ss_hud_skin"):GetInt() == 1 then
@@ -838,7 +936,7 @@ function OpenSettingsMenu()
 
 	HUD_Button:SizeToContents()
 	HUD_Button:Center()
-	HUD_Button:SetY(ScrH()/1.515)
+	HUD_Button:SetY(ScrH()/1.75)
 
 	local TFE_Color_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -852,7 +950,7 @@ function OpenSettingsMenu()
 		end
 	end
 	TFE_Color_Button.OnCursorEntered = function()
-	TFE_Color_Button:SetCursor("blank")
+		TFE_Color_Button:SetCursor("blank")
 		text = "#sdm_help_tfehudcolor"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
@@ -866,7 +964,7 @@ function OpenSettingsMenu()
 	
 	TFE_Color_Button:SizeToContents()
 	TFE_Color_Button:Center()
-	TFE_Color_Button:SetY(ScrH()/1.385)
+	TFE_Color_Button:SetY(ScrH()/1.57)
 
 	local Back_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -899,56 +997,18 @@ function OpenSettingsMenu()
 	
 	Back_Button:SizeToContents()
 	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
-	
-	local Music_Volume = vgui.Create( "DNumSlider", SettingsMenu )
-	Music_Volume:SetX(ScrW()/2.33)
-	Music_Volume:SetY(ScrH() / 2.34)
-	Music_Volume:SetSize( ScrW()/7.1, ScrH()/22 )
-	Music_Volume:SetText( "" )
-	Music_Volume:SetMin( 0 )
-	Music_Volume:SetMax( 1 )
-	Music_Volume:SetDecimals( 2 )
-	Music_Volume:SetConVar( "sdm_music" )
-	Music_Volume:SetValue( cvar_music:GetFloat() )
-
-	Music_Volume.Label:SetVisible(false)
-	Music_Volume.TextArea:SetVisible(false)
-	Music_Volume.Slider.Knob.Paint = function(self)
-		self:SetCursor("blank")
-	end
-	Music_Volume.Slider.Paint = function(self)
-		self:SetCursor("blank")
-	end
-
-	Music_Volume.Paint = function(self, w, h)
-		local number = Music_Volume.TextArea:GetText()
-		surface.SetDrawColor(GetMMFColor())
-		surface.DrawOutlinedRect(0,0,w,h)
-		local hudr,hudg,hudb = GetMMFColor()
-		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)
-		surface.DrawRect(1,1,number*w-2,h-2)
-		draw.SimpleText( (number*100).."%", "MainMenu_font_small", w/2,-1, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER )
-	end
-
 
 	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
 	TFE_Color_Mixer:SetSize(ScrW()/10, ScrH()/10)
 	TFE_Color_Mixer:Center()
-	TFE_Color_Mixer:SetY(ScrH()/1.25)
-	TFE_Color_Mixer:SetPalette(false)
-	TFE_Color_Mixer:SetAlphaBar(false)
-	TFE_Color_Mixer:SetWangs(true)
-	TFE_Color_Mixer:SetColor(Color(30,100,160))
+	TFE_Color_Mixer:SetY(ScrH()/1.4)
+	TFE_Color_Mixer:SetPalette(false)  			-- Show/hide the palette 				DEF:true
+	TFE_Color_Mixer:SetAlphaBar(false) 			-- Show/hide the alpha bar 				DEF:true
+	TFE_Color_Mixer:SetWangs(true) 				-- Show/hide the R G B A indicators 	DEF:true
+	TFE_Color_Mixer:SetColor(Color(30,100,160)) 	-- Set the default color
 	TFE_Color_Mixer:SetConVarR("ss_hud_color_r")
 	TFE_Color_Mixer:SetConVarG("ss_hud_color_g")
 	TFE_Color_Mixer:SetConVarB("ss_hud_color_b")
-	local children = SettingsMenu:GetChildren()
-	table.Add(children, EscMenu:GetChildren())
-	TFE_Color_Mixer.ValueChanged = function(self, col)
-	if GAMEMODE:GetHUDSkin() == 2 then return false end
-		UpdateButtonsColor(children, col)
-	end
-	
 	TFE_Color_Mixer:SetCursor("blank")
 	
 	TFE_Color_Mixer.txtR.OnCursorEntered = function()
@@ -979,213 +1039,16 @@ function OpenSettingsMenu()
 		TFE_Color_Mixer.WangsPanel:SetCursor("blank")
 	end
 	
+	--TFE_Color_Mixer.ColorCube.Knob.OnCursorEntered = function()
+	--	TFE_Color_Mixer.WangsPanel:SetCursor("blank")
+	--end
+	
 	local children = SettingsMenu:GetChildren()
 	table.Add(children, EscMenu:GetChildren())
 	TFE_Color_Mixer.ValueChanged = function(self, col)
 	
 	if GAMEMODE:GetHUDSkin() == 2 then return false end
 		UpdateButtonsColor(children, col)
-	end
-
- 
-	local buttonKleiner = vgui.Create("DImageButton", SettingsMenu)
-	buttonKleiner:SetImage("materials/icons/playermodels/samclassic.png")
-	buttonKleiner:SetSize(ScrW()/30, ScrW()/30)
-	buttonKleiner:SetPos(ScrW()/2 - ScrW()/13, ScrH()/4.45)
-	buttonKleiner.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/samclassic.mdl")
-		net.WriteString("0")
-		net.WriteString("0")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-	buttonKleiner.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-	
-	buttonKleiner.OnCursorEntered = function()
-		buttonKleiner:SetCursor("blank")
-	end
-
-	local buttonKleiner1 = vgui.Create("DImageButton", SettingsMenu)
-	buttonKleiner1:SetImage("materials/icons/playermodels/samclassic_skin1.png")
-	buttonKleiner1:SetSize(ScrW()/30, ScrW()/30)
-	buttonKleiner1:SetPos(ScrW()/2 - ScrW()/26, ScrH()/4.45)
-	buttonKleiner1.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/samclassic.mdl")
-		net.WriteString("1")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
-	end
-	buttonKleiner1.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-	
-	buttonKleiner1.OnCursorEntered = function()
-		buttonKleiner1:SetCursor("blank")
-	end
-	
-	local buttonBarney = vgui.Create("DImageButton", SettingsMenu)
-	buttonBarney:SetImage("materials/icons/playermodels/redrick.png")
-	buttonBarney:SetSize(ScrW()/30, ScrW()/30)
-	buttonBarney:SetPos(ScrW()/1.99, ScrH()/4.45)
-	buttonBarney.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/redrick.mdl")
-		net.WriteString("0")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-		buttonBarney.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-
-	buttonBarney.OnCursorEntered = function()
-		buttonBarney:SetCursor("blank")
-	end
-	
-	local buttonBarney2 = vgui.Create("DImageButton", SettingsMenu)
-	buttonBarney2:SetImage("materials/icons/playermodels/redrick_skin1.png")
-	buttonBarney2:SetSize(ScrW()/30, ScrW()/30)
-	buttonBarney2:SetPos(ScrW()/1.85, ScrH()/4.45)
-	buttonBarney2.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/redrick.mdl")
-		net.WriteString("1")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-		buttonBarney2.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-
-	buttonBarney2.OnCursorEntered = function()
-		buttonBarney2:SetCursor("blank")
-	end
-		
-	local buttonBarney3 = vgui.Create("DImageButton", SettingsMenu)
-	buttonBarney3:SetImage("materials/icons/playermodels/redrick_skin2.png")
-	buttonBarney3:SetSize(ScrW()/30, ScrW()/30)
-	buttonBarney3:SetPos(ScrW()/2 - ScrW()/13, ScrH()/2 /1.7)
-	buttonBarney3.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/redrick.mdl")
-		net.WriteString("2")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(2)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-	buttonBarney3.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-	
-	buttonBarney3.OnCursorEntered = function()
-		buttonBarney3:SetCursor("blank")
-	end
-		
-	local buttonBarney4 = vgui.Create("DImageButton", SettingsMenu)
-	buttonBarney4:SetImage("materials/icons/playermodels/redrick_skin3.png")
-	buttonBarney4:SetSize(ScrW()/30, ScrW()/30)
-	buttonBarney4:SetPos(ScrW()/2 - ScrW()/26, ScrH()/2 /1.7)
-	buttonBarney4.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/redrick.mdl")
-		net.WriteString("3")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(3)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-	buttonBarney4.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-	
-	buttonBarney4.OnCursorEntered = function()
-		buttonBarney4:SetCursor("blank")
-	end
-
-	local buttonAlyx = vgui.Create("DImageButton", SettingsMenu)
-	buttonAlyx:SetImage("materials/icons/playermodels/beheadedben.png")
-	buttonAlyx:SetSize(ScrW()/30, ScrW()/30)
-	buttonAlyx:SetPos(ScrW()/1.99, ScrH()/2 /1.7)
-	buttonAlyx.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/beheadedben.mdl")
-		net.WriteString("1")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/beheadedben.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-	buttonAlyx.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-
-	buttonAlyx.OnCursorEntered = function()
-		buttonAlyx:SetCursor("blank")
-	end
-	
-	local buttonSteve = vgui.Create("DImageButton", SettingsMenu)
-	buttonSteve:SetImage("materials/icons/playermodels/steelsteve.png")
-	buttonSteve:SetSize(ScrW()/30, ScrW()/30)
-	buttonSteve:SetPos(ScrW()/1.85, ScrH()/2 /1.7)
-	buttonSteve.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/steelsteve.mdl")
-		net.WriteString("1")
-		net.WriteString("1")			
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/steelsteve.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-	end
-	buttonSteve.Paint = function(self, w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(20, 20, 20, 0))
-		surface.SetDrawColor(Color(GetMMFColor()))
-		surface.DrawOutlinedRect(0, 0, w, h)
-	end
-	
-	buttonSteve.OnCursorEntered = function()
-		buttonSteve:SetCursor("blank")
 	end
 	
 	SettingsMenu:MakePopup()
@@ -1202,6 +1065,188 @@ function OpenSettingsMenu()
 	
 end
 
+function OpenModelMenu()
+	text = ""
+	
+	ModelMenu = vgui.Create("DFrame")
+	ModelMenu:SetSize(ScrW(), ScrH())
+	ModelMenu:Center()
+	ModelMenu:SetTitle("")
+	ModelMenu:ShowCloseButton( false )
+	ModelMenu:SetDraggable(false)
+	ModelMenu:MakePopup()
+	ModelMenu.Think = nil
+	ModelMenu:SetCursor("blank")
+
+	local Back_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Back_Button:SetText("#sdm_back")
+	Back_Button:SetFont("MainMenu_Font")
+	Back_Button:SetTextColor(GetButtonColor())
+	Back_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Back_Button.OnCursorEntered = function()
+		Back_Button:SetCursor("blank")
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+		text = "#sdm_help_back"
+	end
+
+	Back_Button.OnCursorExited = function()
+		isFlashing = false
+		Back_Button:SetTextColor(GetButtonColor())
+		text = ""
+	end
+
+	Back_Button.DoClick = function()
+		ModelMenu:Close()
+		showGameUI = true
+		surface.PlaySound("menus/press.wav")
+	end
+
+	Back_Button:SizeToContents()
+	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
+
+	local Sam_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Sam_Button:SetFont("MainMenu_Font")
+	Sam_Button:SetText("TSE SERIOUS SAM")
+	Sam_Button:SetTextColor(GetButtonColor())
+	Sam_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Sam_Button.OnCursorEntered = function()
+		Sam_Button:SetCursor( "blank" )
+		text = "#sdm_help_mvolume"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Sam_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		Sam_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Sam_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic.mdl")
+		net.WriteString("0")
+		net.WriteString("0")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		
+		ModelMenu:Close()
+	end
+	
+	Sam_Button:SizeToContents()
+	Sam_Button:Center()
+	Sam_Button:SetY(ScrH()/6.95)
+	
+	local Sam_TFE_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Sam_TFE_Button:SetFont("MainMenu_Font")
+	Sam_TFE_Button:SetText("TFE SERIOUS SAM")
+	Sam_TFE_Button:SetTextColor(GetButtonColor())
+	Sam_TFE_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Sam_TFE_Button.OnCursorEntered = function()
+		Sam_TFE_Button:SetCursor( "blank" )
+		text = "#sdm_help_mvolume"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Sam_TFE_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		Sam_TFE_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Sam_TFE_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic.mdl")
+		net.WriteString("1")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(1)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		
+		ModelMenu:Close()
+	end
+	
+	Sam_TFE_Button:SizeToContents()
+	Sam_TFE_Button:Center()
+	Sam_TFE_Button:SetY(ScrH()/4.75)
+	
+	local Red_Rick_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Red_Rick_Button:SetFont("MainMenu_Font")
+	Red_Rick_Button:SetText("RED RICK")
+	Red_Rick_Button:SetTextColor(GetButtonColor())
+	Red_Rick_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Red_Rick_Button.OnCursorEntered = function()
+		Red_Rick_Button:SetCursor( "blank" )
+		text = "#sdm_help_mvolume"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Red_Rick_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		Red_Rick_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Red_Rick_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/redrick.mdl")
+		net.WriteString("0")
+		net.WriteString("0")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		
+		ModelMenu:Close()
+	end
+	
+	Red_Rick_Button:SizeToContents()
+	Red_Rick_Button:Center()
+	Red_Rick_Button:SetY(ScrH() / 3.65)
+	
+	ModelMenu:MakePopup()
+    
+	ModelMenu.Paint = function(self, w, h)
+		PaintBackground(self, w, h)
+		draw.SimpleText("#sdm_pmselect", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH() - ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
+	
+	ModelMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
+	end
+	
+end
+
 hook.Add( "OnPauseMenuShow", "SSMenu", function()
 	if not showGameUI then
 		showGameUI = true
@@ -1209,6 +1254,10 @@ hook.Add( "OnPauseMenuShow", "SSMenu", function()
 	end
 	if input.IsKeyDown(KEY_ESCAPE) and SettingsMenu and SettingsMenu:IsVisible() then
 		SettingsMenu:Close()
+	end
+	
+	if input.IsKeyDown(KEY_ESCAPE) and ModelMenu and ModelMenu:IsVisible() then
+		ModelMenu:Close()
 	end
 	
 	--[[ needs to be fixed
