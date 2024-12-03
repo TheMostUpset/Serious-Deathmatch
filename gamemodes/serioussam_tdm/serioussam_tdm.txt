@@ -11,67 +11,73 @@
 	{
 		1
 		{
+			"name"		"sdm_friendlyfire_scale"
+			"text"		"sdm_setting_friendlyfire_scale"
+			"type"		"Numeric"
+			"default"	"0.25"
+		}
+		2
+		{
 			"name"		"sdm_max_frags"
 			"text"		"sdm_setting_maxfrags"
 			"type"		"Numeric"
 			"default"	"20"
-		}		
-		2
-		{
-			"name"		"sdm_instagib"
-			"text"		"sdm_setting_instagib"
-			"type"		"CheckBox"
-			"default"	"0"
 		}
 		3
+		{
+			"name"		"sdm_holiday"
+			"text"		"sdm_setting_holiday"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		4
+		{
+			"name"		"sdm_friendlyfire"
+			"text"		"sdm_setting_friendlyfire"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		5
 		{
 			"name"		"sdm_use_hitboxes"
 			"text"		"sdm_setting_headshots"
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		4
+		6
+		{
+			"name"		"sdm_instagib"
+			"text"		"sdm_setting_instagib"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		7
 		{
 			"name"		"sdm_mapvote_enabled"
 			"text"		"sdm_setting_mapvote"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		5
+		8
 		{
 			"name"		"sdm_timer_enabled"
 			"text"		"sdm_setting_timer"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-
-		6
+		9
 		{
 			"name"		"sdm_max_time"
 			"text"		"sdm_setting_maxtime"
 			"type"		"Numeric"
 			"default"	"600"
 		}
-		7
+		10
 		{
 			"name"		"sdm_minplayers"
 			"text"		"sdm_setting_playerstart"
 			"type"		"Numeric"
 			"default"	"2"
-		}
-		8
-		{
-			"name"		"sdm_friendlyfire"
-			"text"		"sdm_setting_friendlyfire"
-			"type"		"CheckBox"
-			"default"	"0"
-		}
-		9
-		{
-			"name"		"sdm_friendlyfire_scale"
-			"text"		"sdm_setting_friendlyfire_scale"
-			"type"		"Numeric"
-			"default"	"0.25"
 		}
 	}
 }

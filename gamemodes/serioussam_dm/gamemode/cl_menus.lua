@@ -578,8 +578,8 @@ function OpenSettingsMenu()
 	
 	local ModelBack = vgui.Create("DImage", SettingsMenu)
 	ModelBack:SetX(ScrW()/1.5)
-	ModelBack:SetY(ScrH()/6.5)
-	ModelBack:SetSize(1024, 1024)
+	ModelBack:SetY(ScrH()/6.15)
+	ModelBack:SetSize(ScrW()/3.25+2, ScrW()/2.65+2)
 	ModelBack.Paint = function(self, w, h)
 		local offsetx = math.sin(CurTime() * 1.5) * 30
 		local offsety = math.cos(CurTime()* 1.5) * 30
@@ -620,7 +620,7 @@ function OpenSettingsMenu()
 	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
 	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
 	ModelFrame:SetX(ScrW()/1.6)
-	ModelFrame:SetY(ScrH()/8)
+	ModelFrame:SetY(ScrH()/7.5)
 	
 	function ModelFrame:LayoutEntity( Entity )		
 		ModelFrame:RunAnimation()
@@ -634,6 +634,39 @@ function OpenSettingsMenu()
 		ModelFrame:SetCursor("blank")
 	end
 
+	local PMSelect_Button = vgui.Create("DButton", SettingsMenu)
+	local isFlashing = false
+	PMSelect_Button:SetFont("MainMenu_Font_32")
+	PMSelect_Button:SetText("#sdm_selectpm")
+	PMSelect_Button:SetTextColor(GetButtonColor())
+	PMSelect_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	
+	PMSelect_Button.DoClick = function()		
+		OpenModelMenu()
+	end
+	
+	PMSelect_Button.OnCursorEntered = function()
+		PMSelect_Button:SetCursor( "blank" )
+		text = "#sdm_help_pmselect"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	PMSelect_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		PMSelect_Button:SetTextColor(GetButtonColor())
+	end
+	
+	PMSelect_Button:SizeToContents()
+	local boundx, boundy, boundw, boundh = PMSelect_Button:GetBounds()
+	PMSelect_Button:SetX(ScrW()/1.5)
+	PMSelect_Button:SetY(ScrH()/1.2)
+
 	local ModelButton = vgui.Create( "DButton", SettingsMenu )
 	local isFlashing = false
 	ModelButton:SetText( "" )
@@ -644,7 +677,9 @@ function OpenSettingsMenu()
 	end
 	
 	ModelButton.Paint = function(self, w, h)
-		draw.SimpleText( "Serious Sam", "MainMenu_Font_32", 0, ScrW()/2.625, GetButtonColor(), TEXT_ALIGN_LEFT )
+		if isFlashing then
+			ButtonFlashing(PMSelect_Button)
+		end
 	end
 
 	ModelButton.OnCursorEntered = function()
@@ -657,6 +692,7 @@ function OpenSettingsMenu()
 	ModelButton.OnCursorExited = function()
 		text = ""
 		isFlashing = false
+		PMSelect_Button:SetTextColor(GetButtonColor())
 	end
 	
 	local Music_Button = vgui.Create("DButton", SettingsMenu)
@@ -1070,8 +1106,6 @@ function OpenModelMenu()
 
 	text = ""
 	
-	randompose = math.random(1, #PoseAnimations)
-	
 	local inital_model = GetConVar("sdm_playermodel"):GetString()
 	local inital_skin = GetConVar("sdm_playermodel_skin"):GetInt()
 	local inital_bodygroup = GetConVar("sdm_playermodel_bodygroup"):GetInt()
@@ -1120,7 +1154,7 @@ function OpenModelMenu()
 
 	local ModelBack = vgui.Create("DImage", ModelMenu)
 	ModelBack:SetX(ScrW()/1.5)
-	ModelBack:SetY(ScrH()/6.5)
+	ModelBack:SetY(ScrH()/6.15)
 	ModelBack:SetSize(1024, 1024)
 	ModelBack.Paint = function(self, w, h)
 		local offsetx = math.sin(CurTime() * 1.5) * 30
@@ -1162,7 +1196,7 @@ function OpenModelMenu()
 	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
 	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
 	ModelFrame:SetX(ScrW()/1.6)
-	ModelFrame:SetY(ScrH()/8)
+	ModelFrame:SetY(ScrH()/7.5)
 	
 	function ModelFrame:LayoutEntity( Entity )		
 		ModelFrame:RunAnimation()
