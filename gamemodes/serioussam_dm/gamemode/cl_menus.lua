@@ -1224,8 +1224,14 @@ function OpenModelMenu()
 	Beheaded_Ben_Button.OnCursorEntered = function()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/beheadedben.mdl")
-		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		GetConVar("sdm_playermodel_skin"):SetInt(0)		
+		
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
+		
 		Beheaded_Ben_Button:SetCursor( "blank" )
 		text = "#sdm_help_beheadedben"
 		isFlashing = true
@@ -1245,12 +1251,22 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/beheadedben.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/beheadedben.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
+		
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1274,7 +1290,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Blue_Bill_Button:SetCursor( "blank" )
 		text = "#sdm_help_colorbots"
 		isFlashing = true
@@ -1294,12 +1314,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
 		net.WriteString("1")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1323,7 +1351,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(2)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Comm_Cliff_Button:SetCursor( "blank" )
 		text = "#sdm_help_commcliff"
 		isFlashing = true
@@ -1343,12 +1375,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/skinlessstan.mdl")
 		net.WriteString("2")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(2)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1372,7 +1412,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Dancing_Den_Button:SetCursor( "blank" )
 		text = "#sdm_help_dancingden"
 		isFlashing = true
@@ -1392,12 +1436,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/dancingden.mdl")
 		net.WriteString("1")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1421,7 +1473,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(2)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Green_Gary_Button:SetCursor( "blank" )
 		text = "#sdm_help_colorbots"
 		isFlashing = true
@@ -1441,12 +1497,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
 		net.WriteString("2")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(2)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1470,7 +1534,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Groovy_Greg_Button:SetCursor( "blank" )
 		text = "#sdm_help_groovygreg"
 		isFlashing = true
@@ -1490,12 +1558,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/dancingden.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1519,7 +1595,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/hillyharry.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Hilly_Harry_Button:SetCursor( "blank" )
 		text = "#sdm_help_hillyharry"
 		isFlashing = true
@@ -1539,12 +1619,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/hillyharry.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/hillyharry.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1568,7 +1656,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Karate_Ken_Button:SetCursor( "blank" )
 		text = "#sdm_help_karateken"
 		isFlashing = true
@@ -1588,12 +1680,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/skinlessstan.mdl")
 		net.WriteString("1")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1617,7 +1717,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/kleerkurt.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Kleer_Kurt_Button:SetCursor( "blank" )
 		text = "#sdm_help_kleerkurt"
 		isFlashing = true
@@ -1637,12 +1741,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/kleerkurt.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/kleerkurt.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1666,7 +1778,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_pirate.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Pirate_Pete_Button:SetCursor( "blank" )
 		text = "#sdm_help_piratepete"
 		isFlashing = true
@@ -1686,12 +1802,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/samclassic_pirate.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_pirate.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1715,7 +1839,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Red_Rick_Button:SetCursor( "blank" )
 		text = "#sdm_help_colorbots"
 		isFlashing = true
@@ -1735,12 +1863,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1764,7 +1900,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_santa.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Santa_Sam_Button:SetCursor( "blank" )
 		text = "#sdm_help_santasam"
 		isFlashing = true
@@ -1784,12 +1924,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/samclassic_santa.mdl")
 		net.WriteString("0")
-		net.WriteString("0")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_santa.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1813,7 +1961,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Skinless_Stan_Button:SetCursor( "blank" )
 		text = "#sdm_help_skinlessstan"
 		isFlashing = true
@@ -1833,12 +1985,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/skinlessstan.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1861,7 +2021,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/steelsteve.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Steel_Steve_Button:SetCursor( "blank" )
 		text = "#sdm_help_steelsteve"
 		isFlashing = true
@@ -1878,12 +2042,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/steelsteve.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/steelsteve.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1907,7 +2079,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_tfe.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Sam_TFE_Button:SetCursor( "blank" )
 		text = "#sdm_help_serioussam"
 		isFlashing = true
@@ -1927,12 +2103,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/samclassic_tfe.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_tfe.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -1960,7 +2144,11 @@ function OpenModelMenu()
 		surface.PlaySound("menus/select.wav")
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 	end
 
 	Sam_Button.OnCursorExited = function()
@@ -1976,12 +2164,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/samclassic.mdl")
 		net.WriteString("0")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -2005,7 +2201,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(3)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Veggie_Vaughn_Button:SetCursor( "blank" )
 		text = "#sdm_help_veggievaughn"
 		isFlashing = true
@@ -2025,12 +2225,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/skinlessstan.mdl")
 		net.WriteString("3")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(3)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
@@ -2054,7 +2262,11 @@ function OpenModelMenu()
 		randompose = math.random(1, #PoseAnimations)
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(3)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		Yellow_Yarek_Button:SetCursor( "blank" )
 		text = "#sdm_help_colorbots"
 		isFlashing = true
@@ -2074,12 +2286,20 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
 		net.WriteString("3")
-		net.WriteString("1")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(3)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
 		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end

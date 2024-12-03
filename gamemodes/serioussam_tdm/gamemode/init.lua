@@ -7,6 +7,7 @@ include( "shared.lua" )
 
 local cvar_friendlyfire = CreateConVar("sdm_friendlyfire", 0, FCVAR_ARCHIVE, "Enable friendly fire", 0, 1)
 local cvar_friendlyfire_scale = CreateConVar("sdm_friendlyfire_scale", 0.25, FCVAR_ARCHIVE, "Scale of friendly fire damage", 0)
+local cvar_holiday = CreateConVar("sdm_holiday", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
 
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
@@ -50,7 +51,15 @@ function GM:PlayerLoadout(ply)
 	if ply:Team() == 1 then
 		ply:SetSkin(0)
 	elseif ply:Team() == 2 then
-		ply:SetSkin(1)
+		ply:SetSkin(5)
+	end
+	
+	if cvar_holiday:GetInt() == 0 then
+		ply:SetBodygroup(0, 0)
+		ply:ConCommand("sdm_playermodel_bodygroup 0")
+	else
+		ply:SetBodygroup(1, 1)
+		ply:ConCommand("sdm_playermodel_bodygroup 1")
 	end
 	
 	ply.SpawnProtection = CurTime() + 3

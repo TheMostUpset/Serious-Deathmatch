@@ -14,7 +14,7 @@ AddCSLuaFile("player_ext.lua")
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
-local cvar_holiday = CreateConVar("sdm_holiday", 1, FCVAR_ARCHIVE, "Christmas!!!!!!", 0, 1)
+local cvar_holiday = CreateConVar("sdm_holiday", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
 
 include("shared.lua")
 include("sb.lua")
@@ -665,8 +665,13 @@ function GM:PlayerInitialSpawn(ply)
 	
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
 	ply:SetSkin(0)
-	ply:SetBodygroup(0, 0)
-	
+	if cvar_holiday:GetInt() == 0 then
+		ply:SetBodygroup(0, 0)
+		ply:ConCommand("sdm_playermodel_bodygroup 0")
+	else
+		ply:SetBodygroup(1, 1)
+		ply:ConCommand("sdm_playermodel_bodygroup 1")
+	end
 	if ply:IsBot() then
 		return
 	end
@@ -677,8 +682,8 @@ function GM:PlayerInitialSpawn(ply)
 		ply:SetModel("models/pechenko_121/samclassic.mdl")
 	end
 	
+	
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
-	ply:SetBodygroup(ply:GetInfo("sdm_playermodel_bodygroup"), 1)
 	
 end
 

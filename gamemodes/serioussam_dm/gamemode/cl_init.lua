@@ -1,6 +1,6 @@
 local cvar_music = CreateClientConVar( "sdm_music", 1, true, false, "Enable music on SSDM maps", 0, 1)
 local cvar_playermodel = CreateClientConVar( "sdm_playermodel", "models/pechenko_121/samclassic.mdl", true, true, "Playermodel option")
-local cvar_playermodel_skin = CreateClientConVar( "sdm_playermodel_skin", 0, true, true, "Playermodel skin option", 0, 3 )
+local cvar_playermodel_skin = CreateClientConVar( "sdm_playermodel_skin", 0, true, true, "Playermodel skin option", 0 )
 local cvar_playermodel_bodygroup = CreateClientConVar( "sdm_playermodel_bodygroup", 0, true, true, "Playermodel bodygroup option", 0, 1 )
 
 
