@@ -14,6 +14,7 @@ AddCSLuaFile("player_ext.lua")
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
+local cvar_holiday = CreateConVar("sdm_holiday", 1, FCVAR_ARCHIVE, "Christmas!!!!!!", 0, 1)
 
 include("shared.lua")
 include("sb.lua")
@@ -672,7 +673,7 @@ function GM:PlayerInitialSpawn(ply)
 	
 	ply:SetModel(ply:GetInfo("sdm_playermodel"))
 	
-	if string.GetPathFromFilename(GetConVar("sdm_playermodel"):GetString()) != "models/pechenko_121/" then
+	if string.GetPathFromFilename(ply:GetInfo("sdm_playermodel")) != "models/pechenko_121/" then
 		ply:SetModel("models/pechenko_121/samclassic.mdl")
 	end
 	
@@ -704,6 +705,7 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderMode( RENDERMODE_TRANSCOLOR )
 	ply.SpawnProtection = CurTime() + 3
 	ply:StartBlinking()
+	
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	local effectdata = EffectData()
 	effectdata:SetOrigin(ply:GetPos())

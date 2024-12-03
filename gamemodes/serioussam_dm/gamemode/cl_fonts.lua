@@ -138,3 +138,12 @@ surface.CreateFont("MainMenu_Font_32",
 	antialias = true,
 	shadow = true
 })
+
+surface.CreateFont("MainMenu_Font_64", 
+{   font = "Arial",
+    extended = true,
+	size = ScrW() / 48,
+	weight = 800,
+	antialias = true,
+	shadow = true
+})

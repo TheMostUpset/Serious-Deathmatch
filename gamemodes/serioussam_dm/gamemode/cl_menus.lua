@@ -4,6 +4,15 @@ local offset = 0
 local speed = 5
 local flashSpeed = 4
 
+local PoseAnimations = {
+		"pose_standing_01",
+		"pose_standing_02",
+		"pose_standing_03",
+		"pose_standing_04",
+	}
+	
+local randompose = math.random(1, #PoseAnimations)
+
 local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
 local ssbg_tse = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
 local detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/MenuBack_detail")
@@ -550,14 +559,6 @@ end
 
 function OpenSettingsMenu()
 
-	local PoseAnimations = {
-		"pose_standing_01",
-		"pose_standing_02",
-		"pose_standing_03",
-		"pose_standing_04",
-	}
-	
-	local randompose = math.random(1, #PoseAnimations)
 	
 	local modelbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/ModelBack")
 	
@@ -576,8 +577,8 @@ function OpenSettingsMenu()
 	SettingsMenu:SetCursor("blank")
 	
 	local ModelBack = vgui.Create("DImage", SettingsMenu)
-	ModelBack:SetX(ScrW()/1.545)
-	ModelBack:SetY(ScrH()/4.75)
+	ModelBack:SetX(ScrW()/1.5)
+	ModelBack:SetY(ScrH()/6.5)
 	ModelBack:SetSize(1024, 1024)
 	ModelBack.Paint = function(self, w, h)
 		local offsetx = math.sin(CurTime() * 1.5) * 30
@@ -596,9 +597,9 @@ function OpenSettingsMenu()
 		
 		
 		surface.SetDrawColor(GetMMFColor())
-		surface.DrawRect(0, 0, ScrW()/3.15+2, ScrW()/2.9+2)
+		surface.DrawRect(0, 0, ScrW()/3.25+2, ScrW()/2.65+2)
 		surface.SetTexture( modelbg )
-		surface.DrawTexturedRect( 1, 1, ScrW()/3.15, ScrW()/2.9 )
+		surface.DrawTexturedRect( 1, 1, ScrW()/3.25, ScrW()/2.65 )
 		
 		if GAMEMODE:GetHUDSkin() == 2 then
 			return
@@ -618,14 +619,14 @@ function OpenSettingsMenu()
 	local ModelFrame = vgui.Create( "DModelPanel", SettingsMenu )
 	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
 	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
-	ModelFrame:SetX(ScrW()/1.675)
+	ModelFrame:SetX(ScrW()/1.6)
 	ModelFrame:SetY(ScrH()/8)
 	
 	function ModelFrame:LayoutEntity( Entity )		
 		ModelFrame:RunAnimation()
 		Entity:SetSequence(PoseAnimations[randompose])
 		Entity:SetSkin(GetConVarNumber("sdm_playermodel_skin"))
-		Entity:SetBodygroup(GetConVarNumber("sdm_playermodel_bodygroup"), GetConVarNumber("sdm_playermodel_bodygroup"))
+		Entity:SetBodygroup(GetConVarString("sdm_playermodel_bodygroup"), 1)
 		Entity:SetModel(GetConVarString("sdm_playermodel"))
 	end
 
@@ -636,14 +637,14 @@ function OpenSettingsMenu()
 	local ModelButton = vgui.Create( "DButton", SettingsMenu )
 	local isFlashing = false
 	ModelButton:SetText( "" )
-	ModelButton:SetPos( ScrW()/1.545, ScrH()/4.75 )
-	ModelButton:SetSize( ScrW()/3.125, ScrW()/2.65 )					
+	ModelButton:SetPos( ScrW()/1.5, ScrH()/6.5 )
+	ModelButton:SetSize( ScrW()/3.25, ScrW()/2.5 )					
 	ModelButton.DoClick = function()		
 		OpenModelMenu()
 	end
 	
 	ModelButton.Paint = function(self, w, h)
-		draw.SimpleText( "Serious Sam", "MainMenu_Font_32", 0, ScrW()/2.85, GetButtonColor(), TEXT_ALIGN_LEFT )
+		draw.SimpleText( "Serious Sam", "MainMenu_Font_32", 0, ScrW()/2.625, GetButtonColor(), TEXT_ALIGN_LEFT )
 	end
 
 	ModelButton.OnCursorEntered = function()
@@ -1066,7 +1067,14 @@ function OpenSettingsMenu()
 end
 
 function OpenModelMenu()
+
 	text = ""
+	
+	randompose = math.random(1, #PoseAnimations)
+	
+	local inital_model = GetConVar("sdm_playermodel"):GetString()
+	local inital_skin = GetConVar("sdm_playermodel_skin"):GetInt()
+	local inital_bodygroup = GetConVar("sdm_playermodel_bodygroup"):GetInt()
 	
 	ModelMenu = vgui.Create("DFrame")
 	ModelMenu:SetSize(ScrW(), ScrH())
@@ -1110,92 +1118,559 @@ function OpenModelMenu()
 	Back_Button:SizeToContents()
 	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
 
-	local Sam_Button = vgui.Create("DButton", ModelMenu)
+	local ModelBack = vgui.Create("DImage", ModelMenu)
+	ModelBack:SetX(ScrW()/1.5)
+	ModelBack:SetY(ScrH()/6.5)
+	ModelBack:SetSize(1024, 1024)
+	ModelBack.Paint = function(self, w, h)
+		local offsetx = math.sin(CurTime() * 1.5) * 30
+		local offsety = math.cos(CurTime()* 1.5) * 30
+		
+		local offsetx2 = math.sin(CurTime()* -0.5) * 15
+		local offsety2 = math.cos(CurTime()* -0.5) * 15
+	
+		local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
+		
+		if GAMEMODE:GetHUDSkin() == 2 then
+			modelbg = surface.GetTextureID("vgui/serioussam/mainmenu/ModelBack")
+		elseif GAMEMODE:GetHUDSkin() == 1 then
+			modelbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/ModelBack")
+		end
+		
+		
+		surface.SetDrawColor(GetMMFColor())
+		surface.DrawRect(0, 0, ScrW()/3.25+2, ScrW()/2.65+2)
+		surface.SetTexture( modelbg )
+		surface.DrawTexturedRect( 1, 1, ScrW()/3.25, ScrW()/2.65 )
+		
+		if GAMEMODE:GetHUDSkin() == 2 then
+			return
+		elseif GAMEMODE:GetHUDSkin() == 1 then
+			surface.SetTexture(ssbg)
+		end
+		
+		surface.SetDrawColor(hudr, hudg, hudb, 50)
+		local texW = 256
+		local texH = 256
+		surface.DrawTexturedRectUV( offsetx-48, offsety-48, 1024, 1024, 0, 0, 2048 / texW, 2048 / texH )
+		
+		surface.SetDrawColor(hudr, hudg, hudb, 25)
+		surface.DrawTexturedRectUV( offsetx2-48, offsety2-48, 1024, 1024, 0, 0, 2048 / texW, 2048 / texH )
+	end
+	
+	local ModelFrame = vgui.Create( "DModelPanel", ModelMenu )
+	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
+	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
+	ModelFrame:SetX(ScrW()/1.6)
+	ModelFrame:SetY(ScrH()/8)
+	
+	function ModelFrame:LayoutEntity( Entity )		
+		ModelFrame:RunAnimation()
+		Entity:SetSequence(PoseAnimations[randompose])
+		Entity:SetSkin(GetConVarNumber("sdm_playermodel_skin"))
+		Entity:SetBodygroup(GetConVarString("sdm_playermodel_bodygroup"), 1)
+		Entity:SetModel(GetConVarString("sdm_playermodel"))
+	end
+
+	ModelFrame.OnCursorEntered = function()
+		ModelFrame:SetCursor("blank")
+	end
+
+	--Beheaded Ben
+	local Beheaded_Ben_Button = vgui.Create("DButton", ModelMenu)
 	local isFlashing = false
-	Sam_Button:SetFont("MainMenu_Font")
-	Sam_Button:SetText("TSE SERIOUS SAM")
-	Sam_Button:SetTextColor(GetButtonColor())
-	Sam_Button.Paint = function(self, w, h) 
+	Beheaded_Ben_Button:SetFont("MainMenu_Font_64")
+	Beheaded_Ben_Button:SetText("#sdm_beheadedben")
+	Beheaded_Ben_Button:SetTextColor(GetButtonColor())
+	Beheaded_Ben_Button.Paint = function(self, w, h) 
 		if isFlashing then
 			ButtonFlashing(self)
 		end
 	end
-	Sam_Button.OnCursorEntered = function()
-		Sam_Button:SetCursor( "blank" )
-		text = "#sdm_help_mvolume"
+	Beheaded_Ben_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/beheadedben.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Beheaded_Ben_Button:SetCursor( "blank" )
+		text = "#sdm_help_beheadedben"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
-
-	Sam_Button.OnCursorExited = function()
+	
+	Beheaded_Ben_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
 		text = ""
 		isFlashing = false
-		Sam_Button:SetTextColor(GetButtonColor())
+		Beheaded_Ben_Button:SetTextColor(GetButtonColor())
 	end
 	
-	Sam_Button.DoClick = function()
+	Beheaded_Ben_Button.DoClick = function()
 		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/samclassic.mdl")
+		net.WriteString("models/pechenko_121/beheadedben.mdl")
 		net.WriteString("0")
-		net.WriteString("0")
+		net.WriteString("1")
 		net.SendToServer()
 		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/beheadedben.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-		
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
 	
-	Sam_Button:SizeToContents()
-	Sam_Button:Center()
-	Sam_Button:SetY(ScrH()/6.95)
+	Beheaded_Ben_Button:SizeToContents()
+	Beheaded_Ben_Button:Center()
+	Beheaded_Ben_Button:SetY(ScrH() / 6.25)
 	
-	local Sam_TFE_Button = vgui.Create("DButton", ModelMenu)
+	--Blue Bill
+	local Blue_Bill_Button = vgui.Create("DButton", ModelMenu)
 	local isFlashing = false
-	Sam_TFE_Button:SetFont("MainMenu_Font")
-	Sam_TFE_Button:SetText("TFE SERIOUS SAM")
-	Sam_TFE_Button:SetTextColor(GetButtonColor())
-	Sam_TFE_Button.Paint = function(self, w, h) 
+	Blue_Bill_Button:SetFont("MainMenu_Font_64")
+	Blue_Bill_Button:SetText("#sdm_bluebill")
+	Blue_Bill_Button:SetTextColor(GetButtonColor())
+	Blue_Bill_Button.Paint = function(self, w, h) 
 		if isFlashing then
 			ButtonFlashing(self)
 		end
 	end
-	Sam_TFE_Button.OnCursorEntered = function()
-		Sam_TFE_Button:SetCursor( "blank" )
-		text = "#sdm_help_mvolume"
-		isFlashing = true
-		surface.PlaySound("menus/select.wav")
-	end
-
-	Sam_TFE_Button.OnCursorExited = function()
-		text = ""
-		isFlashing = false
-		Sam_TFE_Button:SetTextColor(GetButtonColor())
-	end
-	
-	Sam_TFE_Button.DoClick = function()
-		net.Start("PlayerModelMenu")
-		net.WriteString("models/pechenko_121/samclassic.mdl")
-		net.WriteString("1")
-		net.WriteString("1")
-		net.SendToServer()
-		
-		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
+	Blue_Bill_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(1)
 		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Blue_Bill_Button:SetCursor( "blank" )
+		text = "#sdm_help_colorbots"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Blue_Bill_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Blue_Bill_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Blue_Bill_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/redrick.mdl")
+		net.WriteString("1")
+		net.WriteString("1")
+		net.SendToServer()
 		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(1)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
 	
-	Sam_TFE_Button:SizeToContents()
-	Sam_TFE_Button:Center()
-	Sam_TFE_Button:SetY(ScrH()/4.75)
+	Blue_Bill_Button:SizeToContents()
+	Blue_Bill_Button:Center()
+	Blue_Bill_Button:SetY(ScrH() / 5.1)
 	
+	--Commander Cliff
+	local Comm_Cliff_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Comm_Cliff_Button:SetFont("MainMenu_Font_64")
+	Comm_Cliff_Button:SetText("#sdm_commcliff")
+	Comm_Cliff_Button:SetTextColor(GetButtonColor())
+	Comm_Cliff_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Comm_Cliff_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(2)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Comm_Cliff_Button:SetCursor( "blank" )
+		text = "#sdm_help_commcliff"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Comm_Cliff_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Comm_Cliff_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Comm_Cliff_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/skinlessstan.mdl")
+		net.WriteString("2")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(2)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Comm_Cliff_Button:SizeToContents()
+	Comm_Cliff_Button:Center()
+	Comm_Cliff_Button:SetY(ScrH() / 4.275)
+	
+	--Dancing Denzell
+	local Dancing_Den_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Dancing_Den_Button:SetFont("MainMenu_Font_64")
+	Dancing_Den_Button:SetText("#sdm_dancingden")
+	Dancing_Den_Button:SetTextColor(GetButtonColor())
+	Dancing_Den_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Dancing_Den_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(1)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Dancing_Den_Button:SetCursor( "blank" )
+		text = "#sdm_help_dancingden"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Dancing_Den_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Dancing_Den_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Dancing_Den_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/dancingden.mdl")
+		net.WriteString("1")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(1)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Dancing_Den_Button:SizeToContents()
+	Dancing_Den_Button:Center()
+	Dancing_Den_Button:SetY(ScrH() / 3.67)
+	
+	--Green Gary
+	local Green_Gary_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Green_Gary_Button:SetFont("MainMenu_Font_64")
+	Green_Gary_Button:SetText("#sdm_greengary")
+	Green_Gary_Button:SetTextColor(GetButtonColor())
+	Green_Gary_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Green_Gary_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(2)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Green_Gary_Button:SetCursor( "blank" )
+		text = "#sdm_help_colorbots"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Green_Gary_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Green_Gary_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Green_Gary_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/redrick.mdl")
+		net.WriteString("2")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(2)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Green_Gary_Button:SizeToContents()
+	Green_Gary_Button:Center()
+	Green_Gary_Button:SetY(ScrH() / 3.23)
+	
+	--Groovy Greg
+	local Groovy_Greg_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Groovy_Greg_Button:SetFont("MainMenu_Font_64")
+	Groovy_Greg_Button:SetText("#sdm_groovygreg")
+	Groovy_Greg_Button:SetTextColor(GetButtonColor())
+	Groovy_Greg_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Groovy_Greg_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Groovy_Greg_Button:SetCursor( "blank" )
+		text = "#sdm_help_groovygreg"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Groovy_Greg_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Groovy_Greg_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Groovy_Greg_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/dancingden.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/dancingden.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Groovy_Greg_Button:SizeToContents()
+	Groovy_Greg_Button:Center()
+	Groovy_Greg_Button:SetY(ScrH() / 2.89)
+	
+	--Hilarious Harry
+	local Hilly_Harry_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Hilly_Harry_Button:SetFont("MainMenu_Font_64")
+	Hilly_Harry_Button:SetText("#sdm_hillyharry")
+	Hilly_Harry_Button:SetTextColor(GetButtonColor())
+	Hilly_Harry_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Hilly_Harry_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/hillyharry.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Hilly_Harry_Button:SetCursor( "blank" )
+		text = "#sdm_help_hillyharry"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Hilly_Harry_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Hilly_Harry_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Hilly_Harry_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/hillyharry.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/hillyharry.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Hilly_Harry_Button:SizeToContents()
+	Hilly_Harry_Button:Center()
+	Hilly_Harry_Button:SetY(ScrH() / 2.6)
+	
+	--Karate Ken
+	local Karate_Ken_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Karate_Ken_Button:SetFont("MainMenu_Font_64")
+	Karate_Ken_Button:SetText("#sdm_karateken")
+	Karate_Ken_Button:SetTextColor(GetButtonColor())
+	Karate_Ken_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Karate_Ken_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(1)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Karate_Ken_Button:SetCursor( "blank" )
+		text = "#sdm_help_karateken"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Karate_Ken_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Karate_Ken_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Karate_Ken_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/skinlessstan.mdl")
+		net.WriteString("1")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(1)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Karate_Ken_Button:SizeToContents()
+	Karate_Ken_Button:Center()
+	Karate_Ken_Button:SetY(ScrH() / 2.37)
+	
+	--Kleer Kurt
+	local Kleer_Kurt_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Kleer_Kurt_Button:SetFont("MainMenu_Font_64")
+	Kleer_Kurt_Button:SetText("#sdm_kleerkurt")
+	Kleer_Kurt_Button:SetTextColor(GetButtonColor())
+	Kleer_Kurt_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Kleer_Kurt_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/kleerkurt.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Kleer_Kurt_Button:SetCursor( "blank" )
+		text = "#sdm_help_kleerkurt"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Kleer_Kurt_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Kleer_Kurt_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Kleer_Kurt_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/kleerkurt.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/kleerkurt.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Kleer_Kurt_Button:SizeToContents()
+	Kleer_Kurt_Button:Center()
+	Kleer_Kurt_Button:SetY(ScrH() / 2.175)
+	
+	--Pirate Pete
+	local Pirate_Pete_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Pirate_Pete_Button:SetFont("MainMenu_Font_64")
+	Pirate_Pete_Button:SetText("#sdm_piratepete")
+	Pirate_Pete_Button:SetTextColor(GetButtonColor())
+	Pirate_Pete_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Pirate_Pete_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_pirate.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Pirate_Pete_Button:SetCursor( "blank" )
+		text = "#sdm_help_piratepete"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Pirate_Pete_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Pirate_Pete_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Pirate_Pete_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic_pirate.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_pirate.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Pirate_Pete_Button:SizeToContents()
+	Pirate_Pete_Button:Center()
+	Pirate_Pete_Button:SetY(ScrH() / 2.01)
+	
+	--Red Rick
 	local Red_Rick_Button = vgui.Create("DButton", ModelMenu)
 	local isFlashing = false
-	Red_Rick_Button:SetFont("MainMenu_Font")
-	Red_Rick_Button:SetText("RED RICK")
+	Red_Rick_Button:SetFont("MainMenu_Font_64")
+	Red_Rick_Button:SetText("#sdm_redrick")
 	Red_Rick_Button:SetTextColor(GetButtonColor())
 	Red_Rick_Button.Paint = function(self, w, h) 
 		if isFlashing then
@@ -1203,13 +1678,20 @@ function OpenModelMenu()
 		end
 	end
 	Red_Rick_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
 		Red_Rick_Button:SetCursor( "blank" )
-		text = "#sdm_help_mvolume"
+		text = "#sdm_help_colorbots"
 		isFlashing = true
 		surface.PlaySound("menus/select.wav")
 	end
 
 	Red_Rick_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
 		text = ""
 		isFlashing = false
 		Red_Rick_Button:SetTextColor(GetButtonColor())
@@ -1219,19 +1701,358 @@ function OpenModelMenu()
 		net.Start("PlayerModelMenu")
 		net.WriteString("models/pechenko_121/redrick.mdl")
 		net.WriteString("0")
-		net.WriteString("0")
+		net.WriteString("1")
 		net.SendToServer()
 		
 		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
 		GetConVar("sdm_playermodel_skin"):SetInt(0)
-		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
-		
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
 		ModelMenu:Close()
 	end
 	
 	Red_Rick_Button:SizeToContents()
 	Red_Rick_Button:Center()
-	Red_Rick_Button:SetY(ScrH() / 3.65)
+	Red_Rick_Button:SetY(ScrH() / 1.87)
+	
+	--Santa Sam
+	local Santa_Sam_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Santa_Sam_Button:SetFont("MainMenu_Font_64")
+	Santa_Sam_Button:SetText("#sdm_santasam")
+	Santa_Sam_Button:SetTextColor(GetButtonColor())
+	Santa_Sam_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Santa_Sam_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_santa.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		Santa_Sam_Button:SetCursor( "blank" )
+		text = "#sdm_help_santasam"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Santa_Sam_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Santa_Sam_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Santa_Sam_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic_santa.mdl")
+		net.WriteString("0")
+		net.WriteString("0")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_santa.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Santa_Sam_Button:SizeToContents()
+	Santa_Sam_Button:Center()
+	Santa_Sam_Button:SetY(ScrH() / 1.745)
+	
+	--Skinless Stan
+	local Skinless_Stan_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Skinless_Stan_Button:SetFont("MainMenu_Font_64")
+	Skinless_Stan_Button:SetText("#sdm_skinlessstan")
+	Skinless_Stan_Button:SetTextColor(GetButtonColor())
+	Skinless_Stan_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Skinless_Stan_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Skinless_Stan_Button:SetCursor( "blank" )
+		text = "#sdm_help_skinlessstan"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Skinless_Stan_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Skinless_Stan_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Skinless_Stan_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/skinlessstan.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Skinless_Stan_Button:SizeToContents()
+	Skinless_Stan_Button:Center()
+	Skinless_Stan_Button:SetY(ScrH() / 1.6375)
+	
+	local Steel_Steve_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Steel_Steve_Button:SetFont("MainMenu_Font_64")
+	Steel_Steve_Button:SetText("#sdm_steelsteve")
+	Steel_Steve_Button:SetTextColor(GetButtonColor())
+	Steel_Steve_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Steel_Steve_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/steelsteve.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Steel_Steve_Button:SetCursor( "blank" )
+		text = "#sdm_help_steelsteve"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Steel_Steve_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		Steel_Steve_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Steel_Steve_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/steelsteve.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/steelsteve.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Steel_Steve_Button:SizeToContents()
+	Steel_Steve_Button:Center()
+	Steel_Steve_Button:SetY(ScrH() / 1.5385)
+	
+	--TFE Sam
+	local Sam_TFE_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Sam_TFE_Button:SetFont("MainMenu_Font_64")
+	Sam_TFE_Button:SetText("#sdm_tfeserioussam")
+	Sam_TFE_Button:SetTextColor(GetButtonColor())
+	Sam_TFE_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Sam_TFE_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_tfe.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Sam_TFE_Button:SetCursor( "blank" )
+		text = "#sdm_help_serioussam"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Sam_TFE_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Sam_TFE_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Sam_TFE_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic_tfe.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_tfe.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Sam_TFE_Button:SizeToContents()
+	Sam_TFE_Button:Center()
+	Sam_TFE_Button:SetY(ScrH() / 1.45)
+	
+	--TSE Sam
+	local Sam_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Sam_Button:SetFont("MainMenu_Font_64")
+	Sam_Button:SetText("#sdm_tseserioussam")
+	Sam_Button:SetTextColor(GetButtonColor())
+	Sam_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Sam_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		Sam_Button:SetCursor( "blank" )
+		text = "#sdm_help_serioussam"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+	end
+
+	Sam_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Sam_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Sam_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic.mdl")
+		net.WriteString("0")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Sam_Button:SizeToContents()
+	Sam_Button:Center()
+	Sam_Button:SetY(ScrH() / 1.3725)
+	
+	--Vegetable Vaughn
+	local Veggie_Vaughn_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Veggie_Vaughn_Button:SetFont("MainMenu_Font_64")
+	Veggie_Vaughn_Button:SetText("#sdm_veggievaughn")
+	Veggie_Vaughn_Button:SetTextColor(GetButtonColor())
+	Veggie_Vaughn_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Veggie_Vaughn_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(3)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Veggie_Vaughn_Button:SetCursor( "blank" )
+		text = "#sdm_help_veggievaughn"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Veggie_Vaughn_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Veggie_Vaughn_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Veggie_Vaughn_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/skinlessstan.mdl")
+		net.WriteString("3")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/skinlessstan.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(3)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Veggie_Vaughn_Button:SizeToContents()
+	Veggie_Vaughn_Button:Center()
+	Veggie_Vaughn_Button:SetY(ScrH() / 1.3025)
+	
+	--Yellow Yarek
+	local Yellow_Yarek_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Yellow_Yarek_Button:SetFont("MainMenu_Font_64")
+	Yellow_Yarek_Button:SetText("#sdm_yellowyarek")
+	Yellow_Yarek_Button:SetTextColor(GetButtonColor())
+	Yellow_Yarek_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Yellow_Yarek_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(3)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		Yellow_Yarek_Button:SetCursor( "blank" )
+		text = "#sdm_help_colorbots"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Yellow_Yarek_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Yellow_Yarek_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Yellow_Yarek_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/redrick.mdl")
+		net.WriteString("3")
+		net.WriteString("1")
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/redrick.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(3)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Yellow_Yarek_Button:SizeToContents()
+	Yellow_Yarek_Button:Center()
+	Yellow_Yarek_Button:SetY(ScrH() / 1.2375)
 	
 	ModelMenu:MakePopup()
     
