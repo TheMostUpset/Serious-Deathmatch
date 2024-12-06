@@ -48,6 +48,7 @@ local lastMusicStation
 GM.MusicTable = {
     ["sdm_red_station"] = "redstation.ogg",
     ["sdm_desert_temple"] = "redstation.ogg",
+    ["sdm_winter_temple"] = "redstation.ogg",
     ["sdm_sun_palace"] = "sunpalace.ogg",
     ["sdm_little_trouble"] = "littetrouble.ogg",
     ["sdm_brkeen_chevap"] = "brkeen.ogg",
@@ -108,82 +109,6 @@ end
 function GM:PostCleanupMap()
 	self:PlayMapMusic()
 end
-
--- function GM:PlayerBindPress(ply, bind, pressed)
-    -- if not pressed then return end
-    -- bind = bind:lower()
-	-- if ply:Alive() then
-		-- if bind == "+duck" and !ply:IsOnGround() or bind == "+jump" and ply:Crouching() then
-			-- return true
-		-- end
-	-- end
--- end
-
-
--- hook.Add( "Tick", "RestartCheck", function()
-
-	-- for _, ply in ipairs(player.GetAll()) do
-		-- if ply:Frags() >= set_frags then
-
-		-- if not mapvotestate then
-
-	-- hook.Add("PostDrawHUD", "GameEnd_Text", function()
-	-- if endgamesoundplayed == true then
-	-- surface.PlaySound( "misc/serioussam/boioing.wav" )
-	-- endgamesoundplayed = false
-	-- end	
-		-- draw.SimpleText( "The game has ended! Starting Map Vote in 5 seconds..", "GameEnd_Font", ScrW() / 2 + 1.5 , ScrH()/2 / 2 + 1.5, color_black, TEXT_ALIGN_CENTER )
-		-- draw.SimpleText( "The game has ended! Starting Map Vote in 5 seconds..", "GameEnd_Font", ScrW() / 2, ScrH()/2 / 2, color_white, TEXT_ALIGN_CENTER )
-	-- end )
-	-- timer.Simple(5, function()
-	-- hook.Remove("PostDrawHUD", "GameEnd_Text")
-	
-	-- mapvotestate = true
-	-- end)
-  -- else
-	-- return
-	-- end
-  -- end
-  -- end
-
--- end)
-
-net.Receive("SetRenderGroup", function() 
-	local ent = net.ReadEntity()
-	local RENDER_GROUP = net.ReadInt(5)
-	ent.RenderGroup = RENDER_GROUP
-end)
-
-local isAlphaGoUp = false
-local alpha = 1
-
-net.Receive("StartBlinking", function()
-	alpha = 1
-	timer.Create("blinking_timer", 0.02, 150, function()
-		if !isAlphaGoUp then
-			alpha = alpha - 0.039
-			if alpha <= 0.025 then
-				isAlphaGoUp = true
-				surface.PlaySound("misc/serioussam/powerupbeep.wav")
-			end
-		else
-			alpha = alpha + 0.039
-			if alpha >= 0.95 then
-				isAlphaGoUp = false
-				surface.PlaySound("misc/serioussam/powerupbeep.wav")
-			end
-		end
-	end)
-end)
-
-hook.Add("PreDrawViewModel", "blinking_vm", function(viewmodel, ply)
-    
-	if !timer.Exists("blinking_timer") or !ply:IsValid() or !viewmodel:IsValid() then return end
-	
-	render.SetBlend( alpha )
-    render.OverrideBlend( false )
-	
-end)
 
 local thirdperson_enabled = false
 function togglethirdperson()
