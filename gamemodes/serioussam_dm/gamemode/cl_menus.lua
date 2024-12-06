@@ -210,7 +210,7 @@ function OpenSSMenu()
 	Continue_Button:SetSize(ScrW()/12, ScrH()/20)
 	Continue_Button:SetFont("MainMenu_Font")
 	Continue_Button:SetTextColor(GetButtonColor())
-
+	
 	Continue_Button.OnCursorEntered = function()
 		Continue_Button:SetCursor( "blank" )
 		isFlashing = true
@@ -237,7 +237,82 @@ function OpenSSMenu()
 	end
 	Continue_Button:SizeToContents()
 	Continue_Button:Center()
-	Continue_Button:SetY(ScrH()/2.58)
+	Continue_Button:SetY(ScrH()/2.925)
+	
+	if LocalPlayer():Team() == 0 then
+	local Spec_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Spec_Button:SetText("#sdm_spectate")
+	Spec_Button:SetSize(ScrW()/12, ScrH()/20)
+	Spec_Button:SetFont("MainMenu_Font")
+	Spec_Button:SetTextColor(GetButtonColor())
+	Spec_Button.OnCursorEntered = function()
+		Spec_Button:SetCursor( "blank" )
+		text = "#sdm_help_joinspec"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Spec_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		Spec_Button:SetTextColor(GetButtonColor())
+	end
+
+	Spec_Button.Paint = function(self, w, h)
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+
+	Spec_Button.DoClick = function()
+		RunConsoleCommand("sdm_joinspec")
+		EscMenu:Close()
+		showGameUI = false
+		surface.PlaySound("menus/press.wav")
+	end
+	Spec_Button:SizeToContents()
+	Spec_Button:Center()
+	Spec_Button:SetY(ScrH()/2.515)
+	end
+	
+	if LocalPlayer():Team() == TEAM_SPECTATOR then
+	local Return_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Return_Button:SetText("#sdm_joingame")
+	Return_Button:SetSize(ScrW()/6, ScrH()/20)
+	Return_Button:Center()
+	Return_Button:SetFont("MainMenu_Font")
+	Return_Button:SetTextColor(GetButtonColor())
+	Return_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Return_Button.OnCursorEntered = function()
+		Return_Button:SetCursor( "blank" )
+		text = "#sdm_help_joingame"
+		surface.PlaySound("menus/select.wav")
+		isFlashing = true
+		
+	end
+
+	Return_Button.OnCursorExited = function()
+		text = ""
+		isFlashing = false
+		Return_Button:SetTextColor(GetButtonColor())
+	end
+
+	Return_Button.DoClick = function()
+		RunConsoleCommand("sdm_joingame")
+		EscMenu:Close()
+		showGameUI = false
+		surface.PlaySound("menus/press.wav")
+	end
+	Return_Button:SizeToContents()
+	Return_Button:Center()
+	Return_Button:SetY(ScrH()/2.515)
+	end
 
 	local Disconnect_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -271,7 +346,7 @@ function OpenSSMenu()
 	end
 	Disconnect_Button:SizeToContents()
 	Disconnect_Button:Center()
-	Disconnect_Button:SetY(ScrH()/1.8)
+	Disconnect_Button:SetY(ScrH()/1.7875)
 	
 	local Options_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -309,14 +384,13 @@ function OpenSSMenu()
 	end
 	Options_Button:SizeToContents()
 	Options_Button:Center()
-	Options_Button:SetY(ScrH()/2)
-
+	Options_Button:SetY(ScrH()/1.9775)
+	
 	local LegacyM_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	LegacyM_Button:SetText("#sdm_lmenu")
 	LegacyM_Button:SetSize(ScrW()/6, ScrH()/20)
 	LegacyM_Button:Center()
-	LegacyM_Button:SetY(ScrH()/2.25)
 	LegacyM_Button:SetFont("MainMenu_Font")
 	LegacyM_Button:SetTextColor(GetButtonColor())
 	LegacyM_Button.Paint = function(self, w, h) 
@@ -347,14 +421,13 @@ function OpenSSMenu()
 	end
 	LegacyM_Button:SizeToContents()
 	LegacyM_Button:Center()
-	LegacyM_Button:SetY(ScrH()/2.25)
+	LegacyM_Button:SetY(ScrH()/2.215)
 
 	local Quit_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	Quit_Button:SetText("#sdm_exitgame")
 	Quit_Button:SetSize(ScrW()/16, ScrH()/20)
 	Quit_Button:Center()
-	Quit_Button:SetY(ScrH()/1.635)
 	Quit_Button:SetFont("MainMenu_Font")
 	Quit_Button:SetTextColor(GetButtonColor())
 	Quit_Button.Paint = function(self, w, h)
@@ -383,7 +456,7 @@ function OpenSSMenu()
 	end
 	Quit_Button:SizeToContents()
 	Quit_Button:Center()
-	Quit_Button:SetY(ScrH()/1.635)
+	Quit_Button:SetY(ScrH()/1.625)
 	
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)

@@ -33,6 +33,9 @@ end
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
 	self:UpdatePlayerSpeed(ply)
+	if ply:Alive() then
+		ply:KillSilent()
+	end
 	ply:SetTeam(TEAM_SPECTATOR)
 	ply:Spectate(OBS_MODE_FIXED)
 	ply:ConCommand("sdm_changeteam")
@@ -63,21 +66,24 @@ function GM:PlayerLoadout(ply)
 	end
 	
 	ply.SpawnProtection = CurTime() + 3
-	
 	--get this shitass outta here asap
 	if player.GetCount() >=  GetConVarNumber("sdm_minplayers") and self:GetState() == STATE_GAME_WARMUP and team.NumPlayers(1) >= GetConVarNumber("sdm_minplayers") / 2 and team.NumPlayers(2) >= GetConVarNumber("sdm_minplayers") / 2  then
 		self:GamePrepare()
 	end
 	
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
+	ply:SetRenderMode( RENDERMODE_TRANSCOLOR )
 	local effectdata = EffectData()
 	effectdata:SetOrigin(ply:GetPos())
 	effectdata:SetScale(128)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
+	ply:SetRenderFX(4)
+	ply:EmitSound("misc/serioussam/powerupbeep.wav")
+	timer.Create( ply:SteamID() .. " " .. ply:Team() .. " blinking_timer", 3, 1, function() 
+		ply:SetRenderFX(0)
+		timer.Remove(ply:SteamID() .. " " .. ply:Team() .. " blinking_timer")
+	end )
 	return true
-	
-
-	
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
@@ -196,64 +202,9 @@ function GM:PlayerSelectSpawn( pl, transiton )
 		self.LastSpawnPoint = 0
 		self.SpawnPoints = ents.FindByClass( "info_player_start" )
 		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_deathmatch" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_combine" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_rebel" ) )
 
-		-- CS Maps
 		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_counterterrorist" ) )
 		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_terrorist" ) )
-
-		-- DOD Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_axis" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_allies" ) )
-
-		-- (Old) GMod Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "gmod_player_start" ) )
-
-		-- TF Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_teamspawn" ) )
-
-		-- INS Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "ins_spawnpoint" ) )
-
-		-- AOC Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "aoc_spawnpoint" ) )
-
-		-- Dystopia Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "dys_spawn_point" ) )
-
-		-- PVKII Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_pirate" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_viking" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_knight" ) )
-
-		-- DIPRIP Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "diprip_start_team_blue" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "diprip_start_team_red" ) )
-
-		-- OB Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_red" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_blue" ) )
-
-		-- SYN Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_coop" ) )
-
-		-- ZPS Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_human" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_zombie" ) )
-
-		-- ZM Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_zombiemaster" ) )
-
-		-- FOF Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_fof" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_desperado" ) )
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_player_vigilante" ) )
-
-		-- L4D Maps
-		self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_survivor_rescue" ) )
-		-- Removing this one for the time being, c1m4_atrium has one of these in a box under the map
-		--self.SpawnPoints = table.Add( self.SpawnPoints, ents.FindByClass( "info_survivor_position" ) )
 
 	end
 

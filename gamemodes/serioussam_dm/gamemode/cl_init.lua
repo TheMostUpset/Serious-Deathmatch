@@ -3,7 +3,6 @@ local cvar_playermodel = CreateClientConVar( "sdm_playermodel", "models/pechenko
 local cvar_playermodel_skin = CreateClientConVar( "sdm_playermodel_skin", 0, true, true, "Playermodel skin option", 0 )
 local cvar_playermodel_bodygroup = CreateClientConVar( "sdm_playermodel_bodygroup", 0, true, true, "Playermodel bodygroup option", 0, 1 )
 
-
 include("shared.lua")
 include("sb.lua")
 include("cl_hud.lua")

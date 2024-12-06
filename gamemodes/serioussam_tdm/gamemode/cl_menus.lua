@@ -1059,7 +1059,7 @@ function OpenTeamMenu()
 			RED_Button:SizeToContents()
 			RED_Button:Center()
 			RED_Button:SetY(ScrH()/2.25)
-
+			
 			local BLUE_Button = vgui.Create("DButton", TeamMenu)
 			local isFlashing = false
 			BLUE_Button:SetText(language.GetPhrase("sdm_joinblue") .. " (" .. team.NumPlayers(TEAM_BLUE) .. ")")
@@ -1127,7 +1127,7 @@ function OpenTeamMenu()
 			end
 
 			SPEC_Button.DoClick = function()
-				RunConsoleCommand("changeteam", TEAM_SPECTATOR)
+				RunConsoleCommand("sdm_joinspec")
 				TeamMenu:Close()
 				if EscMenu then
 					EscMenu:Close()

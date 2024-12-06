@@ -14,10 +14,18 @@ AddCSLuaFile("player_ext.lua")
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
+local cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, FCVAR_ARCHIVE, "Enables frags limit for match to end", 0, 1)
 local cvar_holiday = CreateConVar("sdm_holiday", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
+
+hook.Add( "CanPlayerSuicide", "DisableSpecSuicide", function( ply )
+	if ply:Team() == TEAM_SPECTATOR then
+		return false
+	end
+end )
 
 include("shared.lua")
 include("sb.lua")
+include("sv_spec.lua")
 
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
@@ -317,7 +325,7 @@ end
 	взято из base gamemode, чтобы добавить своё
 -----------------------------------------------------------]]
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
-
+	if ply:Team() == TEAM_SPECTATOR then return end
 	if ( !dmginfo:IsDamageType( DMG_REMOVENORAGDOLL ) ) then
 		ply:CreateRagdoll()
 	end
@@ -347,6 +355,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 end
 
 function GM:PlayerDeath( ply, inflictor, attacker )	
+	if ply:Team() == TEAM_SPECTATOR then return end
 	-- Don't spawn for at least 2 seconds
 	ply.NextSpawnTime = CurTime() + 2
 	ply.DeathTime = CurTime()
@@ -405,6 +414,7 @@ end
 function GM:PlayerDeathThink( ply )
 
 	if ply.NextSpawnTime && ply.NextSpawnTime > CurTime() then return end
+	if ply:Team() == TEAM_SPECTATOR then return end
 	
 	if ply:IsBot() or ply:KeyPressed(IN_ATTACK) then
 		ply:Spawn()
@@ -446,7 +456,7 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 		net.Start("PlayerFrag")
 		net.WriteString(ply:Nick())
 		net.Send(attacker)
-		if attacker:Frags() >= cvar_max_frags:GetInt() then
+		if attacker:Frags() >= cvar_max_frags:GetInt() and cvar_frag_limit:GetInt() == 1 then
 			self:GameEnd()
 		end
 	end
@@ -553,6 +563,31 @@ function GM:GetFallDamage(ply, speed)
 	return 0
 end
 
+local movekeys = {
+	[IN_ATTACK] = true,
+	[IN_ATTACK2] = true,
+	[IN_BACK] = true,
+	[IN_DUCK] = true,
+	[IN_FORWARD] = true,
+	[IN_JUMP] = true,
+	[IN_LEFT] = true,
+	[IN_MOVELEFT] = true,
+	[IN_MOVERIGHT] = true,
+	[IN_RIGHT] = true
+}
+
+function GM:KeyPress(ply, key)
+	if ply:Team() == TEAM_SPECTATOR then
+		hook.Run("SpectatorKeyPress", ply, key)
+	end
+	
+	if ply:Team() != TEAM_SPECTATOR then
+		if movekeys[key] then
+			ply.keyLastPressed = SysTime()
+		end
+	end
+end
+
 function GM:UpdatePlayerSpeed(ply, wep)
 	wep = wep or ply:GetActiveWeapon()
 	local hasSeriousSpeed = ply:HasSeriousSpeed()
@@ -586,12 +621,8 @@ end
 
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
+	
 	self:UpdatePlayerSpeed(ply)
-	
-	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
-		self:GamePrepare()
-	end
-	
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
 	ply:SetSkin(0)
 	if cvar_holiday:GetInt() == 0 then
@@ -613,7 +644,9 @@ function GM:PlayerInitialSpawn(ply)
 	
 	
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
+
 	
+	--ply:ConCommand("sdm_specmenu")
 end
 
 function GM:PlayerDisconnected(ply)
@@ -645,11 +678,15 @@ function GM:PlayerLoadout(ply)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
+	
+	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP and ply:Team() == 0 then
+		self:GamePrepare()
+	end
+	
 	timer.Create( ply:SteamID() .. " blinking_timer", 3, 1, function() 
 		ply:SetRenderFX(0)
 		timer.Remove(ply:SteamID() .. " blinking_timer")
 	end )
-	
 	return true
 end
 
