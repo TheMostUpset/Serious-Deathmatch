@@ -346,7 +346,7 @@ function GM:HUDPaint()
 		if playerTable and playerTable.Players then
 			firstplayer = playerTable.Players[1]
 		end
-		if IsValid(firstplayer) and cvar_max_frags and cvar_frag_limit then
+		if IsValid(firstplayer) and cvar_max_frags and GetConVarNumber("sdm_frag_limit") == 1 then
 			local max_frags = cvar_max_frags:GetInt()
 			local frags_left = math.min(max_frags - firstplayer:Frags(), max_frags)
 			if frags_left > 0 then
