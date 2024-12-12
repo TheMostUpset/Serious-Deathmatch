@@ -53,19 +53,26 @@
 		}
 		7
 		{
+			"name"		"sdm_powerups"
+			"text"		"sdm_setting_powerups"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		8
+		{
 			"name"		"sdm_timer_enabled"
 			"text"		"sdm_setting_timer"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		8
+		9
 		{
 			"name"		"sdm_max_time"
 			"text"		"sdm_setting_maxtime"
 			"type"		"Numeric"
 			"default"	"600"
 		}
-		9
+		10
 		{
 			"name"		"sdm_minplayers"
 			"text"		"sdm_setting_playerstart"

@@ -16,6 +16,7 @@ local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enab
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
 local cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, FCVAR_ARCHIVE, "Enables frags limit for match to end", 0, 1)
 local cvar_holiday = CreateConVar("sdm_holiday", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
+local cvar_powerups = CreateConVar("sdm_powerups", 1, FCVAR_ARCHIVE, "Enables powerups", 0, 1)
 
 hook.Add( "CanPlayerSuicide", "DisableSpecSuicide", function( ply )
 	if ply:Team() == TEAM_SPECTATOR then
@@ -286,6 +287,28 @@ function GM:ReplacePickupEntities()
 					end
 					newEnt:SetPos(pos)
 					newEnt:Spawn()
+					ent:Remove()
+				end
+			end
+		end
+		if cvar_powerups:GetInt() == 0 then
+			for k, ent in ipairs(ents.FindByClass("ss_seriousdmg")) do
+				if IsValid(ent) then
+					ent:Remove()
+				end
+			end
+			for k, ent in ipairs(ents.FindByClass("ss_seriousspeed")) do
+				if IsValid(ent) then
+					ent:Remove()
+				end
+			end
+			for k, ent in ipairs(ents.FindByClass("ss_protect")) do
+				if IsValid(ent) then
+					ent:Remove()
+				end
+			end
+			for k, ent in ipairs(ents.FindByClass("ss_inv")) do
+				if IsValid(ent) then
 					ent:Remove()
 				end
 			end
