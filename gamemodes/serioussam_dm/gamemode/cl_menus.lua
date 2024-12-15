@@ -9,6 +9,7 @@ local PoseAnimations = {
 		"pose_standing_02",
 		"pose_standing_03",
 		"pose_standing_04",
+		"idle_suitcase",
 	}
 	
 local randompose = math.random(1, #PoseAnimations)
@@ -690,10 +691,10 @@ function OpenSettingsMenu()
 	end
 	
 	local ModelFrame = vgui.Create( "DModelPanel", SettingsMenu )
-	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
+	ModelFrame:SetSize(ScrW()/2.7,ScrW()/2.7)
 	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
-	ModelFrame:SetX(ScrW()/1.6)
-	ModelFrame:SetY(ScrH()/7.5)
+	ModelFrame:SetX(ScrW()/1.565)
+	ModelFrame:SetY(ScrH()/6.25)
 	
 	function ModelFrame:LayoutEntity( Entity )		
 		ModelFrame:RunAnimation()
@@ -1228,7 +1229,7 @@ function OpenModelMenu()
 	local ModelBack = vgui.Create("DImage", ModelMenu)
 	ModelBack:SetX(ScrW()/1.5)
 	ModelBack:SetY(ScrH()/6.15)
-	ModelBack:SetSize(1024, 1024)
+	ModelBack:SetSize(ScrW()/3.25+2, ScrW()/2.65+2)
 	ModelBack.Paint = function(self, w, h)
 		local offsetx = math.sin(CurTime() * 1.5) * 30
 		local offsety = math.cos(CurTime()* 1.5) * 30
@@ -1266,10 +1267,10 @@ function OpenModelMenu()
 	end
 	
 	local ModelFrame = vgui.Create( "DModelPanel", ModelMenu )
-	ModelFrame:SetSize(ScrW()/2.5,ScrW()/2.5)
+	ModelFrame:SetSize(ScrW()/2.7,ScrW()/2.7)
 	ModelFrame:SetModel( GetConVarString("sdm_playermodel") )
-	ModelFrame:SetX(ScrW()/1.6)
-	ModelFrame:SetY(ScrH()/7.5)
+	ModelFrame:SetX(ScrW()/1.565)
+	ModelFrame:SetY(ScrH()/6.25)
 	
 	function ModelFrame:LayoutEntity( Entity )		
 		ModelFrame:RunAnimation()
