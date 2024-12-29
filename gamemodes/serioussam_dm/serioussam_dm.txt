@@ -3,7 +3,7 @@
 	"base"		"base"
 	"title"		"Serious Deathmatch"
 	"category"	"pvp"
-	"maps"		"^sdm_"
+	"maps"		"^sdm_|^sdmw_|^stdm_|^stdmw_"
 	"menusystem"	"1"
 	"workshopid"	"3127352943"
 

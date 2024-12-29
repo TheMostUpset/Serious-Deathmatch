@@ -332,10 +332,23 @@ function GM:Think()
 		local getGameTime = GetGlobalFloat("GameTime")
 		if getGameTime > 0 and getGameTime <= CurTime() then
 			SetGlobalFloat("GameTime", 0)
-			if cvar_mapvote:GetBool() then
-				MapVote.Start(15, true, 16, {"q3", "q2", "sdm_"})
-			else
-				self:GameRestart()
+			if engine.ActiveGamemode() == "serioussam_tdm" then
+				if cvar_mapvote:GetBool() and GetConVarNumber("sdm_holiday") == 1 then
+					MapVote.Start(15, true, 16, {"q3w_", "q2w_", "sdmw_", "stdm_", "stdmw_", "sdm_yoddler_classic"})
+				elseif cvar_mapvote:GetBool() then
+					MapVote.Start(15, true, 16, {"q3", "q2", "sdm_", "stdm_"})
+				else
+					self:GameRestart()
+				end
+			end
+			if engine.ActiveGamemode() == "serioussam_dm" then
+				if cvar_mapvote:GetBool() and GetConVarNumber("sdm_holiday") == 1 then
+					MapVote.Start(15, true, 16, {"q3w_", "q2w_", "sdmw_", "sdm_yoddler_classic"})
+				elseif cvar_mapvote:GetBool() then
+					MapVote.Start(15, true, 16, {"q3", "q2", "sdm_"})
+				else
+					self:GameRestart()
+				end
 			end
 		end
 	end

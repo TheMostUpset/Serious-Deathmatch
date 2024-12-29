@@ -2,7 +2,7 @@ MapVote.EndTime = 0
 MapVote.Panel = false
 
 MapVote.MapIconSize = 64
-MapVote.ColumnAmount = 4
+MapVote.ColumnAmount = 3
 MapVote.MaxMapsWithScoreboard = 16
 
 function MapVote:IsActive()
