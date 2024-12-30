@@ -47,10 +47,10 @@ local lastMusicStation
 GM.MusicTable = {
     ["sdm_red_station"] = "redstation.ogg",
     ["sdm_desert_temple"] = "redstation.ogg",
-    ["sdmw_little_winter"] = "redstation.ogg",
+    ["sdmw_winter_temple"] = "redstation.ogg",
     ["sdm_sun_palace"] = "sunpalace.ogg",
     ["sdm_little_trouble"] = "littetrouble.ogg",
-    ["sdmw_winter_trouble"] = "littetrouble.ogg",
+    ["sdmw_little_winter"] = "littetrouble.ogg",
     ["sdm_brkeen_chevap"] = "brkeen.ogg",
     ["sdmw_xmas_chevap"] = "brkeen.ogg",
     ["sdm_lost_tomb"] = "losttomb.ogg",
