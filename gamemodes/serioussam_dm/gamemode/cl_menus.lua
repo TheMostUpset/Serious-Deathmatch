@@ -1347,7 +1347,7 @@ function OpenModelMenu()
 	
 	Beheaded_Ben_Button:SizeToContents()
 	Beheaded_Ben_Button:Center()
-	Beheaded_Ben_Button:SetY(ScrH() / 6.25)
+	Beheaded_Ben_Button:SetY(ScrH() / 6.65)
 	
 	--Blue Bill
 	local Blue_Bill_Button = vgui.Create("DButton", ModelMenu)
@@ -1408,7 +1408,7 @@ function OpenModelMenu()
 	
 	Blue_Bill_Button:SizeToContents()
 	Blue_Bill_Button:Center()
-	Blue_Bill_Button:SetY(ScrH() / 5.1)
+	Blue_Bill_Button:SetY(ScrH() / 5.325)
 	
 	--Commander Cliff
 	local Comm_Cliff_Button = vgui.Create("DButton", ModelMenu)
@@ -1469,7 +1469,7 @@ function OpenModelMenu()
 	
 	Comm_Cliff_Button:SizeToContents()
 	Comm_Cliff_Button:Center()
-	Comm_Cliff_Button:SetY(ScrH() / 4.275)
+	Comm_Cliff_Button:SetY(ScrH() / 4.5)
 	
 	--Dancing Denzell
 	local Dancing_Den_Button = vgui.Create("DButton", ModelMenu)
@@ -1530,7 +1530,7 @@ function OpenModelMenu()
 	
 	Dancing_Den_Button:SizeToContents()
 	Dancing_Den_Button:Center()
-	Dancing_Den_Button:SetY(ScrH() / 3.67)
+	Dancing_Den_Button:SetY(ScrH() / 3.8445)
 	
 	--Green Gary
 	local Green_Gary_Button = vgui.Create("DButton", ModelMenu)
@@ -1591,7 +1591,7 @@ function OpenModelMenu()
 	
 	Green_Gary_Button:SizeToContents()
 	Green_Gary_Button:Center()
-	Green_Gary_Button:SetY(ScrH() / 3.23)
+	Green_Gary_Button:SetY(ScrH() / 3.3775)
 	
 	--Groovy Greg
 	local Groovy_Greg_Button = vgui.Create("DButton", ModelMenu)
@@ -1652,7 +1652,7 @@ function OpenModelMenu()
 	
 	Groovy_Greg_Button:SizeToContents()
 	Groovy_Greg_Button:Center()
-	Groovy_Greg_Button:SetY(ScrH() / 2.89)
+	Groovy_Greg_Button:SetY(ScrH() / 3.035)
 	
 	--Hilarious Harry
 	local Hilly_Harry_Button = vgui.Create("DButton", ModelMenu)
@@ -1713,7 +1713,7 @@ function OpenModelMenu()
 	
 	Hilly_Harry_Button:SizeToContents()
 	Hilly_Harry_Button:Center()
-	Hilly_Harry_Button:SetY(ScrH() / 2.6)
+	Hilly_Harry_Button:SetY(ScrH() / 2.735)
 	
 	--Karate Ken
 	local Karate_Ken_Button = vgui.Create("DButton", ModelMenu)
@@ -1774,7 +1774,7 @@ function OpenModelMenu()
 	
 	Karate_Ken_Button:SizeToContents()
 	Karate_Ken_Button:Center()
-	Karate_Ken_Button:SetY(ScrH() / 2.37)
+	Karate_Ken_Button:SetY(ScrH() / 2.485)
 	
 	--Kleer Kurt
 	local Kleer_Kurt_Button = vgui.Create("DButton", ModelMenu)
@@ -1835,7 +1835,67 @@ function OpenModelMenu()
 	
 	Kleer_Kurt_Button:SizeToContents()
 	Kleer_Kurt_Button:Center()
-	Kleer_Kurt_Button:SetY(ScrH() / 2.175)
+	Kleer_Kurt_Button:SetY(ScrH() / 2.275)
+	
+	local Mental_Mate_Button = vgui.Create("DButton", ModelMenu)
+	local isFlashing = false
+	Mental_Mate_Button:SetFont("MainMenu_Font_64")
+	Mental_Mate_Button:SetText("Mental Mate")
+	Mental_Mate_Button:SetTextColor(GetButtonColor())
+	Mental_Mate_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Mental_Mate_Button.OnCursorEntered = function()
+		randompose = math.random(1, #PoseAnimations)
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_mental.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
+		Mental_Mate_Button:SetCursor( "blank" )
+		text = "#sdm_help_serioussam"
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Mental_Mate_Button.OnCursorExited = function()
+		GetConVar("sdm_playermodel"):SetString(inital_model)
+		GetConVar("sdm_playermodel_skin"):SetInt(inital_skin)
+		GetConVar("sdm_playermodel_bodygroup"):SetInt(inital_bodygroup)
+		text = ""
+		isFlashing = false
+		Mental_Mate_Button:SetTextColor(GetButtonColor())
+	end
+	
+	Mental_Mate_Button.DoClick = function()
+		net.Start("PlayerModelMenu")
+		net.WriteString("models/pechenko_121/samclassic_mental.mdl")
+		net.WriteString("0")
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			net.WriteString("0")
+		else
+			net.WriteString("1")
+		end
+		net.SendToServer()
+		
+		GetConVar("sdm_playermodel"):SetString("models/pechenko_121/samclassic_mental.mdl")
+		GetConVar("sdm_playermodel_skin"):SetInt(0)
+		if GetConVar("sdm_holiday"):GetInt() == 0 then
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(0)
+		else
+			GetConVar("sdm_playermodel_bodygroup"):SetInt(1)
+		end
+		surface.PlaySound("menus/press.wav")
+		ModelMenu:Close()
+	end
+	
+	Mental_Mate_Button:SizeToContents()
+	Mental_Mate_Button:Center()
+	Mental_Mate_Button:SetY(ScrH() / 2.1075)
 	
 	--Pirate Pete
 	local Pirate_Pete_Button = vgui.Create("DButton", ModelMenu)
@@ -1896,7 +1956,7 @@ function OpenModelMenu()
 	
 	Pirate_Pete_Button:SizeToContents()
 	Pirate_Pete_Button:Center()
-	Pirate_Pete_Button:SetY(ScrH() / 2.01)
+	Pirate_Pete_Button:SetY(ScrH() / 1.9575)
 	
 	--Red Rick
 	local Red_Rick_Button = vgui.Create("DButton", ModelMenu)
@@ -1957,7 +2017,7 @@ function OpenModelMenu()
 	
 	Red_Rick_Button:SizeToContents()
 	Red_Rick_Button:Center()
-	Red_Rick_Button:SetY(ScrH() / 1.87)
+	Red_Rick_Button:SetY(ScrH() / 1.8265)
 	
 	--Santa Sam
 	local Santa_Sam_Button = vgui.Create("DButton", ModelMenu)
@@ -2018,7 +2078,7 @@ function OpenModelMenu()
 	
 	Santa_Sam_Button:SizeToContents()
 	Santa_Sam_Button:Center()
-	Santa_Sam_Button:SetY(ScrH() / 1.745)
+	Santa_Sam_Button:SetY(ScrH() / 1.7125)
 	
 	--Skinless Stan
 	local Skinless_Stan_Button = vgui.Create("DButton", ModelMenu)
@@ -2079,7 +2139,7 @@ function OpenModelMenu()
 	
 	Skinless_Stan_Button:SizeToContents()
 	Skinless_Stan_Button:Center()
-	Skinless_Stan_Button:SetY(ScrH() / 1.6375)
+	Skinless_Stan_Button:SetY(ScrH() / 1.6125)
 	
 	local Steel_Steve_Button = vgui.Create("DButton", ModelMenu)
 	local isFlashing = false
@@ -2136,7 +2196,7 @@ function OpenModelMenu()
 	
 	Steel_Steve_Button:SizeToContents()
 	Steel_Steve_Button:Center()
-	Steel_Steve_Button:SetY(ScrH() / 1.5385)
+	Steel_Steve_Button:SetY(ScrH() / 1.5195)
 	
 	--TFE Sam
 	local Sam_TFE_Button = vgui.Create("DButton", ModelMenu)
@@ -2197,7 +2257,7 @@ function OpenModelMenu()
 	
 	Sam_TFE_Button:SizeToContents()
 	Sam_TFE_Button:Center()
-	Sam_TFE_Button:SetY(ScrH() / 1.45)
+	Sam_TFE_Button:SetY(ScrH() / 1.4375)
 	
 	--TSE Sam
 	local Sam_Button = vgui.Create("DButton", ModelMenu)
@@ -2258,7 +2318,7 @@ function OpenModelMenu()
 	
 	Sam_Button:SizeToContents()
 	Sam_Button:Center()
-	Sam_Button:SetY(ScrH() / 1.3725)
+	Sam_Button:SetY(ScrH() / 1.36685)
 	
 	--Vegetable Vaughn
 	local Veggie_Vaughn_Button = vgui.Create("DButton", ModelMenu)
@@ -2319,7 +2379,7 @@ function OpenModelMenu()
 	
 	Veggie_Vaughn_Button:SizeToContents()
 	Veggie_Vaughn_Button:Center()
-	Veggie_Vaughn_Button:SetY(ScrH() / 1.3025)
+	Veggie_Vaughn_Button:SetY(ScrH() / 1.302)
 	
 	--Yellow Yarek
 	local Yellow_Yarek_Button = vgui.Create("DButton", ModelMenu)
