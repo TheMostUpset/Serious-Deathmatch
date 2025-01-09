@@ -15,7 +15,7 @@ local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
 local cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, FCVAR_ARCHIVE, "Enables frags limit for match to end", 0, 1)
-local cvar_holiday = CreateConVar("sdm_holiday", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
+local cvar_holiday = CreateConVar("sdm_holiday", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
 local cvar_powerups = CreateConVar("sdm_powerups", 1, FCVAR_ARCHIVE, "Enables powerups", 0, 1)
 
 hook.Add( "CanPlayerSuicide", "DisableSpecSuicide", function( ply )

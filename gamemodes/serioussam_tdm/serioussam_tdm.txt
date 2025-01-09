@@ -28,7 +28,7 @@
 			"name"		"sdm_holiday"
 			"text"		"sdm_setting_holiday"
 			"type"		"CheckBox"
-			"default"	"1"
+			"default"	"0"
 		}
 		4
 		{
