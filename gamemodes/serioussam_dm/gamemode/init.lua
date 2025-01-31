@@ -1,4 +1,7 @@
 resource.AddWorkshop("3127352943")
+resource.AddWorkshop("262062192")
+resource.AddWorkshop("258523980")
+resource.AddWorkshop("718492479")
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("cl_hud.lua")
@@ -15,7 +18,6 @@ local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
 local cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, FCVAR_ARCHIVE, "Enables frags limit for match to end", 0, 1)
-local cvar_holiday = CreateConVar("sdm_holiday", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
 local cvar_powerups = CreateConVar("sdm_powerups", 1, FCVAR_ARCHIVE, "Enables powerups", 0, 1)
 
 hook.Add( "CanPlayerSuicide", "DisableSpecSuicide", function( ply )
@@ -661,7 +663,7 @@ function GM:PlayerInitialSpawn(ply)
 	self:UpdatePlayerSpeed(ply)
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
 	ply:SetSkin(0)
-	if cvar_holiday:GetInt() == 0 then
+	if GetConVar("sdm_holiday"):GetInt() == 0 then
 		ply:SetBodygroup(0, 0)
 		ply:ConCommand("sdm_playermodel_bodygroup 0")
 	else

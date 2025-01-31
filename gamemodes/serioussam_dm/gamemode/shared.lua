@@ -17,7 +17,9 @@ end
 if !cvar_timer_enabled then
 	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
-
+if !cvar_holiday then
+	local cvar_holiday = CreateConVar("sdm_holiday", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
+end
 STATE_GAME_WARMUP = 0
 STATE_GAME_PREPARE = 1
 STATE_GAME_PROGRESS = 2

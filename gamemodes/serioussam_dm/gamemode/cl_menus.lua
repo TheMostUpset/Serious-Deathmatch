@@ -1840,7 +1840,7 @@ function OpenModelMenu()
 	local Mental_Mate_Button = vgui.Create("DButton", ModelMenu)
 	local isFlashing = false
 	Mental_Mate_Button:SetFont("MainMenu_Font_64")
-	Mental_Mate_Button:SetText("Mental Mate")
+	Mental_Mate_Button:SetText("#sdm_mentalmate")
 	Mental_Mate_Button:SetTextColor(GetButtonColor())
 	Mental_Mate_Button.Paint = function(self, w, h) 
 		if isFlashing then
