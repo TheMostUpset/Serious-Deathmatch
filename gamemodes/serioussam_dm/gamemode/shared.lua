@@ -11,6 +11,9 @@ cvar_instagib = CreateConVar("sdm_instagib", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED
 if !cvar_max_frags then
 	cvar_max_frags = CreateConVar("sdm_max_frags", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
+if !cvar_frag_limit then
+	cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Enables frags limit for match to end", 0, 1)
+end
 if !cvar_max_time then
 	cvar_max_time = CreateConVar("sdm_max_time", 600, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end

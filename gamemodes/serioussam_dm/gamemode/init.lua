@@ -17,7 +17,6 @@ AddCSLuaFile("player_ext.lua")
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
 local cvar_minplayers = CreateConVar("sdm_minplayers", 2, FCVAR_ARCHIVE, "Minimum player count to start a match", 0)
-local cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, FCVAR_ARCHIVE, "Enables frags limit for match to end", 0, 1)
 local cvar_powerups = CreateConVar("sdm_powerups", 1, FCVAR_ARCHIVE, "Enables powerups", 0, 1)
 
 hook.Add( "CanPlayerSuicide", "DisableSpecSuicide", function( ply )
@@ -35,7 +34,7 @@ util.AddNetworkString("PlayerFrag")
 util.AddNetworkString("PlayerKilledBy")
 util.AddNetworkString("ClientChatMessage")
 
-resource.AddFile( "resource/fonts/seriousmenu.ttf" )
+resource.AddSingleFile( "resource/fonts/seriousmenu.ttf" )
 
 PLAYER_WALKSPEED = 400
 PLAYER_RUNSPEED = 300
@@ -494,7 +493,7 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 		net.Start("PlayerFrag")
 		net.WriteString(ply:Nick())
 		net.Send(attacker)
-		if attacker:Frags() >= cvar_max_frags:GetInt() and cvar_frag_limit:GetInt() == 1 then
+		if attacker:Frags() >= GetConVar("sdm_max_frags"):GetInt() and GetConVar("sdm_frag_limit"):GetInt() == 1 then
 			self:GameEnd()
 		end
 	end
