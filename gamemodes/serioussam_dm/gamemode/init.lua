@@ -36,11 +36,11 @@ util.AddNetworkString("ClientChatMessage")
 
 resource.AddSingleFile( "resource/fonts/seriousmenu.ttf" )
 
-PLAYER_WALKSPEED = 400
-PLAYER_RUNSPEED = 300
+PLAYER_WALKSPEED = 375
+PLAYER_RUNSPEED = 125
 PLAYER_JUMPPOWER = 300
 
-PLAYER_WALKSPEED_KNIFE = 500
+PLAYER_WALKSPEED_KNIFE = 450
 PLAYER_JUMPPOWER_KNIFE = 375
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
