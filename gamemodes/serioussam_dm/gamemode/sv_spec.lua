@@ -36,7 +36,7 @@ concommand.Add( "sdm_joingame", function( ply, cmd, args )
 	GAMEMODE:PlayerLoadout(ply)
 end )
 
---stolen code from q3gmod
+--stolen code from q3gmod (i'm allowed to i guess)
 GM.specplys = {}
 
 function GM:UpdatePlayerList()

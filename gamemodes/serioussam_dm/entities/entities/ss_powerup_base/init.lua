@@ -7,7 +7,7 @@ util.AddNetworkString("SSPowerupsClient")
  
 ENT.PDuration = 30
 ENT.RespawnTime = 180
-local ss_cvar_powerupduration = CreateConVar("sdm_powerupduration", 30)
+local ss_cvar_powerupduration = GetConVar("sdm_powerupduration")
 
 function ENT:SpawnFunction(ply, tr)
 	if (!tr.Hit) then return end

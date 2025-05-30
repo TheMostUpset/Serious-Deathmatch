@@ -9,7 +9,6 @@ AddCSLuaFile("cl_fonts.lua")
 AddCSLuaFile("cl_menus.lua")
 AddCSLuaFile("cl_weaponselection.lua")
 AddCSLuaFile("shared.lua")
--- AddCSLuaFile("shared_killfeed.lua")
 AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 AddCSLuaFile("player_ext.lua")
@@ -69,7 +68,7 @@ function GM:ShutDown()
 	RunConsoleCommand("sv_airaccelerate", "10")
 end
 
--- хук который вызывается после создания всех энтитей, но игроков в этот момент еще может не быть
+-- hook which is being called after creating all entities, but players may be not spawned
 function GM:InitPostEntity()
 	local weapon_ss_doubleshotgun = weapons.GetStored("weapon_ss_doubleshotgun")
 	if weapon_ss_doubleshotgun then weapon_ss_doubleshotgun.Primary.AnimSpeed = 1.5 end
@@ -317,7 +316,7 @@ function GM:ReplacePickupEntities()
 	end
 end
 
--- вызывается каждый фрейм
+-- called each frame
 function GM:Think()
 	if cvar_timer_enabled:GetBool() and self:GetState() == STATE_GAME_PROGRESS then
 		local getGameTime = GetGlobalFloat("GameTime")
@@ -359,7 +358,7 @@ end
 	Name: gamemode:DoPlayerDeath( )
 	Desc: Carries out actions when the player dies
 	
-	взято из base gamemode, чтобы добавить своё
+	taken from base gamemode to edit it
 -----------------------------------------------------------]]
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 	if ply:Team() == TEAM_SPECTATOR then return end
@@ -499,7 +498,7 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 	end
 end
 
--- отключаем урон после конца игры, чтобы ничего не сломать
+-- disable damage after match ends to prevent breaking the gamemode
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	if ply.SpawnProtection > CurTime() then return false end
 	return self:GetState() != STATE_GAME_END
@@ -574,7 +573,6 @@ end
 function GM:GameRestart()
 	game.CleanUpMap()
 	self:ResetGameState()
-	-- hook.Run("InitPostEntity")
 	self:ReplacePickupEntities()
 	if self:IsInstagib() then
 		self:ToggleMapPickups(false)
@@ -631,7 +629,6 @@ function GM:UpdatePlayerSpeed(ply, wep)
 	local mul = hasSeriousSpeed and 2 or 1
 	
 	ply:SetRunSpeed(PLAYER_RUNSPEED * mul)	
-   -- ply:SetSlowWalkSpeed( 380 )
 	if IsValid(wep) and wep:GetClass() == "weapon_ss_knife" then
 		mul = hasSeriousSpeed and 1.315 or 1
 		ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE * mul)
@@ -682,8 +679,6 @@ function GM:PlayerInitialSpawn(ply)
 	
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
 
-	
-	--ply:ConCommand("sdm_specmenu")
 end
 
 function GM:PlayerDisconnected(ply)
@@ -730,11 +725,11 @@ end
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	if !cvar_hitboxes:GetBool() then return end
 
-	-- More damage if we're shot in the head
+	-- more damage if we're shot in the head
 	if hitgroup == HITGROUP_HEAD then
 		dmginfo:ScaleDamage( 2 )
 	end
-	-- Less damage if we're shot in the arms or legs
+	-- less damage if we're shot in the arms or legs
 	if hitgroup == HITGROUP_LEFTARM or
 		hitgroup == HITGROUP_RIGHTARM or
 		 hitgroup == HITGROUP_LEFTLEG or
@@ -768,7 +763,6 @@ end
 
 function GM:AcceptInput(ent, input, activator, caller, value)
 	if ent:GetClass() == "info_teleport_destination" and caller:GetClass() == "trigger_teleport" and activator:IsValid() and activator:IsPlayer() then
-		-- caller:EmitSound("q3/teleout.wav", 85, 100)
 		activator:EmitSound("misc/serioussam/teleport.wav", 80, 100)
 		local ang = ent:GetAngles()
 		//local vel = activator:GetVelocity():Length2D()
@@ -776,10 +770,6 @@ function GM:AcceptInput(ent, input, activator, caller, value)
 		activator:ScreenFade(SCREENFADE.IN, Color(100, 100, 100, 200), .05, 0)
 		
 		local pos = activator:GetPos()
-		
-		-- local effectdata = EffectData()
-		-- effectdata:SetOrigin(pos)
-		-- util.Effect("q3spawneffect", effectdata, true, true)
 		
 		-- telefrag
 		local Ents = ents.FindInBox( pos + activator:OBBMins(), pos + activator:OBBMaxs() )
@@ -791,40 +781,6 @@ function GM:AcceptInput(ent, input, activator, caller, value)
 	end
 end
 
---[[net.Receive( "set", function( len, ply ) -- len is the net message length, which we don't care about, ply is the player who sent it.
-	 local color = net.ReadTable()
-	 local model = net.ReadString()
-	 ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
-	 ply:SetModel(model)
-	 local oldhands = ply:GetHands()
-	if ( IsValid( oldhands ) ) then oldhands:Remove() end
-
-	local hands = ents.Create( "gmod_hands" )
-	if ( IsValid( hands ) ) then
-		ply:SetHands( hands )
-		hands:SetOwner( ply )
-
-		-- Which hands should we use?
-		local cl_playermodel = ply:GetInfo( "cl_playermodel" )
-		local info = player_manager.TranslatePlayerHands( cl_playermodel )
-		if ( info ) then
-			hands:SetModel( info.model )
-			hands:SetSkin( info.skin )
-			hands:SetBodyGroups( info.body )
-		end
-
-		-- Attach them to the viewmodel
-		local vm = ply:GetViewModel( 0 )
-		hands:AttachToViewmodel( vm )
-
-		vm:DeleteOnRemove( hands )
-		ply:DeleteOnRemove( hands )
-
-		hands:Spawn()
-	end
-	
-	
-end )]]
 
 local spawnpointmin = Vector( -16, -16, 0 )
 local spawnpointmax = Vector( 16, 16, 64 )

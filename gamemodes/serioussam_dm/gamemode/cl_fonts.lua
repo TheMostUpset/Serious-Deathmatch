@@ -22,7 +22,7 @@ surface.CreateFont("seriousHUDfont_targetid", {
 })
 
 surface.CreateFont( "Scoreboard_Font", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	font = "Roboto",
 	extended = true,
 	size = ScrW() / 46,
 	weight = 800,
@@ -39,7 +39,7 @@ surface.CreateFont("killfeed_font",{
 });
 
 surface.CreateFont( "Death_Font", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	font = "Roboto",
 	extended = true,
 	size = ScrH() / 42,
 	weight = 800,
@@ -47,7 +47,7 @@ surface.CreateFont( "Death_Font", {
 } )
 
 surface.CreateFont( "Frag_Font", {
-	font = "Roboto", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+	font = "Roboto",
 	extended = true,
 	size = ScrH() / 32,
 	weight = 800,

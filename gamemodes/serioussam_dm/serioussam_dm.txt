@@ -18,61 +18,68 @@
 		}
 		2
 		{
+			"name"		"sdm_powerupduration"
+			"text"		"sdm_settings_powerupduration"
+			"type"		"Numeric"
+			"default"	"30"
+		}
+		3
+		{
 			"name"		"sdm_holiday"
 			"text"		"sdm_setting_holiday"
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		3
+		4
 		{
 			"name"		"sdm_frag_limit"
 			"text"		"sdm_setting_fraglimit"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		4
+		5
 		{
 			"name"		"sdm_use_hitboxes"
 			"text"		"sdm_setting_headshots"
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		5
+		6
 		{
 			"name"		"sdm_instagib"
 			"text"		"sdm_setting_instagib"
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		6
+		7
 		{
 			"name"		"sdm_mapvote_enabled"
 			"text"		"sdm_setting_mapvote"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		7
+		8
 		{
 			"name"		"sdm_powerups"
 			"text"		"sdm_setting_powerups"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		8
+		9
 		{
 			"name"		"sdm_timer_enabled"
 			"text"		"sdm_setting_timer"
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		9
+		10
 		{
 			"name"		"sdm_max_time"
 			"text"		"sdm_setting_maxtime"
 			"type"		"Numeric"
 			"default"	"600"
 		}
-		10
+		11
 		{
 			"name"		"sdm_minplayers"
 			"text"		"sdm_setting_playerstart"

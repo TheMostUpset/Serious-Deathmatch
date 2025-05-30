@@ -1,28 +1,43 @@
 
 GM.Name = "Serious Deathmatch"
-GM.Author = "wico."
+GM.Author = "wico. and upset"
 GM.Email = "N/A"
 GM.Website = "N/A"
+
 
 cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
 cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
-cvar_instagib = CreateConVar("sdm_instagib", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Instagib mode", 0, 1)
+
+
 if !cvar_max_frags then
 	cvar_max_frags = CreateConVar("sdm_max_frags", 20, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
+
 if !cvar_frag_limit then
 	cvar_frag_limit = CreateConVar("sdm_frag_limit", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Enables frags limit for match to end", 0, 1)
 end
+
 if !cvar_max_time then
 	cvar_max_time = CreateConVar("sdm_max_time", 600, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
 end
+
 if !cvar_timer_enabled then
-	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
+	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, 0, 1)
 end
+
 if !cvar_holiday then
-	local cvar_holiday = CreateConVar("sdm_holiday", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
+	cvar_holiday = CreateConVar("sdm_holiday", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
 end
+
+if !cvar_powerupduration then
+	cvar_powerupduration = CreateConVar("sdm_powerupduration", 30, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY})
+end
+
+if !cvar_instagib then
+	cvar_instagib = CreateConVar("sdm_instagib", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Instagib mode", 0, 1)
+end
+
 STATE_GAME_WARMUP = 0
 STATE_GAME_PREPARE = 1
 STATE_GAME_PROGRESS = 2
@@ -32,7 +47,6 @@ MAPVOTE_NOTVOTED  	= 0
 MAPVOTE_VOTING		= 1
 MAPVOTE_VOTED		= 2
 
--- include( "shared_killfeed.lua" )
 include( "shared_gibs.lua" )
 include("player_ext.lua")
 include("mapvote.lua")
@@ -160,9 +174,9 @@ function GM:PlayerTick(ply, mv)
 		end
 	end
 	if SERVER then
-		-- CheckIfPlayerStuck который был в таймере
+		-- CheckIfPlayerStuck which one was in timer
 		if ply:Alive() and (!ply.nextStuckCheck or ply.nextStuckCheck < CurTime()) then
-			ply.nextStuckCheck = CurTime() + 1 -- перепроверяем каждую секунду
+			ply.nextStuckCheck = CurTime() + 1 -- check every second
 			if !ply:InVehicle() then
 				local Offset = Vector(2, 2, 2) -- This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
 				local pushDir = VectorRand()

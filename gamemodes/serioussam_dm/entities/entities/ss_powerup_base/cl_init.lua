@@ -7,22 +7,27 @@ net.Receive("SSPowerupsClient", function()
 	end
 end)
 
-local icons = {
-	["SeriousDamage"] = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage"),
-	["Invisibility"] = surface.GetTextureID("vgui/serioussam/hud/pinvisibility"),
-	["Protect"] = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability"),
-	["Speed"] = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
-}
-
 hook.Add("HUDPaint", "SSPowerupsHUD", function()
+
 	local client = LocalPlayer()
 	local t = client.SSPowerups
     if !t then return end
 	
-	-- local hasSDMG = t.SeriousDamage and t.SeriousDamage > CurTime()
-	-- local hasInvis = t.Invisibility and t.Invisibility > CurTime()
-	-- local hasProtect = t.Protect and t.Protect > CurTime()
-	-- local hasSSpeed = t.Speed and t.Speed > CurTime()
+	local icons = {
+			["SeriousDamage"] = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage"),
+			["Invisibility"] = surface.GetTextureID("vgui/serioussam/hud/pinvisibility"),
+			["Protect"] = surface.GetTextureID("vgui/serioussam/hud/pinvulnerability"),
+			["Speed"] = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
+		}
+
+	if SeriousHUD:GetSkin() == 1 then 
+		icons = {
+			["SeriousDamage"] = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/pseriousdamage"),
+			["Invisibility"] = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/pinvisibility"),
+			["Protect"] = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/pinvulnerability"),
+			["Speed"] = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/pseriousspeed")
+		}
+	end
 	
 	local size = ScrH() / 14.75
 	local gap_screen = ScrH() / 14
@@ -34,8 +39,10 @@ hook.Add("HUDPaint", "SSPowerupsHUD", function()
     local CT = CurTime()
 	local powerupx = ScrH() / 14.75 /1.25
 	local powerupy = ScrH() / 14.75 /1.25
+	local dur = GetConVar("sdm_powerupduration"):GetInt()
 	
 	local frame_r, frame_g, frame_b = SeriousHUD:GetFrameColor()
+	local r, g, b = SeriousHUD:GetColor()
 	
 	for k, v in pairs(t) do
 		if v > CurTime() then
@@ -43,20 +50,26 @@ hook.Add("HUDPaint", "SSPowerupsHUD", function()
 			surface.SetDrawColor(Color(frame_r, frame_g, frame_b))
 			surface.DrawOutlinedRect(iconpos, ammoy, powerupx, powerupy)
 			surface.SetTexture(icons[k])
-			surface.SetDrawColor(255, 255, 255, 255)
+			
+			if SeriousHUD:GetSkin() == 1 then 
+				surface.SetDrawColor(r, g, b, 255)
+			elseif SeriousHUD:GetSkin() == 2 then
+				surface.SetDrawColor(255, 255, 255, 255)
+			end
+			
 			surface.DrawTexturedRect(iconpos+2, ammoy+2, ammosize/1.075, ammosize/1.075)	
-			local timebar = (v - CT) / 34
-			local scale = math.floor(ammosize * timebar)
+			local timebar = (v - CT)
+			local scale = math.floor((ammosize * timebar ) / dur - ScrH()/270)
 			if SeriousHUD:GetSkin() == 1 then
-				local r, g, b = SeriousHUD:GetColor()
 				surface.SetDrawColor(r, g, b, 220)
 				if timebar < 0.2 then
 					surface.SetDrawColor(255, 0, 0, 220)
 				end
 			elseif SeriousHUD:GetSkin() == 2 then
-				surface.SetDrawColor(255, 255 * timebar, 0, 220)
+				surface.SetDrawColor(255, 255 * timebar / 10, 0, 220)
 			end
 			surface.DrawRect(iconpos + ammosize / 1.375, ammoy+ammosize-scale-3, ammosize / 4.75, scale)
+			
 			
 			iconpos = iconpos - powerupx - icon_gap
 		end
