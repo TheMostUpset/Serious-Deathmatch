@@ -46,8 +46,8 @@ end
 local lastMusicStation
 GM.MusicTable = {
     ["sdm_red_station"] = "redstation.ogg",
-    ["sdm_desert_temple"] = "redstation.ogg",
-    ["sdmw_winter_temple"] = "redstation.ogg",
+    ["sdm_desert_temple"] = "deserttemple.ogg",
+    ["sdmw_winter_temple"] = "deserttemple.ogg",
     ["sdm_sun_palace"] = "sunpalace.ogg",
     ["sdm_little_trouble"] = "littetrouble.ogg",
     ["sdmw_little_winter"] = "littetrouble.ogg",
@@ -55,8 +55,9 @@ GM.MusicTable = {
     ["sdmw_xmas_chevap"] = "brkeen.ogg",
     ["sdm_lost_tomb"] = "losttomb.ogg",
     ["sdm_hole_classic"] = "holeclassic.ogg",
-    ["stdm_crystal_march"] = "kukulkan.ogg",
+    ["stdm_crystal_march"] = "crystalmarch.ogg",
     ["sdm_the_fortress"] = "thefortress.ogg",
+    ["sdm_yoddler_classic"] = "yoddler.ogg",
 }
 function GM:PlayMapMusic(volume)
 	if lastMusicStation and IsValid(lastMusicStation) then
