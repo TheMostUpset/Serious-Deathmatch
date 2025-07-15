@@ -53,7 +53,7 @@ function PaintBackground(self, w, h)
 	else
 		surface.SetTexture(ssbg)
 	end
-	surface.SetDrawColor(hudr, hudg, hudb, 150)
+	surface.SetDrawColor(hudr, hudg, hudb, 75)
 	local texW = 256
 	local texH = 256
 	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
@@ -81,7 +81,7 @@ function PaintBackground(self, w, h)
 
 	if skin == 1 then 
 		surface.SetTexture(grid_bg)
-		surface.SetDrawColor(hudr, hudg, hudb, 125)
+		surface.SetDrawColor(hudr, hudg, hudb, 75)
 	end
 	if skin == 2 then 
 		surface.SetDrawColor(0, 0, 0, 0)
@@ -108,9 +108,8 @@ function PaintBackground(self, w, h)
 	else
 		surface.SetTexture(detailTexture_vtf)
 	end
-	surface.SetDrawColor(hudr, hudg, hudb, 125)
+	surface.SetDrawColor(hudr, hudg, hudb, 85)
 	surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*5, h*5, 0, 0, w / texW, h / texH )
-	
 end
 
 function GetButtonColor()
@@ -195,15 +194,11 @@ function OpenSSMenu()
 	EscMenu:SetMouseInputEnabled(true)
 	EscMenu.Think  = nil
 
-
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
-
-
-
 
 	local Continue_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -575,12 +570,12 @@ function OpenConfirmationMenu()
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0, 0, 0, 255)
 		surface.DrawRect(0, 0, w, h)
-		surface.SetDrawColor(hudr, hudg, hudb, 255)
+		surface.SetDrawColor(hudr, hudg, hudb, 75)
 		surface.DrawOutlinedRect(0, 0, w, h, 1)
 		
 		surface.SetTexture(ssbg)
 		local hudr, hudg, hudb = SeriousHUD:GetColor()
-		surface.SetDrawColor(hudr, hudg, hudb, 145)
+		surface.SetDrawColor(hudr, hudg, hudb, 75)
 		local texW = 256
 		local texH = 256
 		if GetConVarNumber("ss_hud_skin") == 2 then
@@ -604,8 +599,6 @@ function OpenConfirmationMenu()
 		if offset > w then
 			offset = 0
 		end
-
-
 
 		local texW = 256
 		local texH = 128
@@ -652,7 +645,7 @@ function OpenSettingsMenu()
 	local ModelBack = vgui.Create("DImage", SettingsMenu)
 	ModelBack:SetX(ScrW()/1.5)
 	ModelBack:SetY(ScrH()/6.85)
-	ModelBack:SetSize(ScrW()/3.25+2, ScrW()/2.5+2)
+	ModelBack:SetSize(ScrW()/3.25+2, ScrW()/2.65+2)
 	ModelBack.Paint = function(self, w, h)
 		local offsetx = math.sin(CurTime() * 1.5) * 30
 		local offsety = math.cos(CurTime()* 1.5) * 30
@@ -680,12 +673,12 @@ function OpenSettingsMenu()
 			surface.SetTexture(ssbg)
 		end
 		
-		surface.SetDrawColor(hudr, hudg, hudb, 50)
+		surface.SetDrawColor(hudr, hudg, hudb, 25)
 		local texW = 256
 		local texH = 256
 		surface.DrawTexturedRectUV( offsetx-48, offsety-48, 1024, 1024, 0, 0, 2048 / texW, 2048 / texH )
 		
-		surface.SetDrawColor(hudr, hudg, hudb, 25)
+		surface.SetDrawColor(hudr, hudg, hudb, 50)
 		surface.DrawTexturedRectUV( offsetx2-48, offsety2-48, 1024, 1024, 0, 0, 2048 / texW, 2048 / texH )
 	end
 	
@@ -739,7 +732,7 @@ function OpenSettingsMenu()
 	PMSelect_Button:SizeToContents()
 	local boundx, boundy, boundw, boundh = PMSelect_Button:GetBounds()
 	PMSelect_Button:SetX(ScrW()/1.5)
-	PMSelect_Button:SetY(ScrH()/1.2)
+	PMSelect_Button:SetY(ScrH()/1.215)
 
 	local ModelButton = vgui.Create( "DButton", SettingsMenu )
 	local isFlashing = false

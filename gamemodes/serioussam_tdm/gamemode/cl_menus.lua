@@ -43,7 +43,7 @@ function PaintBackground(self, w, h)
 	else
 		surface.SetTexture(ssbg)
 	end
-	surface.SetDrawColor(hudr, hudg, hudb, 150)
+	surface.SetDrawColor(hudr, hudg, hudb, 75)
 	local texW = 256
 	local texH = 256
 	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
@@ -52,26 +52,26 @@ function PaintBackground(self, w, h)
 	end
 	
 	if skin == 2 then
-	surface.SetDrawColor(255,255,255)
-	surface.SetTexture(sam)
+		surface.SetDrawColor(255,255,255)
+		surface.SetTexture(sam)
 	if fourbythree < 1.5 then
-	surface.DrawTexturedRect(w/1.5, h/5.5, w/3.5, h/1.3)
+		surface.DrawTexturedRect(w/1.5, h/5.5, w/3.5, h/1.3)
 	else
-	surface.DrawTexturedRect(w/1.5, h/5.5, w/4.5, h/1.3)
+		surface.DrawTexturedRect(w/1.5, h/5.5, w/4.5, h/1.3)
 	end
 	
 	surface.SetDrawColor(255,255,255)
 	surface.SetTexture(pillar)
 	if fourbythree < 1.5 then
-	surface.DrawTexturedRect(w-w, h-h, w/6, h)
+		surface.DrawTexturedRect(w-w, h-h, w/6, h)
 	else
-	surface.DrawTexturedRect(w-w, h-h, w/8, h)
+		surface.DrawTexturedRect(w-w, h-h, w/8, h)
 	end
 	end
 
 	if skin == 1 then 
-	surface.SetTexture(grid_bg)
-	surface.SetDrawColor(hudr, hudg, hudb, 200)
+		surface.SetTexture(grid_bg)
+		surface.SetDrawColor(hudr, hudg, hudb, 75)
 	end
 	if skin == 2 then 
 		surface.SetDrawColor(0, 0, 0, 0)
@@ -98,7 +98,7 @@ function PaintBackground(self, w, h)
 	else
 		surface.SetTexture(detailTexture_vtf)
 	end
-	surface.SetDrawColor(hudr, hudg, hudb, 140)
+	surface.SetDrawColor(hudr, hudg, hudb, 85)
 	surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*5, h*5, 0, 0, w / texW, h / texH )
 end
 
@@ -511,12 +511,12 @@ function OpenConfirmationMenu()
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0, 0, 0, 255)
 		surface.DrawRect(0, 0, w, h)
-		surface.SetDrawColor(hudr, hudg, hudb, 255)
+		surface.SetDrawColor(hudr, hudg, hudb, 75)
 		surface.DrawOutlinedRect(0, 0, w, h, 1)
 		
 		surface.SetTexture(ssbg)
 		local hudr, hudg, hudb = SeriousHUD:GetColor()
-		surface.SetDrawColor(hudr, hudg, hudb, 145)
+		surface.SetDrawColor(hudr, hudg, hudb, 75)
 		local texW = 256
 		local texH = 256
 		if GetConVarNumber("ss_hud_skin") == 2 then
@@ -540,8 +540,6 @@ function OpenConfirmationMenu()
 		if offset > w then
 			offset = 0
 		end
-
-
 
 		local texW = 256
 		local texH = 128
