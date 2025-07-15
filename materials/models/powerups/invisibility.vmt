@@ -3,6 +3,7 @@
 	"$basetexture" "models/powerups/invisibility"
 	"$bumpmap"	"models/powerups/invisibility_normal"
 	"$halflambert" 1
+	"$nocull" 1
 	
 	$phong 1
 	$phongboost 10

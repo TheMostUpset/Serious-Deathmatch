@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/serioussam/powerups/gold"
+	"$basetexture" "models/serioussam/powerups/gold1"
 	"$bumpmap"	"models/serioussam/powerups/gold_normal"	
 	"$detail" "models/serioussam/powerups/gold_detail.vtf"
 	"$detailscale" "0.1"
@@ -18,5 +18,6 @@
 	"$basemapalphaphongmask" "1"
 	"$envmap" "customcubemaps/simplespec.vtf"
 	$envmaptint 0.1
+	"$nocull" 1
 
 }

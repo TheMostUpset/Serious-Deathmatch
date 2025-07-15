@@ -2,6 +2,7 @@
 {
 	"$basetexture" "models/effects/serioussam/sdmg_overlay"
 	"$additive" 1
+	"$nocull" 1
 				"Proxies"
 	{
 		"AnimatedTexture"
