@@ -27,6 +27,7 @@ end )
 include("shared.lua")
 include("sb.lua")
 include("sv_spec.lua")
+include("taunts.lua")
 
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
