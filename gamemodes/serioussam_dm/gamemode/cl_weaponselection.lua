@@ -242,7 +242,7 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
         thisWidth = thisWidth + width + Marge
     end
 
-    x = ScrW()/2 - powerupx/2 - (#LocalPlayer():GetWeapons() * (icon_gap * 5)) 
+    x = ScrW()/2 - powerupx/2 - (#LocalPlayer():GetWeapons() * (icon_gap * 4.5)) 
 
 	
 	ss_x = (ScrW() + thisWidth) / 2

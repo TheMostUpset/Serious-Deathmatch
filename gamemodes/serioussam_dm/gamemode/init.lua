@@ -698,8 +698,7 @@ function GM:PlayerLoadout(ply)
 		ply:Give("weapon_ss_knife")
 	else
 		ply:Give('weapon_ss_knife')
-		ply:Give('weapon_ss_colt_dual')
-		ply:Give('weapon_ss_singleshotgun')
+		ply:Give('weapon_ss_colt')
 	end
 	
 	ply:SetRenderMode( RENDERMODE_TRANSCOLOR )
