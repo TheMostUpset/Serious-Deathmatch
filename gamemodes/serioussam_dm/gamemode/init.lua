@@ -52,7 +52,7 @@ cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 		GAMEMODE:PlayerLoadout(ply)
 	end
 	GAMEMODE:ToggleMapPickups(!value_new)
-	if value_new then	
+	if value_new then
 		GAMEMODE:ReplaceSDMGPickup()
 	else
 		GAMEMODE:RestoreSDMGPickup()
@@ -79,7 +79,7 @@ function GM:InitPostEntity()
 	-- if ammo_base then ammo_base.ModelScale = 10 end
 
 	self:ReplacePickupEntities()
-	
+
 	if self:IsInstagib() then
 		self:ToggleMapPickups(false)
 		self:ReplaceSDMGPickup()
@@ -358,7 +358,7 @@ end
 --[[---------------------------------------------------------
 	Name: gamemode:DoPlayerDeath( )
 	Desc: Carries out actions when the player dies
-	
+
 	taken from base gamemode to edit it
 -----------------------------------------------------------]]
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
@@ -379,11 +379,11 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		end
 
 	end
-	
+
 	net.Start("PlayerKilledBy")
 	net.WriteString(IsValid(attacker) and attacker:IsPlayer() and attacker:Nick() or "")
 	net.Send(ply)
-	
+
 	local actWep = ply:GetActiveWeapon()
 	if IsValid(actWep) then
 		self:SpawnPickupOnDeath(ply, actWep)
@@ -391,12 +391,12 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 
 end
 
-function GM:PlayerDeath( ply, inflictor, attacker )	
+function GM:PlayerDeath( ply, inflictor, attacker )
 	if ply:Team() == TEAM_SPECTATOR then return end
 	-- Don't spawn for at least 2 seconds
 	ply.NextSpawnTime = CurTime() + 2
 	ply.DeathTime = CurTime()
-	
+
 
 	if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ply end
 
@@ -452,7 +452,7 @@ function GM:PlayerDeathThink( ply )
 
 	if ply.NextSpawnTime && ply.NextSpawnTime > CurTime() then return end
 	if ply:Team() == TEAM_SPECTATOR then return end
-	
+
 	if ply:IsBot() or ply:KeyPressed(IN_ATTACK) then
 		ply:Spawn()
 	end
@@ -585,7 +585,7 @@ function GM:GameRestart()
 		v:SetDeaths(0)
 		v:Spawn()
 	end
-	
+
 	if player.GetCount() >= cvar_minplayers:GetInt() then
 		timer.Simple(1, function()
 			if player.GetCount() >= cvar_minplayers:GetInt() then
@@ -616,7 +616,7 @@ function GM:KeyPress(ply, key)
 	if ply:Team() == TEAM_SPECTATOR then
 		hook.Run("SpectatorKeyPress", ply, key)
 	end
-	
+
 	if ply:Team() != TEAM_SPECTATOR then
 		if movekeys[key] then
 			ply.keyLastPressed = SysTime()
@@ -628,8 +628,8 @@ function GM:UpdatePlayerSpeed(ply, wep)
 	wep = wep or ply:GetActiveWeapon()
 	local hasSeriousSpeed = ply:HasSeriousSpeed()
 	local mul = hasSeriousSpeed and 2 or 1
-	
-	ply:SetRunSpeed(PLAYER_RUNSPEED * mul)	
+
+	ply:SetRunSpeed(PLAYER_RUNSPEED * mul)
 	if IsValid(wep) and wep:GetClass() == "weapon_ss_knife" then
 		mul = hasSeriousSpeed and 1.315 or 1
 		ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE * mul)
@@ -640,7 +640,7 @@ function GM:UpdatePlayerSpeed(ply, wep)
 		ply:SetWalkSpeed(PLAYER_WALKSPEED * mul)
 		mul = hasSeriousSpeed and 1.1 or 1
 		ply:SetJumpPower(PLAYER_JUMPPOWER * mul)
-	end   
+	end
 end
 
 function GM:UpdatePowerupTable(ply)
@@ -656,7 +656,7 @@ end
 
 function GM:PlayerInitialSpawn(ply)
 	ply:AllowFlashlight(false)
-	
+
 	self:UpdatePlayerSpeed(ply)
 	ply:SetModel("models/pechenko_121/samclassic.mdl")
 	ply:SetSkin(0)
@@ -670,14 +670,14 @@ function GM:PlayerInitialSpawn(ply)
 	if ply:IsBot() then
 		return
 	end
-	
+
 	ply:SetModel(ply:GetInfo("sdm_playermodel"))
-	
+
 	if string.GetPathFromFilename(ply:GetInfo("sdm_playermodel")) != "models/pechenko_121/" then
 		ply:SetModel("models/pechenko_121/samclassic.mdl")
 	end
-	
-	
+
+
 	ply:SetSkin(ply:GetInfo("sdm_playermodel_skin"))
 
 end
@@ -693,6 +693,7 @@ function GM:PostCleanupMap()
 end
 
 function GM:PlayerLoadout(ply)
+	if ply == TEAM_SPECTATOR then return end
 	if self:IsInstagib() then
 		ply:Give("weapon_ss_railgun")
 		ply:Give("weapon_ss_knife")
@@ -700,7 +701,7 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_knife')
 		ply:Give('weapon_ss_colt')
 	end
-	
+
 	ply:SetRenderMode( RENDERMODE_TRANSCOLOR )
 	ply.SpawnProtection = CurTime() + 3
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
@@ -710,12 +711,12 @@ function GM:PlayerLoadout(ply)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
-	
+
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP and ply:Team() == 0 then
 		self:GamePrepare()
 	end
-	
-	timer.Create( ply:SteamID() .. " blinking_timer", 3, 1, function() 
+
+	timer.Create( ply:SteamID() .. " blinking_timer", 3, 1, function()
 		ply:SetRenderFX(0)
 		timer.Remove(ply:SteamID() .. " blinking_timer")
 	end )
@@ -768,9 +769,9 @@ function GM:AcceptInput(ent, input, activator, caller, value)
 		//local vel = activator:GetVelocity():Length2D()
 		activator:SetLocalVelocity(ang:Forward() * 350)
 		activator:ScreenFade(SCREENFADE.IN, Color(100, 100, 100, 200), .05, 0)
-		
+
 		local pos = activator:GetPos()
-		
+
 		-- telefrag
 		local Ents = ents.FindInBox( pos + activator:OBBMins(), pos + activator:OBBMaxs() )
 		for k, v in pairs( Ents ) do
@@ -799,11 +800,11 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
 		if ( IsValid( v ) && v != pl && v:GetClass() == "player" && v:Alive() ) then
 
 			Blockers = Blockers + 1
-			
+
 			if ( bMakeSuitable ) then
-				v.nextStuckCheck = CurTime()				
+				v.nextStuckCheck = CurTime()
 			end
-			
+
 		end
 	end
 

@@ -28,10 +28,10 @@ if SERVER then
 		["Napalm"] = "#sdm_napalm",
 		["Rockets"] = "#sdm_rockets",
 		["Shells"] = "#sdm_shells",
-		
+
 		["Armor"] = "#sdm_armor",
 		["Health"] = "#sdm_health",
-		
+
 		["Cannon"] = "#sdm_cannon",
 		["Chainsaw"] = "#sdm_chainsaw",
 		["Colt"] = "#sdm_colt",
@@ -45,7 +45,7 @@ if SERVER then
 		["Shotgun"] = "#sdm_pump",
 		["Sniper Rifle"] = "#sdm_sniper",
 		["Thompson"] = "#sdm_tommygun",
-		
+
 		["Serious Damage"] = "#sdm_seriousdmg",
 		["Serious Speed"] = "#sdm_seriousspeed",
 		["Invulnerability"] = "#sdm_protect",
@@ -63,12 +63,38 @@ if SERVER then
 		net.WriteUInt(amount, 8)
 		net.Send(self)
 	end
-	
+
 	function meta:ChatMessage(tbl)
 		if !istable(tbl) then tbl = {tbl} end
 		net.Start("ClientChatMessage")
 		net.WriteTable(tbl)
 		net.Send(self)
 	end
-	
+
+	-- Original code from TTT
+	-- https://github.com/Facepunch/garrysmod/blob/3f6517458a1b74d469ba3f53f42ff37076a0037e/garrysmod/gamemodes/terrortown/gamemode/player_ext.lua
+	-- https://github.com/Facepunch/garrysmod/blob/3f6517458a1b74d469ba3f53f42ff37076a0037e/garrysmod/gamemodes/terrortown/gamemode/player_ext_shd.lua
+	-- This is a fix for spectator mode
+	-- And Spectator check
+	local plymeta = FindMetaTable( "Player" )
+	if not plymeta then Error("FAILED TO FIND PLAYER TABLE") return end
+
+	local oldSpectate = plymeta.Spectate
+	function plymeta:Spectate(type)
+		oldSpectate(self, type)
+
+	-- NPCs should never see spectators. A workaround for the fact that gmod NPCs
+	-- do not ignore them by default.
+		self:SetNoTarget(true)
+
+		if type == OBS_MODE_ROAMING then
+			self:SetMoveType(MOVETYPE_NOCLIP)
+		end
+	end
+
+	local oldUnSpectate = plymeta.UnSpectate
+	function plymeta:UnSpectate()
+		oldUnSpectate(self)
+		self:SetNoTarget(false)
+	end
 end

@@ -1,11 +1,11 @@
 concommand.Add( "sdm_joinspec", function( ply, cmd, args )
 	if !ply or !IsValid(ply) or ply:Team() == TEAM_SPECTATOR or GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
-	
+
 	if ply.joindelay and ply.joindelay >= CurTime() then
 		ply:ChatPrint("#sdm_timewait")
 		return
 	end
-	
+
 	ply:KillSilent()
 	ply:SetFrags(0)
 	ply:SetDeaths(0)
@@ -24,7 +24,7 @@ end )
 
 concommand.Add( "sdm_joingame", function( ply, cmd, args )
 	if !ply or !IsValid(ply) or ply:Team() == 0 or GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
-	
+
 	if ply.joindelay and ply.joindelay >= CurTime() then
 		ply:ChatPrint("#sdm_timewait")
 		return
@@ -58,7 +58,7 @@ function GM:NextPrevPlayer(curply, where)
 
 	local asd = table.KeyFromValue(self.specplys, curply)
 	asd = asd +where
-	
+
 	if !IsValid(self.specplys[asd]) then
 		if where == 1 then
 			asd = 1
@@ -66,14 +66,14 @@ function GM:NextPrevPlayer(curply, where)
 			asd = #self.specplys
 		end
 	end
-	
+
 	return self.specplys[asd]
 end
 
 function GM:SpectatorKeyPress(ply, key)
 	local obsTarget = ply:GetObserverTarget()
 	if !ply.specmode then ply.specmode = OBS_MODE_CHASE end
-	
+
 	if key == IN_DUCK and IsValid(obsTarget) then
 		if ply.specmode != OBS_MODE_IN_EYE then
 			ply.specmode = OBS_MODE_IN_EYE
@@ -82,10 +82,10 @@ function GM:SpectatorKeyPress(ply, key)
 		end
 		ply:SetObserverMode(ply.specmode)
 	end
-	
+
 	if key == IN_ATTACK then
 		local nextply = self:NextPrevPlayer(obsTarget, 1)
-		
+
 		if IsValid(nextply) then
 			ply:Spectate(ply.specmode)
 			ply:SpectateEntity(nextply)
@@ -106,7 +106,7 @@ function GM:SpectatorKeyPress(ply, key)
 		end
 	elseif key == IN_ATTACK2 then
 		local prevply = self:NextPrevPlayer(obsTarget, -1)
-		
+
 		if IsValid(prevply) then
 			ply:Spectate(ply.specmode)
 			ply:SpectateEntity(prevply)
@@ -134,8 +134,6 @@ function GM:SpectatorKeyPress(ply, key)
 			ply:SetNWInt("team_color_r", 200)
 			ply:SetNWInt("team_color_g", 200)
 			ply:SetNWInt("team_color_b", 200)
-			ply:UnSpectate()
-			ply:KillSilent()
 			ply:Spectate(OBS_MODE_ROAMING)
 			ply:SetNWString("spectator_plynick", "")
 		end

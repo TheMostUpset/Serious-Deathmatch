@@ -48,14 +48,14 @@ function GM:PlayerLoadout(ply)
 		ply:Give('weapon_ss_knife')
 		ply:Give('weapon_ss_colt')
 	end
-	
+
 	ply:SetModel("models/pechenko_121/redrick.mdl")
 	if ply:Team() == 1 then
 		ply:SetSkin(0)
 	elseif ply:Team() == 2 then
 		ply:SetSkin(5)
 	end
-	
+
 	if GetConVar("sdm_holiday"):GetInt() == 0 then
 		ply:SetBodygroup(0, 0)
 		ply:ConCommand("sdm_playermodel_bodygroup 0")
@@ -63,13 +63,13 @@ function GM:PlayerLoadout(ply)
 		ply:SetBodygroup(1, 1)
 		ply:ConCommand("sdm_playermodel_bodygroup 1")
 	end
-	
+
 	ply.SpawnProtection = CurTime() + 3
 	--get this shitass outta here asap
 	if player.GetCount() >=  GetConVarNumber("sdm_minplayers") and self:GetState() == STATE_GAME_WARMUP and team.NumPlayers(1) >= GetConVarNumber("sdm_minplayers") / 2 and team.NumPlayers(2) >= GetConVarNumber("sdm_minplayers") / 2  then
 		self:GamePrepare()
 	end
-	
+
 	EmitSound( "misc/serioussam/teleport.wav", ply:GetPos(), 0, CHAN_AUTO, 1, 150, 0, 100)
 	ply:SetRenderMode( RENDERMODE_TRANSCOLOR )
 	local effectdata = EffectData()
@@ -78,7 +78,7 @@ function GM:PlayerLoadout(ply)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
-	timer.Create( ply:SteamID() .. " " .. ply:Team() .. " blinking_timer", 3, 1, function() 
+	timer.Create( ply:SteamID() .. " " .. ply:Team() .. " blinking_timer", 3, 1, function()
 		ply:SetRenderFX(0)
 		timer.Remove(ply:SteamID() .. " " .. ply:Team() .. " blinking_timer")
 	end )
@@ -111,11 +111,11 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		end
 
 	end
-	
+
 	net.Start("PlayerKilledBy")
 	net.WriteString(IsValid(attacker) and attacker:IsPlayer() and attacker:Nick() or "")
 	net.Send(ply)
-	
+
 	local actWep = ply:GetActiveWeapon()
 	if IsValid(actWep) then
 		self:SpawnPickupOnDeath(ply, actWep)
@@ -126,8 +126,8 @@ end
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	if ply.SpawnProtection > CurTime() then return false end
 	if cvar_friendlyfire:GetInt() == 0 then
-		if attacker:IsPlayer() then		
-			if ply:Team() == attacker:Team() and attacker:IsPlayer() and not attacker:Nick() == ply:Nick() then 
+		if attacker:IsPlayer() then
+			if ply:Team() == attacker:Team() and attacker:IsPlayer() and not attacker:Nick() == ply:Nick() then
 				return false
 			else
 				return true
@@ -173,13 +173,13 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 			self:GameEnd()
 		end
 	end
-	
+
 	if team.TotalFrags(2) > team.TotalFrags(1) then
 		SetGlobalBool("bluelead", false)
 	elseif team.TotalFrags(1) > team.TotalFrags(2) then
 		SetGlobalBool("redlead", false)
 	end
-	
+
 end
 
 function GM:PlayerSelectSpawn( pl, transiton )
@@ -267,7 +267,7 @@ function GM:GameRestart()
 		v:SetDeaths(0)
 		v:Spawn()
 	end
-	
+
 	if player.GetCount() >= GetConVarNumber("sdm_minplayers") then
 		timer.Simple(1, function()
 			if player.GetCount() >= GetConVarNumber("sdm_minplayers") then
