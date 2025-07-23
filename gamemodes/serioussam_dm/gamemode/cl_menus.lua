@@ -21,6 +21,7 @@ local detailTexture_vtf_tse = surface.GetTextureID("vgui/serioussam/mainmenu/Men
 local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 local sam = surface.GetTextureID("vgui/serioussam/mainmenu/sam")
 local pillar = surface.GetTextureID("vgui/serioussam/mainmenu/pillar")
+local stars01 = surface.GetTextureID("vgui/serioussam/mainmenu/stars01")
 
 local cvar_music = GetConVar("sdm_music")
 
@@ -127,6 +128,18 @@ function ButtonFlashing(button)
 		flashColor1 = Color(hudr / 2, hudg / 2, hudb / 2)
 		flashColor2 = color_white
 	end
+	
+	local t = RealTime() * flashSpeed -- 4
+	local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
+	local g = Lerp(math.abs(math.sin(t)), flashColor1.g, flashColor2.g)
+	local b = Lerp(math.abs(math.sin(t)), flashColor1.b, flashColor2.b)
+   
+	button:SetTextColor(Color(r, g, b))
+end
+
+function CreditsButtonFlashing(button)
+	flashColor1 = Color(255 / 2, 255 / 2, 255 / 2)
+	flashColor2 = color_white
 	
 	local t = RealTime() * flashSpeed -- 4
 	local r = Lerp(math.abs(math.sin(t)), flashColor1.r, flashColor2.r)
@@ -376,6 +389,43 @@ function OpenSSMenu()
 	Options_Button:Center()
 	Options_Button:SetY(ScrH()/1.9775)
 	
+	local Credits_Button = vgui.Create("DButton", EscMenu)
+	local isFlashing = false
+	Credits_Button:SetText("#sdm_credits")
+	Credits_Button:SetSize(ScrW()/8, ScrH()/20)
+	Credits_Button:SetFont("MainMenu_Font")
+	if GetConVarNumber("ss_hud_skin") == 2 then
+		Credits_Button:SetTextColor(GetButtonColor())
+	elseif GetConVarNumber("ss_hud_skin") == 1 then
+		Credits_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
+	end
+	Credits_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			ButtonFlashing(self)
+		end
+	end
+	Credits_Button.OnCursorEntered = function()
+		Credits_Button:SetCursor( "blank" )
+		isFlashing = true
+		text = "#sdm_help_credits"
+		surface.PlaySound("menus/select.wav")
+	end
+
+	Credits_Button.OnCursorExited = function()
+		isFlashing = false
+		text = ""
+		Credits_Button:SetTextColor(GetButtonColor())
+	end
+
+	Credits_Button.DoClick = function()
+		OpenCreditsMenu()
+
+		surface.PlaySound("menus/press.wav")
+
+	end
+	Credits_Button:SizeToContents()
+	Credits_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
+	
 	local LegacyM_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
 	LegacyM_Button:SetText("#sdm_lmenu")
@@ -454,6 +504,237 @@ function OpenSSMenu()
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 	end
 	EscMenu.PaintOver = function(self, w, h)
+		draw.CustomCursor(self)
+	end
+	
+end
+
+function OpenCreditsMenu()
+	showGameUI = true
+	local text = ""
+	CreditsMenu = vgui.Create("DFrame")
+	CreditsMenu:SetSize(ScrW(), ScrH())
+	CreditsMenu:Center()
+	CreditsMenu:SetTitle("")
+	CreditsMenu:ShowCloseButton( false )
+	CreditsMenu:SetDraggable(false)
+	CreditsMenu:SetMouseInputEnabled(false)
+	CreditsMenu:MakePopup()
+	CreditsMenu:SetCursor("blank")
+	CreditsMenu:SetMouseInputEnabled(true)
+	CreditsMenu.Think  = nil
+
+	local music
+	local stored_music_cvar = GetConVarNumber("sdm_music")
+	RunConsoleCommand("sdm_music", "0")
+
+	music = CreateSound(LocalPlayer(), "music/croteamcredits.mp3")
+	
+	if music then
+        music:Play()
+    end
+
+	local creditsText = [[
+		Serious Deathmatch
+		[SEPARATOR]
+		CREDITS
+		[SEPARATOR]
+		PROGRAMMING
+		upset
+		wico.
+		[SEPARATOR]		
+		2D ART
+		Croteam:
+		Dinko Pavicic
+		Petar Ivancek
+		Davor Hunski
+		[SEPARATOR]
+		3D ART
+		Croteam:
+		Admir Elezovic
+		Tomislav Pongrac
+		Davor Hunski
+		[SEPARATOR]
+		LEVEL DESIGN
+		Croteam:
+		Davor Tomicic
+		Davor Hunski
+		Dean Sekulic
+		[SEPARATOR]
+		MUSIC
+		Croteam:
+		Damjan Mravunac
+		[SEPARATOR]
+		SOUND
+		Croteam:
+		Damjan Mravunac
+		Roman Ribaric
+		[SEPARATOR]
+		OTHER:
+		Croteam:
+		Serious Sam Voice by John J. Dick aka "Booger"
+		[SEPARATOR]
+		GAME ASSETS PORT
+		wico.
+		[SEPARATOR]
+		GAMEMODE LOCALIZATION
+		wico.
+		Erick_Maksimets
+		[SEPARATOR]	
+		Serious Testing by
+		An mast, boblikutt, DenDi85, denomito, 
+		Erick_Maksimets, Europa_Teles_BTR, FosFor, Lo Stesso, 
+		MakiSedo, RoboKnife, Sereganeon, sigmadud, 
+		Skitcher, Sokira, Windows_TAHK, Winterskin
+		[SEPARATOR]		
+		Special thanks goes to:
+		An mast, FosterZ, pibab, 
+		NextOrange2704TheSlayer, o u t l a w, Windows_TAHK,
+		and all other Serious Deathmatch gamemode contributors.
+		Thanks for the support.
+		[SEPARATOR]
+		Mega serious special thanks goes to Stefano.
+	]]
+
+	local scrollPanel = vgui.Create("DPanel", CreditsMenu)
+	scrollPanel:SetSize(ScrW(), ScrH())
+	scrollPanel:SetPos(0, ScrH() * 0.01)
+	scrollPanel.Paint = function(self, w, h)
+		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 150))
+	end
+	
+	scrollPanel.OnCursorEntered = function()
+		scrollPanel:SetCursor("blank")
+	end
+
+	local creditsLabel = vgui.Create("DPanel", scrollPanel)
+
+	local font = "MainMenu_Font_64"
+	surface.SetFont(font)
+
+	local function trim(s)
+		return s:match("^%s*(.-)%s*$")
+	end
+
+	local lines = {}
+	for line in creditsText:gmatch("[^\r\n]+") do
+		table.insert(lines, trim(line))
+	end
+
+	local groups = {}
+	local currentGroup = {}
+
+	for _, line in ipairs(lines) do
+		if line == "[SEPARATOR]" then
+			if #currentGroup > 0 then
+				table.insert(groups, currentGroup)
+				currentGroup = {}
+			end
+		else
+			table.insert(currentGroup, line)
+		end
+	end
+
+	if #currentGroup > 0 then
+		table.insert(groups, currentGroup)
+	end
+
+	local _, lineHeight = surface.GetTextSize("Ay")
+	lineHeight = lineHeight + 5 -- add some padding
+	local separatorHeight = 50
+
+	local totalHeight = 0
+	for i, group in ipairs(groups) do
+		totalHeight = totalHeight + (#group * lineHeight)
+		if i ~= #groups then
+			totalHeight = totalHeight + separatorHeight
+		end
+	end
+
+	creditsLabel:SetSize(scrollPanel:GetWide(), totalHeight)
+	creditsLabel:SetPos(0, scrollPanel:GetTall())
+
+	creditsLabel.Paint = function(self, w, h)
+		local y = 0
+		for i, group in ipairs(groups) do
+			for _, line in ipairs(group) do
+				draw.SimpleText(line, font, w / 2, y, color_white, TEXT_ALIGN_CENTER)
+				y = y + lineHeight
+			end
+			if i ~= #groups then
+				y = y + separatorHeight
+			end
+		end
+	end
+	
+	creditsLabel.OnCursorEntered = function()
+		creditsLabel:SetCursor("blank")
+	end
+
+	local scrollDuration = 75
+	local startY = scrollPanel:GetTall()
+	local endY = -creditsLabel:GetTall()
+
+	local startTime = SysTime()
+
+	CreditsMenu.Think = function(self)
+		local elapsed = SysTime() - startTime
+		local progress = elapsed / scrollDuration
+
+		if progress > 1 then
+			startTime = SysTime()
+			progress = 0
+		end
+
+		local y = Lerp(progress, startY, endY)
+		local x, _ = creditsLabel:GetPos()
+		creditsLabel:SetPos(x, y)
+	end
+
+	
+	local Back_Button = vgui.Create("DButton", CreditsMenu)
+	local isFlashing = false
+	Back_Button:SetText("#sdm_back")
+	Back_Button:SetFont("MainMenu_Font")
+	Back_Button:SetTextColor(color_white)
+	Back_Button.Paint = function(self, w, h) 
+		if isFlashing then
+			CreditsButtonFlashing(self)
+		end
+	end
+	Back_Button.OnCursorEntered = function()
+		Back_Button:SetCursor("blank")
+		isFlashing = true
+		surface.PlaySound("menus/select.wav")
+		text = "#sdm_help_back"
+	end
+
+	Back_Button.OnCursorExited = function()
+		isFlashing = false
+		Back_Button:SetTextColor(color_white)
+		text = ""
+	end
+
+	Back_Button.DoClick = function()
+		CreditsMenu:Close()
+		showGameUI = true
+		surface.PlaySound("menus/press.wav")
+        if music then
+			music:Stop()
+			music = nil
+		end
+		RunConsoleCommand("sdm_music", stored_music_cvar)
+	end
+	
+	Back_Button:SizeToContents()
+	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
+
+	CreditsMenu.Paint = function(self, w, h)
+		surface.SetDrawColor(255,255,255)
+		surface.SetTexture(stars01)
+		surface.DrawTexturedRect(0,0,w,h)
+	end
+	CreditsMenu.PaintOver = function(self, w, h)
 		draw.CustomCursor(self)
 	end
 	
