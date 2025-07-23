@@ -15,9 +15,7 @@ local x = 0
 
 WeaponSelector = WeaponSelector or {}
 WeaponSelector.Colors = {
-    BG = Color(44, 62, 80),
     Select = Color(252, 186, 4, 100),
-    TextColor = Color(255, 255, 255), 
 }
 
 
@@ -54,26 +52,58 @@ local function GetCurSwep()
     end
 end
 
+local HUDOrder = {
+    [0] = { "weapon_ss_knife", "weapon_ss_chainsaw" },               -- key 1
+    [1] = { "weapon_ss_colt", "weapon_ss_colt_dual" },               -- key 2
+    [2] = { "weapon_ss_singleshotgun", "weapon_ss_doubleshotgun" },  -- key 3
+    [3] = { "weapon_ss_tommygun", "weapon_ss_minigun" },             -- key 4
+    [4] = { "weapon_ss_rocketlauncher", "weapon_ss_grenadelauncher" }, -- key 5
+    [5] = { "weapon_ss_flamer", "weapon_ss_sniper" },                -- key 6
+    [6] = { "weapon_ss_ghostbuster", "weapon_ss_laser" },            -- key 7
+    [7] = { "weapon_ss_cannon" }, 									 -- key 8
+}
+
+local CycleOrder = {
+    [0] = { "weapon_ss_knife", "weapon_ss_chainsaw" },               -- key 1
+    [1] = { "weapon_ss_colt_dual", "weapon_ss_colt" },               -- key 2
+    [2] = { "weapon_ss_doubleshotgun", "weapon_ss_singleshotgun" },  -- key 3
+    [3] = { "weapon_ss_minigun", "weapon_ss_tommygun" },             -- key 4
+    [4] = { "weapon_ss_rocketlauncher", "weapon_ss_grenadelauncher" }, -- key 5
+    [5] = { "weapon_ss_flamer", "weapon_ss_sniper" },                -- key 6
+    [6] = { "weapon_ss_laser", "weapon_ss_ghostbuster" },            -- key 7
+    [7] = { "weapon_ss_cannon" },									 -- key 8
+}
+
 local function update()
     table.Empty(tblLoad)
 
-    for k, v in pairs(LocalPlayer():GetWeapons()) do
-        local classname = v:GetClass()
-        local Slot = CurSwep[classname] and CurSwep[classname].Slot - 1 or v.Slot or 1
-        tblLoad[Slot] = tblLoad[Slot] or {}
-		local ammotype = v:GetPrimaryAmmoType()
-		local ammo = ammotype > -1 and LocalPlayer():GetAmmoCount(ammotype) or 999
-
-        table.insert(tblLoad[Slot], {
-            classname = classname,
-            name = v:GetPrintName(),
-            slotpos = CurSwep[classname] and CurSwep[classname].SlotPos - 1 or v.SlotPos or 1,
-			ammo = ammo
-        })
+    local ownedWeapons = {}
+    for _, wep in pairs(LocalPlayer():GetWeapons()) do
+        ownedWeapons[wep:GetClass()] = wep
     end
 
-    for k, v in pairs(tblLoad) do
-        table.sort(v, function(a, b) return a.slotpos < b.slotpos end)
+    for slot, weaponList in pairs(HUDOrder) do
+        tblLoad[slot] = {}
+
+        for pos, class in ipairs(weaponList) do
+            if ownedWeapons[class] then
+                local wep = ownedWeapons[class]
+                local ammotype = wep:GetPrimaryAmmoType()
+                local ammo = ammotype > -1 and LocalPlayer():GetAmmoCount(ammotype) or 999
+
+                table.insert(tblLoad[slot], {
+                    classname = class,
+                    name = wep:GetPrintName(),
+                    slotpos = pos - 1,
+                    ammo = ammo,
+                    noammo = (ammo == 0 and ammotype > -1) -- flag weapons with no ammo (exclude melee)
+                })
+            end
+        end
+
+        if #tblLoad[slot] == 0 then
+            tblLoad[slot] = nil
+        end
     end
 end
 
@@ -85,7 +115,7 @@ hook.Add("CreateMove", "WeaponSelector.Hooks.CreateMove", function(cmd)
     if newinv then
         local wep = LocalPlayer():GetWeapon(newinv)
 
-        if wep:IsValid() and LocalPlayer():GetActiveWeapon() ~= wep then
+        if IsValid(wep) and LocalPlayer():GetActiveWeapon() ~= wep then
             cmd:SelectWeapon(wep)
         else
             newinv = nil
@@ -93,129 +123,146 @@ hook.Add("CreateMove", "WeaponSelector.Hooks.CreateMove", function(cmd)
     end
 end)
 
+local lastSwitchTime = 0
+local switchCooldown = 0.45
+
 -- overwrite binding
 hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply, bind, pressed)
-    if not pressed then return end
+    if (bind ~= "invnext" and bind ~= "invprev") and not pressed then return end
     bind = bind:lower()
     if LocalPlayer():InVehicle() then return end
 
-    if string.sub(bind, 1, 4) == "slot" and not ply:KeyDown(IN_ATTACK) then
-        local n = tonumber(string.sub(bind, 5, 5) or 1) or 1
-        if n < 1 or n > 6 then return true end
-        n = n - 1
-        update()
-        if not tblLoad[n] then return true end
-        GetCurSwep()
+    if RealTime() - lastSwitchTime < switchCooldown then
+        if string.sub(bind, 1, 4) == "slot" or bind == "invnext" or bind == "invprev" then
+            return true
+        else
+            return
+        end
+    end
 
-        if CurTb == n and tblLoad[CurTb] and (alpha > 0 or GetConVarNumber("hud_fastswitch") > 0) then
-            CurSlt = CurSlt + 1
+    if ply:KeyDown(IN_ATTACK) then return end
 
-            if CurSlt > #tblLoad[CurTb] then
-                CurSlt = 1
+    update()
+
+    -- Handle number keys (slot1..slot8)
+    if string.sub(bind, 1, 4) == "slot" then
+        local n = tonumber(string.sub(bind, 5, 5) or "1") or 1
+        if n < 1 or n > 8 then return true end
+        local slotIndex = n - 1
+
+        local hudWeapons = tblLoad[slotIndex]
+        if not hudWeapons or #hudWeapons == 0 then return true end
+
+        local cycleList = CycleOrder[slotIndex] or {}
+
+        -- Filter weapons in this slot that are selectable (not noammo)
+        local ownedCycleWeapons = {}
+        for _, class in ipairs(cycleList) do
+            for i, w in ipairs(hudWeapons) do
+                if w.classname == class and not w.noammo then
+                    table.insert(ownedCycleWeapons, {classname = class, hudIndex = i})
+                    break
+                end
             end
-        else
-            CurTb = n
-            CurSlt = 1
         end
 
-        if GetConVarNumber("hud_fastswitch") > 0 then
-            newinv = tblLoad[CurTb][CurSlt].classname
-        else
-            lastAction = RealTime()
-            alpha = 1
+        if #ownedCycleWeapons == 0 then return true end
+
+        local currentCyclePos = 0
+        for i, w in ipairs(ownedCycleWeapons) do
+            if CurTb == slotIndex and hudWeapons[CurSlt] and hudWeapons[CurSlt].classname == w.classname then
+                currentCyclePos = i
+                break
+            end
         end
+
+        local nextCyclePos = currentCyclePos + 1
+        if nextCyclePos > #ownedCycleWeapons then nextCyclePos = 1 end
+
+        local nextWeapon = ownedCycleWeapons[nextCyclePos]
+
+        CurTb = slotIndex
+        CurSlt = nextWeapon.hudIndex
+
+        local wep = LocalPlayer():GetWeapon(nextWeapon.classname)
+        if IsValid(wep) and LocalPlayer():GetActiveWeapon() ~= wep then
+            newinv = nextWeapon.classname
+        end
+
+        alpha = 1
+        lastAction = RealTime()
+        lastSwitchTime = RealTime()
 
         return true
-    elseif bind == "invnext" and not ply:KeyDown(IN_ATTACK) then
-        update()
-        if #tblLoad < 1 then return true end
-        GetCurSwep()
-        CurSlt = CurSlt + 1
+    end
 
-        if CurSlt > (tblLoad[CurTb] and #tblLoad[CurTb] or -1) then
-            repeat
-                CurTb = CurTb + 1
-
-                if CurTb > 5 then
-                    CurTb = 0
+    -- Handle mouse wheel invnext/invprev
+    if bind == "invnext" or bind == "invprev" then
+        -- Flatten tblLoad into flat list of selectable weapons (skip noammo)
+        local flatWeapons = {}
+        for slot = 0, 7 do
+            if tblLoad[slot] then
+                for i, w in ipairs(tblLoad[slot]) do
+                    if not w.noammo then
+                        table.insert(flatWeapons, {classname = w.classname, slot = slot, hudIndex = i})
+                    end
                 end
-            until tblLoad[CurTb]
-            CurSlt = 1
+            end
         end
 
-        if GetConVarNumber("hud_fastswitch") > 0 then
-            newinv = tblLoad[CurTb][CurSlt].classname
-        else
-            lastAction = RealTime()
-            alpha = 1
+        if #flatWeapons == 0 then return true end
+
+        local activeWep = LocalPlayer():GetActiveWeapon()
+        local activeClass = IsValid(activeWep) and activeWep:GetClass() or nil
+        local currentPos = 0
+        for i, w in ipairs(flatWeapons) do
+            if w.classname == activeClass then
+                currentPos = i
+                break
+            end
         end
 
-        return true
-    elseif bind == "invprev" and not ply:KeyDown(IN_ATTACK) then
-        update()
-        if #tblLoad < 1 then return true end
-        GetCurSwep()
-        CurSlt = CurSlt - 1
-
-        if CurSlt < 1 then
-            repeat
-                CurTb = CurTb - 1
-
-                if CurTb < 0 then
-                    CurTb = 5
-                end
-            until tblLoad[CurTb]
-            CurSlt = #tblLoad[CurTb]
+        local nextPos
+        if bind == "invnext" then
+            nextPos = currentPos + 1
+            if nextPos > #flatWeapons then nextPos = 1 end
+        else -- invprev
+            nextPos = currentPos - 1
+            if nextPos < 1 then nextPos = #flatWeapons end
         end
 
-        if GetConVarNumber("hud_fastswitch") > 0 then
-            newinv = tblLoad[CurTb][CurSlt].classname
-        else
-            lastAction = RealTime()
-            alpha = 1
+        local nextWeapon = flatWeapons[nextPos]
+
+        CurTb = nextWeapon.slot
+        CurSlt = nextWeapon.hudIndex
+
+        local wep = LocalPlayer():GetWeapon(nextWeapon.classname)
+        if IsValid(wep) and LocalPlayer():GetActiveWeapon() ~= wep then
+            newinv = nextWeapon.classname
         end
 
-        return true
-    elseif bind == "+attack" and alpha > 0 then
-        if tblLoad[CurTb] and tblLoad[CurTb][CurSlt] then
-            newinv = tblLoad[CurTb][CurSlt].classname
-        end
-        alpha = 0
+        alpha = 1
+        lastAction = RealTime()
+        lastSwitchTime = RealTime()
 
         return true
     end
 end)
 
+
 local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
 local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
 hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
---weapon selection
-	-- local client = LocalPlayer()
-	-- local t = client.SSPowerups
-	-- local awep = client:GetActiveWeapon()
-	local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
-	local size = ScrH() / 14.75
-	local gap_screen = ScrH() / 14
-	-- local gap_rect = 7
-	local y = ScrH() - size - gap_screen
-	-- local armor_y = y * .908
-	-- local widerect_w = size * 2.42
-	-- local widerectleft_x = size + gap_screen + gap_rect
-	-- local text_align_y = size / 5
-	
-	-- local cntr = widerectleft_x + widerect_w + ScrW() / 8 - 52
-	-- local ammorectx = cntr + size + gap_rect
-	-- local ammoiconrectx = ammorectx + widerect_w + gap_rect
-
-
-	-- local rect, recta = 0, 160
-	-- local armor = client:Alive() and client:Armor() or 0
-	local ammosize = size/1.25
-	local ammoy = y+ammosize/4
-	local icon_gap = 5.5
-	-- local iconpos = ScrW() / 2
-	local powerupx = ScrH() / 14.75 /1.25
-	local powerupy = ScrH() / 14.75 /1.25
+    --weapon selection
+    local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
+    local size = ScrH() / 14.75
+    local gap_screen = ScrH() / 14
+    local y = ScrH() - size - gap_screen
+    local ammosize = size/1.25
+    local ammoy = y+ammosize/4
+    local icon_gap = 5.5
+    local powerupx = ScrH() / 14.75 /1.25
+    local powerupy = ScrH() / 14.75 /1.25
 
     if not IsValid(LocalPlayer()) then return end
 
@@ -229,7 +276,7 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 
     update()
 
-    if RealTime() - lastAction > 2 then
+    if RealTime() - lastAction > 1.5 then
         alpha = Lerp(FrameTime() * 4, alpha, 0)
     end
 
@@ -242,18 +289,23 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
         thisWidth = thisWidth + width + Marge
     end
 
-    x = ScrW()/2 - powerupx/2 - (#LocalPlayer():GetWeapons() * (icon_gap * 4.5)) 
+    local weapons = LocalPlayer():GetWeapons()
+    local numWeapons = #weapons
 
-	
-	ss_x = (ScrW() + thisWidth) / 2
-	
+    local iconWidth = powerupx
+    local gap = 4
+
+    local totalWidth = numWeapons * iconWidth + (numWeapons - 1) * gap
+
+    local x = (ScrW() / 2) - (totalWidth / 2)
+
     local pos = x
-	local frame_r, frame_g, frame_b = SeriousHUD:GetFrameColor()
-	if SeriousHUD:GetSkin() == 1 then
-		WeaponSelector.Colors.Select = Color(255,255,255,100)
-	elseif SeriousHUD:GetSkin() == 2 then
-		WeaponSelector.Colors.Select = Color(252, 186, 4, 100)
-	end
+    local frame_r, frame_g, frame_b = SeriousHUD:GetFrameColor()
+    if SeriousHUD:GetSkin() == 1 then
+        WeaponSelector.Colors.Select = Color(255, 255, 255, 255)
+    elseif SeriousHUD:GetSkin() == 2 then
+        WeaponSelector.Colors.Select = Color(255, 200, 0, 255)
+    end
 
     for i, v in SortedPairs(tblLoad) do
         local y = Marge
@@ -263,25 +315,36 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
         for j, wep in pairs(v) do
             local selected = CurTb == i and CurSlt == j
             local height = height + (height + Marge) * 1
-            draw.RoundedBox(0, x, ammoy / 1.2, powerupx, powerupy, selected and WeaponSelector.Colors.Select or Color(20, 20, 20, 160))
-  
-			surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(frame_r, frame_g, frame_b))
-			surface.DrawOutlinedRect( x, ammoy / 1.2, powerupx, powerupy)
 
-			--serious sam weapon icons
-			local icon = SeriousHUD and SeriousHUD:GetWeaponIcon(wep.classname) or sdmg
-			local iconr, icong, iconb = hudr, hudg, hudb
-			if wep.ammo == 0 then
-				iconr, icong, iconb = iconr / 3, icong / 3, iconb / 3
-			end
-			surface.SetTexture(icon)			
-			surface.SetDrawColor(Color(iconr, icong, iconb))
-			surface.DrawTexturedRect( x+2, ammoy / 1.2+2, ammosize/1.075, ammosize/1.075)
+            draw.RoundedBox(0, x, ammoy / 1.2, powerupx, powerupy, Color(20, 20, 20, 160))
 			
-			local w, h = surface.GetTextSize(wep.classname)
-			x = x + (powerupx + 4)
+			
+            surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(frame_r, frame_g, frame_b))
+			if wep.ammo == 0 then
+				surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(frame_r / 3, frame_g / 3, frame_b / 3))
+			end
+            surface.DrawOutlinedRect( x, ammoy / 1.2, powerupx, powerupy)
+
+            --serious sam weapon icons
+            local icon = SeriousHUD and SeriousHUD:GetWeaponIcon(wep.classname) or sdmg
+            local iconr, icong, iconb = hudr, hudg, hudb
+            if wep.ammo == 0 then
+                iconr, icong, iconb = iconr / 3, icong / 3, iconb / 3
+            end
+
+            if selected then
+                surface.SetDrawColor(WeaponSelector.Colors.Select.r, WeaponSelector.Colors.Select.g, WeaponSelector.Colors.Select.b, 255)
+            else
+                surface.SetDrawColor(Color(iconr, icong, iconb))
+            end
+
+            surface.SetTexture(icon)
+            surface.DrawTexturedRect( x+2, ammoy / 1.2+2, ammosize/1.075, ammosize/1.075)
+
+            local w, h = surface.GetTextSize(wep.classname)
+            x = x + (powerupx + 4)
         end
-		
+
     end
 
     surface.SetAlphaMultiplier(1)
