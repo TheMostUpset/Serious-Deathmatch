@@ -5,7 +5,6 @@ local CurSlt = 1
 local alpha = 0
 local lastAction = -math.huge
 local tblLoad = {}
-local slide = {}
 local newinv
 local CurSwep = {}
 local width = 200 * scale
@@ -14,8 +13,9 @@ local Marge = 50
 local x = 0
 
 WeaponSelector = WeaponSelector or {}
+
 WeaponSelector.Colors = {
-    Select = Color(252, 186, 4, 100),
+    Select = Color(0,0,0,0),
 }
 
 
@@ -144,7 +144,6 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
 
     update()
 
-    -- Handle number keys (slot1..slot8)
     if string.sub(bind, 1, 4) == "slot" then
         local n = tonumber(string.sub(bind, 5, 5) or "1") or 1
         if n < 1 or n > 8 then return true end
@@ -155,7 +154,6 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
 
         local cycleList = CycleOrder[slotIndex] or {}
 
-        -- Filter weapons in this slot that are selectable (not noammo)
         local ownedCycleWeapons = {}
         for _, class in ipairs(cycleList) do
             for i, w in ipairs(hudWeapons) do
@@ -196,9 +194,7 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
         return true
     end
 
-    -- Handle mouse wheel invnext/invprev
     if bind == "invnext" or bind == "invprev" then
-        -- Flatten tblLoad into flat list of selectable weapons (skip noammo)
         local flatWeapons = {}
         for slot = 0, 7 do
             if tblLoad[slot] then
