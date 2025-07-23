@@ -618,7 +618,7 @@ function OpenCreditsMenu()
 		creditsLabel:SetCursor("blank")
 	end
 
-	local scrollDuration = 75
+	local scrollDuration = 60
 	local startY = scrollPanel:GetTall()
 	local endY = -creditsLabel:GetTall()
 
