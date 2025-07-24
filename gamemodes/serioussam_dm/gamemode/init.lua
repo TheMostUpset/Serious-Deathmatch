@@ -449,7 +449,6 @@ end
 	Desc: Called when the player is waiting to respawn
 -----------------------------------------------------------]]
 function GM:PlayerDeathThink( ply )
-
 	if ply.NextSpawnTime && ply.NextSpawnTime > CurTime() then return end
 	if ply:Team() == TEAM_SPECTATOR then return end
 
@@ -546,6 +545,7 @@ function GM:GameStart()
 	game.CleanUpMap(true)
 	self:ReplacePickupEntities()
 	for k, v in ipairs(player.GetAll()) do
+	if v == TEAM_SPECTATOR then return end
 		v:KillSilent()
 		v:SetFrags(0)
 		v:SetDeaths(0)
@@ -693,7 +693,7 @@ function GM:PostCleanupMap()
 end
 
 function GM:PlayerLoadout(ply)
-	if ply == TEAM_SPECTATOR then return end
+	if ply:Team() == TEAM_SPECTATOR then return end
 	if self:IsInstagib() then
 		ply:Give("weapon_ss_railgun")
 		ply:Give("weapon_ss_knife")
@@ -712,7 +712,7 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 
-	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP and ply:Team() == 0 then
+	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
 	end
 

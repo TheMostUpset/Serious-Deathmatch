@@ -41,6 +41,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerLoadout(ply)
+	if ply:Team() == TEAM_SPECTATOR return end
 	if self:IsInstagib() then
 		ply:Give("weapon_ss_railgun")
 		ply:Give("weapon_ss_knife")
@@ -86,7 +87,7 @@ function GM:PlayerLoadout(ply)
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
-
+	if ply:Team() == TEAM_SPECTATOR then return end
 	if ( !dmginfo:IsDamageType( DMG_REMOVENORAGDOLL ) ) then
 		ply:CreateRagdoll()
 	end
@@ -183,7 +184,7 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 end
 
 function GM:PlayerSelectSpawn( pl, transiton )
-
+	if ply:Team() == TEAM_SPECTATOR return end
 	-- If we are in transition, do not reset player's position
 	if ( transiton ) then return end
 
