@@ -482,63 +482,110 @@ function OpenCreditsMenu()
     end
 
 	local creditsText = [[
-		Serious Deathmatch
-		[SEPARATOR]
 		CREDITS
+		ㅤ
+		[SEPARATOR]
+		CROTEAM:
+		ㅤ
 		[SEPARATOR]
 		PROGRAMMING
-		upset
-		wico.
-		[SEPARATOR]		
+		[SEPARATOR]
+		Alen Ladavac
+		Davor Hunski
+		Dean Sekulic
+		ㅤ
+		[SEPARATOR]	
 		2D ART
-		Croteam:
+		[SEPARATOR]
 		Dinko Pavicic
 		Petar Ivancek
 		Davor Hunski
+		ㅤ
 		[SEPARATOR]
 		3D ART
-		Croteam:
+		[SEPARATOR]
 		Admir Elezovic
 		Tomislav Pongrac
 		Davor Hunski
+		ㅤ
+		[SEPARATOR]
+		GAME DESIGN
+		[SEPARATOR]
+		Davor Hunski
+		Davor Tomicic
+		Roman Ribaric
+		ㅤ
 		[SEPARATOR]
 		LEVEL DESIGN
-		Croteam:
+		[SEPARATOR]
 		Davor Tomicic
 		Davor Hunski
 		Dean Sekulic
+		ㅤ
 		[SEPARATOR]
 		MUSIC
-		Croteam:
+		[SEPARATOR]
 		Damjan Mravunac
+		ㅤ
 		[SEPARATOR]
 		SOUND
-		Croteam:
+		[SEPARATOR]
 		Damjan Mravunac
 		Roman Ribaric
+		ㅤ
 		[SEPARATOR]
 		OTHER:
-		Croteam:
+		[SEPARATOR]
 		Serious Sam Voice by John J. Dick aka "Booger"
+		ㅤ
+		[SEPARATOR]
+		SERIOUS DEATHMATCH:
+		ㅤ
+		[SEPARATOR]
+		PROGRAMMING
+		[SEPARATOR]
+		upset
+		wico.
+		ㅤ
 		[SEPARATOR]
 		GAME ASSETS PORT
+		[SEPARATOR]
 		wico.
+		ㅤ
 		[SEPARATOR]
 		GAMEMODE LOCALIZATION
+		[SEPARATOR]
 		wico.
 		Erick_Maksimets
+		ㅤ
 		[SEPARATOR]	
 		Serious Testing by
-		An mast, boblikutt, DenDi85, denomito, 
-		Erick_Maksimets, Europa_Teles_BTR, FosFor, Lo Stesso, 
-		MakiSedo, RoboKnife, Sereganeon, sigmadud, 
-		Skitcher, Sokira, Windows_TAHK, Winterskin
+		[SEPARATOR]
+		An mast, boblikutt, 
+		DenDi85, denomito, 
+		Erick_Maksimets, 
+		Europa_Teles_BTR, 
+		FosFor, Lo Stesso, 
+		MakiSedo, RoboKnife, 
+		Sereganeon, sigmadud, 
+		Skitcher, Sokira, 
+		Windows_TAHK, Winterskin
+		ㅤ
 		[SEPARATOR]		
 		Special thanks goes to:
-		An mast, FosterZ, pibab, 
-		NextOrange2704TheSlayer, o u t l a w, Windows_TAHK,
-		and all other Serious Deathmatch gamemode contributors.
+		[SEPARATOR]
+		An mast 
+		FosterZ
+		pibab
+		NextOrange2704TheSlayer
+		omletus
+		o u t l a w
+		Windows_TAHK
+		and all other Serious Deathmatch contributors.
+		ㅤ
+		[SEPARATOR]
 		Thanks for the support.
+		ㅤ
 		[SEPARATOR]
 		Mega serious special thanks goes to Stefano.
 	]]

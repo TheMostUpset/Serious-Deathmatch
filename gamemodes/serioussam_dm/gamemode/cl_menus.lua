@@ -631,7 +631,8 @@ function OpenCreditsMenu()
 		FosterZ
 		pibab
 		NextOrange2704TheSlayer
-		o u t l a w 
+		omletus
+		o u t l a w
 		Windows_TAHK
 		and all other Serious Deathmatch contributors.
 		ㅤ

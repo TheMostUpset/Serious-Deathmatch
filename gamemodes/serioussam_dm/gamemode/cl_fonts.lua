@@ -13,6 +13,7 @@ surface.CreateFont("seriousHUDfont_fragsleft", {
 	blursize = 1,
 	extended = true,
 })
+
 surface.CreateFont("seriousHUDfont_targetid", {
 	font = "Roboto",
 	size = ScrH()/32,
@@ -30,19 +31,12 @@ surface.CreateFont( "Scoreboard_Font", {
 	antialias = true,
 } )
 
-surface.CreateFont("killfeed_font",{
-	font = "Roboto",
-	size = ScrH() / 46,
-	weight = 1000,
-	antialiasing = true,
-	shadow = true
-});
-
 surface.CreateFont( "Death_Font", {
 	font = "Roboto",
 	extended = true,
 	size = ScrH() / 42,
 	weight = 800,
+	blursize = 1,
 	antialias = true,
 } )
 
@@ -51,6 +45,7 @@ surface.CreateFont( "Frag_Font", {
 	extended = true,
 	size = ScrH() / 32,
 	weight = 800,
+	blursize = 1,
 	antialias = true,
 } )
 
@@ -59,10 +54,9 @@ surface.CreateFont( "GameEnd_Font", {
 	extended = true,
 	size = ScrH() / 42,
 	weight = 800,
+	blursize = 1,
 	antialias = true,
 } )
-
-
 
 surface.CreateFont( "MainMenu_Font", {
 	font = "Arial Stretched",
@@ -72,8 +66,6 @@ surface.CreateFont( "MainMenu_Font", {
 	shadow = true,
 	extended = true,
 } )
-
-
 
 surface.CreateFont( "Vote_Font", {
 	font = "Arial Stretched",
