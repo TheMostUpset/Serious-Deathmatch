@@ -47,7 +47,7 @@ MAPVOTE_NOTVOTED  	= 0
 MAPVOTE_VOTING		= 1
 MAPVOTE_VOTED		= 2
 
-include( "shared_gibs.lua" )
+include("shared_gibs.lua")
 include("player_ext.lua")
 include("mapvote.lua")
 

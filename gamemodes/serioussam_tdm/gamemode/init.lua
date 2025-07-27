@@ -79,6 +79,9 @@ function GM:PlayerLoadout(ply)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
+	
+	ply:SetViewOffset(Vector(0,0,58))
+	
 	timer.Create( ply:SteamID() .. " " .. ply:Team() .. " blinking_timer", 3, 1, function()
 		ply:SetRenderFX(0)
 		timer.Remove(ply:SteamID() .. " " .. ply:Team() .. " blinking_timer")

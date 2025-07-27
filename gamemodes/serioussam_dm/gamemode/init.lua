@@ -12,6 +12,7 @@ AddCSLuaFile("shared.lua")
 AddCSLuaFile("sb.lua")
 AddCSLuaFile("shared_gibs.lua")
 AddCSLuaFile("player_ext.lua")
+AddCSLuaFile("cl_footsteps.lua")
 
 local cvar_hitboxes = CreateConVar("sdm_use_hitboxes", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Use player hitboxes to scale damage", 0, 1)
 local cvar_mapvote = CreateConVar("sdm_mapvote_enabled", 1, FCVAR_ARCHIVE, "Enable map vote at the end of match", 0, 1)
@@ -28,6 +29,7 @@ include("shared.lua")
 include("sb.lua")
 include("sv_spec.lua")
 include("taunts.lua")
+include("sv_footsteps.lua")
 
 util.AddNetworkString("FMenu")
 util.AddNetworkString("PlayerFrag")
@@ -711,6 +713,8 @@ function GM:PlayerLoadout(ply)
 	util.Effect("ss_spawn_effect", effectdata, true, true)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
+	
+	ply:SetViewOffset(Vector(0,0,58))
 
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()

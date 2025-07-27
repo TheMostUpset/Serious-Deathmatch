@@ -9,6 +9,7 @@ include("cl_hud.lua")
 include("cl_fonts.lua")
 include("cl_menus.lua")
 include("cl_weaponselection.lua")
+include("cl_footsteps.lua")
 
 net.Receive("ClientChatMessage", function()
 	local tbl = net.ReadTable()

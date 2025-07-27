@@ -576,6 +576,7 @@ function OpenCreditsMenu()
 		[SEPARATOR]
 		An mast 
 		FosterZ
+		GrechHerald
 		pibab
 		NextOrange2704TheSlayer
 		omletus
