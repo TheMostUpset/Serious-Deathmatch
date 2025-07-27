@@ -41,7 +41,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerLoadout(ply)
-	if ply:Team() == TEAM_SPECTATOR return end
+	if ply:Team() == TEAM_SPECTATOR then return end
 	if self:IsInstagib() then
 		ply:Give("weapon_ss_railgun")
 		ply:Give("weapon_ss_knife")
@@ -187,7 +187,6 @@ function GM:OnPlayerKilledByPlayer(ply, attacker, dmginfo)
 end
 
 function GM:PlayerSelectSpawn( pl, transiton )
-	if ply:Team() == TEAM_SPECTATOR return end
 	-- If we are in transition, do not reset player's position
 	if ( transiton ) then return end
 

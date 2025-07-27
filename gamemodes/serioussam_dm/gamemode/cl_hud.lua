@@ -355,7 +355,7 @@ function GM:HUDPaint()
 		local x, y = ScrW() / 2, ScrH() / 3.25
 		local text = language.GetPhrase( "sdm_youfragged" ) .. " " .. fragMsgNick
 		local font = "Frag_Font"
-		local fadeSpeed = 3
+		local fadeSpeed = 100
 		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
 		draw.SimpleText( text, font, x + 2, y + 2, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
 		draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)

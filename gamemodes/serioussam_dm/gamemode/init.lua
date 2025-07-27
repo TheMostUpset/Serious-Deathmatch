@@ -714,7 +714,7 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 	
-	ply:SetViewOffset(Vector(0,0,58))
+	ply:SetViewOffset(Vector(0,0,56))
 
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()

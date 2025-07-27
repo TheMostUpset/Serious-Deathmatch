@@ -262,7 +262,7 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 
     if not IsValid(LocalPlayer()) then return end
 
-    if alpha < 1e-02 then
+    if alpha < 1 then
         if alpha ~= 0 then
             alpha = 0
         end
@@ -272,8 +272,8 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 
     update()
 
-    if RealTime() - lastAction > 1.5 then
-        alpha = Lerp(FrameTime() * 4, alpha, 0)
+    if RealTime() - lastAction > 2 then
+        alpha = 0
     end
 
     surface.SetAlphaMultiplier(alpha)
