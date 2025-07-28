@@ -170,7 +170,7 @@ function GM:PlayerTick(ply, mv)
 		local vel = mv:GetVelocity()
 		if vel:Length2D() > mv:GetMaxClientSpeed() + 1 then
 			vel.z = 0
-			mv:SetVelocity(vel * 0.85)
+			mv:SetVelocity(vel * 0.8)
 		end
 	end
 	if SERVER then

@@ -39,11 +39,15 @@ util.AddNetworkString("ClientChatMessage")
 resource.AddSingleFile( "resource/fonts/seriousmenu.ttf" )
 
 PLAYER_WALKSPEED = 375
-PLAYER_RUNSPEED = 125
+PLAYER_RUNSPEED = 250
 PLAYER_JUMPPOWER = 300
 
 PLAYER_WALKSPEED_KNIFE = 450
+PLAYER_RUNSPEED_KNIFE = 300
 PLAYER_JUMPPOWER_KNIFE = 375
+
+PLAYER_CROUCHSPEED_MULTIPLIER = 0.4
+PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE = 0.475
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 	if GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
@@ -627,22 +631,36 @@ function GM:KeyPress(ply, key)
 end
 
 function GM:UpdatePlayerSpeed(ply, wep)
-	wep = wep or ply:GetActiveWeapon()
-	local hasSeriousSpeed = ply:HasSeriousSpeed()
-	local mul = hasSeriousSpeed and 2 or 1
+    wep = wep or ply:GetActiveWeapon()
+    local hasSeriousSpeed = ply:HasSeriousSpeed()
+    local mul
 
-	ply:SetRunSpeed(PLAYER_RUNSPEED * mul)
-	if IsValid(wep) and wep:GetClass() == "weapon_ss_knife" then
-		mul = hasSeriousSpeed and 1.315 or 1
-		ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE * mul)
-		mul = hasSeriousSpeed and 1.1 or 1
-		ply:SetJumpPower(PLAYER_JUMPPOWER_KNIFE * mul)
-	else
-		mul = hasSeriousSpeed and 1.63 or 1
-		ply:SetWalkSpeed(PLAYER_WALKSPEED * mul)
-		mul = hasSeriousSpeed and 1.1 or 1
-		ply:SetJumpPower(PLAYER_JUMPPOWER * mul)
-	end
+    if IsValid(wep) and wep:GetClass() == "weapon_ss_knife" then
+        mul = hasSeriousSpeed and 1.315 or 1
+        ply:SetWalkSpeed(PLAYER_WALKSPEED_KNIFE * mul)
+
+        mul = hasSeriousSpeed and 2 or 1
+        ply:SetRunSpeed(PLAYER_RUNSPEED_KNIFE * mul)
+
+        mul = hasSeriousSpeed and 1.1 or 1
+        ply:SetJumpPower(PLAYER_JUMPPOWER_KNIFE * mul)
+
+        local crouchMul = hasSeriousSpeed and (PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE * 1.1) or PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE
+        ply:SetCrouchedWalkSpeed(crouchMul)
+
+    else
+        mul = hasSeriousSpeed and 1.63 or 1
+        ply:SetWalkSpeed(PLAYER_WALKSPEED * mul)
+
+        mul = hasSeriousSpeed and 2 or 1
+        ply:SetRunSpeed(PLAYER_RUNSPEED * mul)
+
+        mul = hasSeriousSpeed and 1.1 or 1
+        ply:SetJumpPower(PLAYER_JUMPPOWER * mul)
+
+        local crouchMul = hasSeriousSpeed and (PLAYER_CROUCHSPEED_MULTIPLIER * 1.1) or PLAYER_CROUCHSPEED_MULTIPLIER
+        ply:SetCrouchedWalkSpeed(crouchMul)
+    end
 end
 
 function GM:UpdatePowerupTable(ply)
@@ -714,7 +732,11 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 	
-	ply:SetViewOffset(Vector(0,0,56))
+	ply:SetViewOffset(Vector(0,0,60))
+	ply:SetViewOffsetDucked(Vector(0,0,24))
+	
+	ply:SetDuckSpeed(0.1)
+	ply:SetUnDuckSpeed(0.1)
 
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()

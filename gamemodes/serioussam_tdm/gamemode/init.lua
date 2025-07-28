@@ -80,7 +80,11 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 	
-	ply:SetViewOffset(Vector(0,0,58))
+	ply:SetViewOffset(Vector(0,0,60))
+	ply:SetViewOffsetDucked(Vector(0,0,24))
+	
+	ply:SetDuckSpeed(0.1)
+	ply:SetUnDuckSpeed(0.1)
 	
 	timer.Create( ply:SteamID() .. " " .. ply:Team() .. " blinking_timer", 3, 1, function()
 		ply:SetRenderFX(0)
