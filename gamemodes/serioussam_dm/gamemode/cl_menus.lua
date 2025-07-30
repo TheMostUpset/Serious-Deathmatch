@@ -1231,7 +1231,12 @@ function OpenSettingsMenu()
 	Crosshair_Image:SetX(ScrW()/2.075)
 	Crosshair_Image:SetY(ScrH()/1.975)
 	Crosshair_Image:SetSize(ScrW()/32, ScrW() / 32)
-	Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
+	if GetConVarNumber("ss_crosshair") < 0 then
+		Crosshair_Image:SetImage("vgui/serioussam/CrosshairError")
+	else
+		Crosshair_Image:SetImage("vgui/serioussam/Crosshair".. GetConVarNumber("ss_crosshair"))
+	end
+
 	
 	local Forward_Button = vgui.Create("DButton", SettingsMenu)
 	local isFlashing = false
@@ -1287,7 +1292,7 @@ function OpenSettingsMenu()
 	Backwards_Button.DoClick = function()
 	surface.PlaySound("menus/press.wav")
 		local crosshair_value = GetConVarNumber("ss_crosshair") - 1
-		if crosshair_value < 1 then
+		if crosshair_value < 0 then
 			return false
 		else
 			RunConsoleCommand("ss_crosshair", crosshair_value)
