@@ -713,7 +713,12 @@ function GM:PostCleanupMap()
 end
 
 function GM:PlayerLoadout(ply)
-	if ply:Team() == TEAM_SPECTATOR then return end
+	if ply:Team() == TEAM_SPECTATOR then
+		ply:KillSilent()
+		ply:SetFrags(0)
+		ply:SetDeaths(0)
+		ply:StripWeapons()
+	end
 	if self:IsInstagib() then
 		ply:Give("weapon_ss_railgun")
 		ply:Give("weapon_ss_knife")
