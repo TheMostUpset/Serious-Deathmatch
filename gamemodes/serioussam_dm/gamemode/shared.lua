@@ -8,6 +8,9 @@ GM.Website = "N/A"
 cvar_max_frags = GetConVar( "sdm_max_frags" )
 cvar_max_time = GetConVar( "sdm_max_time" )
 cvar_timer_enabled = GetConVar( "sdm_timer_enabled" )
+cvar_holiday = GetConVar("sdm_holiday")
+cvar_powerupduration = GetConVar("sdm_powerupduration")
+cvar_instagib = GetConVar("sdm_instagib")
 
 
 if !cvar_max_frags then
@@ -23,7 +26,7 @@ if !cvar_max_time then
 end
 
 if !cvar_timer_enabled then
-	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, 0, 1)
+	cvar_timer_enabled = CreateConVar("sdm_timer_enabled", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Enables time limit for match to end", 0, 1)
 end
 
 if !cvar_holiday then
