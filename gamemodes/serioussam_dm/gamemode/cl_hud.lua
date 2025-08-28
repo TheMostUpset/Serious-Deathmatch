@@ -344,7 +344,12 @@ function GM:HUDPaint()
 	elseif game_state == STATE_GAME_PROGRESS then
 		if LocalPlayer():Team() == TEAM_SPECTATOR then
 		local font = "seriousHUDfont_targetid"
-		local text = language.GetPhrase("#sdm_spectating") .. " " .. LocalPlayer():GetNWString("spectator_plynick")
+		local text = ""
+		if LocalPlayer():GetObserverMode() == OBS_MODE_ROAMING then
+			text = ""
+		else
+			text = language.GetPhrase("#sdm_spectating") .. " " .. LocalPlayer():GetNWString("spectator_plynick")
+		end
 		local x = ScrW() / 2
 		local y = ScrH() / 1.25
 

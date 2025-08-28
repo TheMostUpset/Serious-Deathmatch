@@ -162,7 +162,6 @@ end
 	Allows override of the default view
 -----------------------------------------------------------]]
 function GM:CalcView( ply, origin, angles, fov, znear, zfar )
-
 	local Vehicle	= ply:GetVehicle()
 	local Weapon	= ply:GetActiveWeapon()
 	
@@ -208,6 +207,14 @@ function GM:CalcView( ply, origin, angles, fov, znear, zfar )
 		end
 
 	end
+	
+	if ply:GetObserverMode() == OBS_MODE_IN_EYE then
+		local view = {}
+		view.origin = pos
+		view.angles = ang
+		view.fov = GetConVar("fov_desired"):GetInt()
+		return view
+	end
 
 	return view
 
@@ -237,6 +244,7 @@ function GM:CalcViewModelView( Weapon, ViewModel, OldEyePos, OldEyeAng, EyePos, 
 	
 	local owner = Weapon:GetOwner()
 	if IsValid(owner) and owner:HasSeriousSpeed() then
+		if LocalPlayer():Team() == TEAM_SPECTATOR then return end
 		vm_origin = vm_origin - vm_angles:Forward()*2
 	end
 
@@ -251,6 +259,16 @@ local inv_mat = Material("models/powerups/invisibility")
 local protect_mat = Material("models/serioussam/powerups/gold")
 
 hook.Add("PostDrawViewModel", "glowy_vm", function(viewmodel, ply)
+	if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE and LocalPlayer():GetObserverTarget():HasSeriousDamage() and not drawing then
+		drawing = true
+
+        render.ModelMaterialOverride(sdmg_mat)
+        viewmodel:DrawModel()
+		
+        render.ModelMaterialOverride()
+
+        drawing = false
+	end
     if not ply:HasSeriousDamage() then
         return
     end
@@ -268,9 +286,14 @@ end)
 
 
 hook.Add("PreDrawViewModel", "invis_vm", function(vm, ply)
+	if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE and LocalPlayer():GetObserverTarget():HasInvisibility() then
+		render.SetBlend(0.4)
+		render.OverrideBlend( false )
+	end
     if not ply:HasInvisibility() then
         return
     end
+	
     if IsValid(ply) then
         render.SetBlend(0.4)
 		render.OverrideBlend( false )
@@ -294,6 +317,16 @@ function GM:PostPlayerDraw(ply)
 end
 
 hook.Add("PostDrawViewModel", "gold_vm", function(viewmodel, ply)
+	if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE and LocalPlayer():GetObserverTarget():HasProtect() and not drawing then
+		drawing = true
+
+        render.ModelMaterialOverride(protect_mat)
+        viewmodel:DrawModel()
+		
+        render.ModelMaterialOverride()
+
+        drawing = false
+	end
     if not ply:HasProtect() then
         return
     end
@@ -330,11 +363,9 @@ hook.Add("PostPlayerDraw", "gold_pm", function(ply)
     end
     if not drawing then
         drawing = true
-
-        render.ModelMaterialOverride(protect_mat)
-        ply:DrawModel()
-        render.ModelMaterialOverride()
-
+		render.ModelMaterialOverride(protect_mat)
+		ply:DrawModel()
+		render.ModelMaterialOverride()
         drawing = false
 	end
 end)

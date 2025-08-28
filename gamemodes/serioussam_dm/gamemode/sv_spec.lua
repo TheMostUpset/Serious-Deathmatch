@@ -81,6 +81,7 @@ function GM:SpectatorKeyPress(ply, key)
 			ply.specmode = OBS_MODE_CHASE
 		end
 		ply:SetObserverMode(ply.specmode)
+		ply:SetNWString("spectator_plynick", obsTarget:Nick())
 	end
 
 	if key == IN_ATTACK then
