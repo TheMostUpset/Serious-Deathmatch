@@ -29,14 +29,18 @@ function GetMMFColor()
 	if SeriousHUD and SeriousHUD:GetSkin() == 1 then
 		return SeriousHUD:GetColor()
 	end
-	return 240, 155, 0
+	if SeriousHUD and SeriousHUD:GetSkin() == 2 or SeriousHUD and SeriousHUD:GetSkin() == 3  then
+		return 240, 155, 0
+	end
 end
 
 function GetAccentColor()
 	if SeriousHUD and SeriousHUD:GetSkin() == 1 then
 		return 255, 255, 255
 	end
-	return 255, 190, 0
+	if SeriousHUD and SeriousHUD:GetSkin() == 2 or SeriousHUD and SeriousHUD:GetSkin() == 3  then
+		return 240, 200, 0
+	end
 end
 
 function PaintBackground(self, w, h)
@@ -117,12 +121,18 @@ function GetButtonColor()
 	if GAMEMODE:GetHUDSkin() == 1 then
 		return Color(GAMEMODE:GetHUDColor())
 	end
-	return Color(240, 155, 0)
+	if GAMEMODE:GetHUDSkin() == 2 or GAMEMODE:GetHUDSkin() == 3 then
+		return Color(240, 155, 0)
+	end
 end
 
 function ButtonFlashing(button)
-	local flashColor1 = Color(170, 85, 0)
-	local flashColor2 = Color(255, 200, 0)
+	local flashColor1 = Color(255,255,255)
+	local flashColor2 = Color(255,255,255)
+	if GAMEMODE:GetHUDSkin() == 2 or GAMEMODE:GetHUDSkin() == 3 then
+		flashColor1 = Color(170, 85, 0)
+		flashColor2 = Color(255, 200, 0)
+	end
 	if GAMEMODE:GetHUDSkin() == 1 then
 		local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
 		flashColor1 = Color(hudr / 2, hudg / 2, hudb / 2)
@@ -163,6 +173,7 @@ function UpdateButtonsSkin(t, skin)
 end
 
 function UpdateButtonsColor(t, col)
+
 	col = col or Color(240, 155, 0, 255)
 	for k, v in ipairs(t) do
 		if v:GetName() == "DButton" then
@@ -177,11 +188,14 @@ local ConfirmationMenu
 
 local cursor = Material("vgui/serioussam/hud/pointer")
 local cursor_tfe = Material("vgui/serioussam/hud/hud_tfe/pointer")
+local cursor_warped = Material("vgui/serioussam/hud/hud_warped/pointer")
 
 function draw.CustomCursor(panel)
 	local material = cursor
-	if SeriousHUD:GetSkin() == 1 then
+	if GAMEMODE:GetHUDSkin() == 1 then
 		material = cursor_tfe
+	elseif GAMEMODE:GetHUDSkin() == 3 then
+		material = cursor_warped
 	end
 	-- Paint the custom cursor
 	local cursorX, cursorY = panel:LocalCursorPos()
@@ -356,11 +370,7 @@ function OpenSSMenu()
 	Options_Button:SetText("#sdm_options")
 	Options_Button:SetSize(ScrW()/8, ScrH()/20)
 	Options_Button:SetFont("MainMenu_Font")
-	if GetConVarNumber("ss_hud_skin") == 2 then
-		Options_Button:SetTextColor(GetButtonColor())
-	elseif GetConVarNumber("ss_hud_skin") == 1 then
-		Options_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-	end
+	Options_Button:SetTextColor(GetButtonColor())
 	Options_Button.Paint = function(self, w, h) 
 		if isFlashing then
 			ButtonFlashing(self)
@@ -394,11 +404,7 @@ function OpenSSMenu()
 	Credits_Button:SetText("#sdm_credits")
 	Credits_Button:SetSize(ScrW()/8, ScrH()/20)
 	Credits_Button:SetFont("MainMenu_Font")
-	if GetConVarNumber("ss_hud_skin") == 2 then
-		Credits_Button:SetTextColor(GetButtonColor())
-	elseif GetConVarNumber("ss_hud_skin") == 1 then
-		Credits_Button:SetTextColor(Color(SeriousHUD:GetTextColor()))
-	end
+	Credits_Button:SetTextColor(GetButtonColor())
 	Credits_Button.Paint = function(self, w, h) 
 		if isFlashing then
 			ButtonFlashing(self)
@@ -794,7 +800,7 @@ function OpenConfirmationMenu()
 	local ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/menuback")
 	local grid_bg = surface.GetTextureID("vgui/serioussam/mainmenu/hud_tfe/grid")
 	local text = ""
-	if GetConVarNumber("ss_hud_skin") == 2 then
+	if GAMEMODE:GetHUDSkin() == 2 then
 		ssbg = surface.GetTextureID("vgui/serioussam/mainmenu/menuback")	
 		detailTexture_vtf = surface.GetTextureID("vgui/serioussam/mainmenu/MenuBack_detail")
 	end
@@ -901,17 +907,17 @@ function OpenConfirmationMenu()
 		surface.SetDrawColor(hudr, hudg, hudb, 75)
 		local texW = 256
 		local texH = 256
-		if GetConVarNumber("ss_hud_skin") == 2 then
+		if GAMEMODE:GetHUDSkin() == 2 then
 			surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w-500, h-500, 0, 0, w / texW, h / texH )
 		else
 			surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w+500, h+500, 0, 0, w / texW, h / texH )
 		end
-		if GetConVarNumber("ss_hud_skin") == 2 then
+		if GAMEMODE:GetHUDSkin() == 2 then
 			surface.DrawTexturedRect(1,1,w-2,h-2)
 		end
 		surface.SetTexture(grid_bg)
 		surface.SetDrawColor(hudr, hudg, hudb, 100)
-		if GetConVarNumber("ss_hud_skin") == 2 then 
+		if GAMEMODE:GetHUDSkin() == 2 then 
 			surface.SetDrawColor(0, 0, 0, 0)
 		end
 		local texW = 16

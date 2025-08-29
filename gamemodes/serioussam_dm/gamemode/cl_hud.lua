@@ -237,7 +237,7 @@ function GM:HUDPaint()
 			timer = "00:00"
 		end
 
-		if SeriousHUD:GetSkin() == 1 then
+		if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 3 then
 			ITime = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/itimer")
 		elseif SeriousHUD:GetSkin() == 2 then
 			ITime = surface.GetTextureID("vgui/serioussam/hud/itimer")
@@ -251,15 +251,24 @@ function GM:HUDPaint()
 		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
 		
 		surface.SetTexture(ITime)
-		surface.SetDrawColor(hudr, hudg, hudb, 255)		
+		if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 2 then
+			surface.SetDrawColor(hudr, hudg, hudb, 255)
+		else
+			surface.SetDrawColor(255, 255, 255, 255)
+		end
 		surface.DrawTexturedRect(ScrH() / 80 * 1.35 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)	
 		draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
 		
 		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
 		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
-
-		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
-		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
+		
+		if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 2 then
+			draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
+			draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)
+		elseif SeriousHUD:GetSkin() == 3 then
+			draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
+			draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(255,255,255, 255), TEXT_ALIGN_CENTER)
+		end
 	
 		if countdown <= 0 and !endgamesoundplayed then
 			surface.PlaySound( "misc/serioussam/churchbell.wav" )

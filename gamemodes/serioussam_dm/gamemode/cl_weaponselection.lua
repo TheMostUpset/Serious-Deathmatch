@@ -302,7 +302,7 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
     elseif SeriousHUD:GetSkin() == 2 then
         WeaponSelector.Colors.Select = Color(240, 200, 0, 255)
 	elseif SeriousHUD:GetSkin() == 3 then
-        WeaponSelector.Colors.Select = Color(240, 200, 0, 255)
+        WeaponSelector.Colors.Select = Color(240, 255, 255, 255)
     end
 
     for i, v in SortedPairs(tblLoad) do
