@@ -743,6 +743,8 @@ function GM:PlayerLoadout(ply)
 	ply:SetDuckSpeed(0.1)
 	ply:SetUnDuckSpeed(0.1)
 
+	ply:SetupHands()
+
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
 	end

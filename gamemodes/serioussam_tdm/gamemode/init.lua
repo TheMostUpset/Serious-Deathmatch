@@ -91,6 +91,8 @@ function GM:PlayerLoadout(ply)
 	ply:SetDuckSpeed(0.1)
 	ply:SetUnDuckSpeed(0.1)
 	
+	ply:SetupHands()
+	
 	timer.Create( ply:SteamID() .. " " .. ply:Team() .. " blinking_timer", 3, 1, function()
 		ply:SetRenderFX(0)
 		timer.Remove(ply:SteamID() .. " " .. ply:Team() .. " blinking_timer")
