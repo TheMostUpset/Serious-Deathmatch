@@ -3,7 +3,8 @@
 	"$basetexture" "models/effects/serioussam/sdmg_overlay"
 	"$additive" 1
 	"$nocull" 1
-				"Proxies"
+	"$basetexturetransform" "center .5 .5 scale .75 .75 rotate 0 translate 0 0"
+	"Proxies"
 	{
 		"AnimatedTexture"
 		{

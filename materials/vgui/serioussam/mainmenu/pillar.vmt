@@ -2,4 +2,6 @@
 {
 	"$basetexture" "vgui/serioussam/mainmenu/pillar"
 	"$decal" "1"
+	"$vertexcolor" "1"
+	"$color" "[0.85 0.85 0.9]"
 }

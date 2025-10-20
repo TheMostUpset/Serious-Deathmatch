@@ -1,4 +1,4 @@
-surface.CreateFont("seriousHUDfont_timer", {
+surface.CreateFont("seriousHUDfont_frags", {
 	font = "default",
 	size = ScrH()/16,
 	weight = 600,
@@ -8,7 +8,7 @@ surface.CreateFont("seriousHUDfont_timer", {
 
 surface.CreateFont("seriousHUDfont_fragsleft", {
 	font = "Roboto",
-	size = ScrH()/32,
+	size = ScrH()/36,
 	weight = 800,
 	blursize = 1,
 	extended = true,

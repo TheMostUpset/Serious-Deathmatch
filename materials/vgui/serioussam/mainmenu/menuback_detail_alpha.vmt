@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/serioussam/mainmenu/MenuBack_detail"
+	"$alpha" "1"
+	"$vertexalpha" "1"
+	"$vertexcolor" "1"
+	"$color" "[0.9 0.9 0.9]
+}

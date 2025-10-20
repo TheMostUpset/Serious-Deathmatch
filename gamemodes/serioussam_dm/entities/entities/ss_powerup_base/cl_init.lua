@@ -20,7 +20,7 @@ hook.Add("HUDPaint", "SSPowerupsHUD", function()
 			["Speed"] = surface.GetTextureID("vgui/serioussam/hud/pseriousspeed")
 		}
 
-	if SeriousHUD:GetSkin() == 1 then 
+	if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 3 then 
 		icons = {
 			["SeriousDamage"] = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/pseriousdamage"),
 			["Invisibility"] = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/pinvisibility"),

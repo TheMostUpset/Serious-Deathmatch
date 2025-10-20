@@ -59,6 +59,7 @@ GM.MusicTable = {
     ["stdm_crystal_march"] = "crystalmarch.ogg",
     ["sdm_the_fortress"] = "thefortress.ogg",
     ["sdm_yoddler_classic"] = "yoddler.ogg",
+    ["sdm_skulls'n_bones"] = "holeclassic.ogg",
 }
 function GM:PlayMapMusic(volume)
 	if lastMusicStation and IsValid(lastMusicStation) then
@@ -287,7 +288,7 @@ end)
 
 hook.Add("PreDrawViewModel", "invis_vm", function(vm, ply)
 	if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE and LocalPlayer():GetObserverTarget():HasInvisibility() then
-		render.SetBlend(0.4)
+		render.SetBlend(0.2)
 		render.OverrideBlend( false )
 	end
     if not ply:HasInvisibility() then
@@ -295,7 +296,7 @@ hook.Add("PreDrawViewModel", "invis_vm", function(vm, ply)
     end
 	
     if IsValid(ply) then
-        render.SetBlend(0.4)
+        render.SetBlend(0.2)
 		render.OverrideBlend( false )
     end
 end)

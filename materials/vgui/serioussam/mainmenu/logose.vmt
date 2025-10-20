@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/serioussam/mainmenu/logose"
+	"$translucent" "1"
+	"$decal" "1"
+}

@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/powerups/invisibility"
+	"$basetexture" "models/powerups/invisibility_pm"
 	"$bumpmap"	"models/powerups/invisibility_normal"	
 	$phong 1
 	$phongboost 5

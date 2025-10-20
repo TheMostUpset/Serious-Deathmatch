@@ -254,11 +254,11 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
     local size = ScrH() / 14.75
     local gap_screen = ScrH() / 14
     local y = ScrH() - size - gap_screen
-    local ammosize = size/1.25
+    local ammosize = size/1.025
     local ammoy = y+ammosize/4
     local icon_gap = 5.5
-    local powerupx = ScrH() / 14.75 /1.25
-    local powerupy = ScrH() / 14.75 /1.25
+    local powerupx = ScrH() / 14.75
+    local powerupy = ScrH() / 14.75
 
     if not IsValid(LocalPlayer()) then return end
 
@@ -337,7 +337,7 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
             end
 
             surface.SetTexture(icon)
-            surface.DrawTexturedRect( x+2, ammoy / 1.2+2, ammosize/1.075, ammosize/1.075)
+            surface.DrawTexturedRect( x+1, ammoy / 1.2+2, ammosize, ammosize)
 
             local w, h = surface.GetTextSize(wep.classname)
             x = x + (powerupx + 4)

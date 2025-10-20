@@ -38,16 +38,16 @@ util.AddNetworkString("ClientChatMessage")
 
 resource.AddSingleFile( "resource/fonts/seriousmenu.ttf" )
 
-PLAYER_WALKSPEED = 375
+PLAYER_WALKSPEED = 362
 PLAYER_RUNSPEED = 250
 PLAYER_JUMPPOWER = 300
 
-PLAYER_WALKSPEED_KNIFE = 450
-PLAYER_RUNSPEED_KNIFE = 300
-PLAYER_JUMPPOWER_KNIFE = 375
+PLAYER_WALKSPEED_KNIFE = 437
+PLAYER_RUNSPEED_KNIFE = 325
+PLAYER_JUMPPOWER_KNIFE = 387
 
-PLAYER_CROUCHSPEED_MULTIPLIER = 0.4
-PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE = 0.475
+PLAYER_CROUCHSPEED_MULTIPLIER = 0.35
+PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE = 0.425
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 	if GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
@@ -81,8 +81,6 @@ function GM:InitPostEntity()
 	if weapon_ss_doubleshotgun then weapon_ss_doubleshotgun.Primary.AnimSpeed = 1.5 end
 	local weapon_ss_singleshotgun = weapons.GetStored("weapon_ss_singleshotgun")
 	if weapon_ss_singleshotgun then weapon_ss_singleshotgun.Primary.AnimSpeed = 1.5 end
-	-- local ammo_base = scripted_ents.GetStored("ss_ammo_base")
-	-- if ammo_base then ammo_base.ModelScale = 10 end
 
 	self:ReplacePickupEntities()
 
@@ -744,7 +742,6 @@ function GM:PlayerLoadout(ply)
 	ply:SetUnDuckSpeed(0.1)
 
 	ply:SetupHands()
-
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then
 		self:GamePrepare()
 	end
