@@ -25,7 +25,7 @@ surface.CreateFont("seriousHUDfont_targetid", {
 surface.CreateFont( "Scoreboard_Font", {
 	font = "Roboto",
 	extended = true,
-	size = ScrW() / 46,
+	size = ScrH() / 26,
 	weight = 800,
 	blursize = 1,
 	antialias = true,
@@ -60,7 +60,7 @@ surface.CreateFont( "GameEnd_Font", {
 
 surface.CreateFont( "MainMenu_Font", {
 	font = "Arial Stretched",
-	size = ScrW()/28,
+	size = ScrH()/16,
 	weight = 0,
 	antialias = true,
 	shadow = true,
@@ -69,7 +69,7 @@ surface.CreateFont( "MainMenu_Font", {
 
 surface.CreateFont( "Vote_Font", {
 	font = "Arial Stretched",
-	size = ScrW() / 32	,
+	size = ScrH()/32,
 	weight = 0,
 	extended = true,
 } )
@@ -77,22 +77,22 @@ surface.CreateFont( "Vote_Font", {
 surface.CreateFont( "Vote_Font2", {
 	font = "Arial Stretched",
 	extended = false,
-	size = ScrW() / 42,
+	size = ScrH()/42,
 	weight = 0,
 	extended = true,
 } )
 
 surface.CreateFont("MainMenu_font_very_small", {
 	font = "Arial",
-	size = ScrW()/64,
-	weight = 800,
+	size = ScrH()/32,
+	weight = 600,
 	shadow = true,
 	extended = true,
 })
 
 surface.CreateFont("MainMenu_font_small", {
 	font = "Arial Stretched",
-	size = ScrW()/38,
+	size = ScrH()/20,
 	weight = 600,
 	shadow = true,
 	extended = true,
@@ -125,25 +125,25 @@ surface.CreateFont("RAM_VoteSysButton",
 surface.CreateFont("MainMenu_Font_32", 
 {   font = "Arial",
     extended = true,
-	size = ScrW() / 64,
+	size = ScrH() / 48,
 	weight = 800,
 	antialias = true,
 	shadow = true
 })
 
-surface.CreateFont("MainMenu_Font_64", 
+surface.CreateFont("Credits_Font_64", 
 {   font = "Arial",
     extended = true,
-	size = ScrW() / 48,
+	size = ScrH() / 24,
 	weight = 800,
+	blursize = 1,
 	antialias = true,
-	shadow = true
 })
 
 surface.CreateFont("MainMenu_Font_Models", 
 {   font = "Arial",
     extended = true,
-	size = ScrW() / 56,
+	size = ScrH() / 32,
 	weight = 800,
 	antialias = true,
 	shadow = true

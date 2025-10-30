@@ -181,7 +181,7 @@ function GM:HUDDrawTargetID()
 	local font = "seriousHUDfont_targetid"
 
 	if ( trace.Entity:IsPlayer() ) then
-		text = trace.Entity:Nick() .. " " .. trace.Entity:Health()
+		text = trace.Entity:Nick()
 	else
 		--text = trace.Entity:GetClass()
 		return
@@ -235,41 +235,6 @@ function GM:HUDPaint()
 	
 	hook.Run( "HUDDrawTargetID" )
     playerTable:PaintManual()
-	if self:ShouldDrawTimer() then
-		local timeLimit = cvar_max_time:GetInt()
-
-		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
-		if countdown < 0 then
-			countdown = 0
-		end
-		local timer = string.FormattedTime(countdown, "00:%02i:%02i")
-		if game_state == STATE_GAME_END then
-			timer = "00:00:00"
-		end
-		
-		local x, y = ScrH() / 80, ScrH() /  9
-		
-		draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x + 2 , y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
-		draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x , y, color_white, TEXT_ALIGN_LEFT)
-	
-		if countdown <= 0 and !endgamesoundplayed then
-			surface.PlaySound( "misc/serioussam/churchbell.wav" )
-			endgamesoundplayed = true
-		end
-		
-		if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
-			local countdown_rnd = math.Round(countdown - .5)
-			if countdown_rnd == 300 and !announcer5 then
-				announcer5 = true
-				surface.PlaySound( minutesleft5 )
-				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			elseif countdown_rnd == 60 and !announcer1 then
-				announcer1 = true
-				surface.PlaySound( minuteleft1 )
-				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-		end
-	end
 	
 	if game_state == STATE_GAME_WARMUP then
 		local x, y = ScrW() / 2, ScrH() / 4
@@ -420,7 +385,7 @@ function GM:HUDPaint()
 				local text = language.GetPhrase( "sdm_fragsleft" ) .. " " .. frags_left
 				local x, y = ScrH() / 80, ScrH() /  7.25
 				if !self:ShouldDrawTimer() then
-					y = ScrH() / 70
+					y = ScrH() /  9
 				end
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
@@ -442,6 +407,43 @@ function GM:HUDPaint()
 				end
 			end
 		end
+		
+		if self:ShouldDrawTimer() then
+			local timeLimit = cvar_max_time:GetInt()
+
+			local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
+			if countdown < 0 then
+				countdown = 0
+			end
+			local timer = string.FormattedTime(countdown, "00:%02i:%02i")
+			if game_state == STATE_GAME_END then
+				timer = "00:00:00"
+			end
+			
+			local x, y = ScrH() / 80, ScrH() /  9
+			
+			draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x + 2 , y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
+			draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x , y, color_white, TEXT_ALIGN_LEFT)
+		
+			if countdown <= 0 and !endgamesoundplayed then
+				surface.PlaySound( "misc/serioussam/churchbell.wav" )
+				endgamesoundplayed = true
+			end
+			
+			if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
+				local countdown_rnd = math.Round(countdown - .5)
+				if countdown_rnd == 300 and !announcer5 then
+					announcer5 = true
+					surface.PlaySound( minutesleft5 )
+					AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+				elseif countdown_rnd == 60 and !announcer1 then
+					announcer1 = true
+					surface.PlaySound( minuteleft1 )
+					AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+				end
+			end
+		end
+		
 		if !LocalPlayer():Alive() then
 			if LocalPlayer():Team() == TEAM_SPECTATOR then return end
 			local x, y = ScrW() / 2, ScrH() / 4

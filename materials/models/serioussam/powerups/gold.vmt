@@ -4,7 +4,7 @@
 	"$bumpmap"	"models/serioussam/powerups/gold_normal"	
 	"$detail" "models/serioussam/powerups/gold_detail.vtf"	
 	"$detailscale" "1"
-	"$detailblendfactor" .5
+	"$detailblendfactor" .25
 	"$detailblendmode" 5
 	
 	"$rimlight" "1"

@@ -253,7 +253,7 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
     local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
     local size = ScrH() / 14.75
     local gap_screen = ScrH() / 14
-    local y = ScrH() - size - gap_screen
+    local y = ScrH() - size - gap_screen * 2.2
     local ammosize = size/1.025
     local ammoy = y+ammosize/4
     local icon_gap = 5.5

@@ -112,6 +112,16 @@ function GetOppositeTeamFrags()
 	end
 end
 
+function GetTeamFrags()
+	if LocalPlayer():Team() == TEAM_RED then
+		return team.TotalFrags(TEAM_RED)
+	elseif LocalPlayer():Team() == TEAM_BLUE then
+		return team.TotalFrags(TEAM_BLUE)
+	else
+		return "0"
+	end
+end
+
 local fragMsgTime = 0
 local leadMsgTime = 0
 function LeadingSound()
@@ -267,94 +277,8 @@ end)
 function GM:HUDPaint()
 	local game_state = self:GetState()
 	
-	if SeriousHUD:GetSkin() == 1 then
-		ISkull = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/iskull")
-	elseif SeriousHUD:GetSkin() == 2 then
-		ISkull = surface.GetTextureID("vgui/serioussam/hud/iskull")
-	end
-	
-	--draw.SimpleText( "Red team: " .. team.GetScore(1) , "TargetID", 12, 200, color_white )
-	--draw.SimpleText( "Blue team: " .. team.GetScore(2) , "TargetID", 12, 225, color_white )
-	
 	hook.Run( "HUDDrawTargetID" )
     teamsplayerTable:PaintManual()
-	if self:ShouldDrawTimer() then
-		local timeLimit = cvar_max_time:GetInt()
-
-		local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
-		if countdown < 0 then
-			countdown = 0
-		end
-		local timer = string.FormattedTime(countdown, "%02i:%02i")
-		if game_state == STATE_GAME_END then
-			timer = "00:00"
-		end
-
-
-		local hudr, hudg, hudb = self:GetHUDColor()
-		local hudr_e, hudg_e, hudb_e = self:GetHUDColorFrame()
-		
-		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
-		
-		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)		
-		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
-		
-		surface.SetTexture(ITime)
-		surface.SetDrawColor(hudr, hudg, hudb, 255)		
-		surface.DrawTexturedRect(ScrH() / 80 * 1.35 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)	
-		draw.RoundedBox(0, ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
-		
-		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
-		surface.DrawOutlinedRect(ScrH() / 14.75 + 5.5 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
-
-		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 + 2 ,ScrH() /  14.75 / 10 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
-		draw.SimpleText(timer, "seriousHUDfont_timer", ScrH() / 14.75 * 2.2 ,ScrH() /  14.75 / 10, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
-	
-		if countdown <= 0 and !endgamesoundplayed then
-			surface.PlaySound( "misc/serioussam/churchbell.wav" )
-			endgamesoundplayed = true
-		end
-		
-		if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
-			local countdown_rnd = math.Round(countdown - .5)
-			if countdown_rnd == 300 and !announcer5 then
-				announcer5 = true
-				surface.PlaySound( minutesleft5 )
-				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			elseif countdown_rnd == 60 and !announcer1 then
-				announcer1 = true
-				surface.PlaySound( minuteleft1 )
-				AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
-			end
-		end
-		
-		
-	
-	end
-	
-	if cvar_frag_limit then
-		local hudr_e, hudg_e, hudb_e = GetOppositeTeamColor()
-		local hudr, hudg, hudb = self:GetHUDColor()
-		
-		local y = ScrH() /  80
-		
-		--opposite team kill counter
-		draw.RoundedBox(0, ScrW() / 2.36 , y, ScrH() / 14.75 /1.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
-		
-		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)		
-		surface.DrawOutlinedRect(ScrW() / 2.36 , y, ScrH() / 14.75 / 1.25, ScrH() / 14.75 / 1.25)
-		
-		surface.SetTexture(ISkull)
-		surface.SetDrawColor(hudr, hudg, hudb, 255)		
-		surface.DrawTexturedRect(ScrW() / 2.36 * 1.005 , y * 1.3, ScrH() / 14.75 /1.4, ScrH() / 14.75 /1.4)	
-		draw.RoundedBox(0, ScrW() / 2.2 + 5.5 , y , ScrH() / 14.75 * 2.25, ScrH() / 14.75 /1.25, Color(20, 20, 20, 100))
-		
-		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
-		surface.DrawOutlinedRect(ScrW() / 2.2 + 5.5 , y , ScrH() / 14.75 * 2.25, ScrH() / 14.75 / 1.25)
-
-		draw.SimpleText(GetOppositeTeamFrags(), "seriousHUDfont_timer", ScrW() / 2 + 2 , y / 2 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)			
-		draw.SimpleText(GetOppositeTeamFrags(), "seriousHUDfont_timer", ScrW() / 2, y / 2, Color(hudr, hudg, hudb, 255), TEXT_ALIGN_CENTER)	
-	end
 	
 	if game_state == STATE_GAME_WARMUP then
 		local x, y = ScrW() / 2, ScrH() / 4
@@ -418,18 +342,95 @@ function GM:HUDPaint()
 			end
 		end
 	elseif game_state == STATE_GAME_PROGRESS then
-		local firstplayer = LocalPlayer()
-		if teamsplayerTable and teamsplayerTable.Players then
-			firstplayer = teamsplayerTable.Players[1]
+		if LocalPlayer():Team() == TEAM_SPECTATOR then
+		local font = "seriousHUDfont_targetid"
+		local text = ""
+		if LocalPlayer():GetObserverMode() == OBS_MODE_ROAMING then
+			text = ""
+		else
+			text = language.GetPhrase("#sdm_spectating") .. " " .. LocalPlayer():GetNWString("spectator_plynick")
 		end
+		local x = ScrW() / 2
+		local y = ScrH() / 1.25
+
+		draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
+		end
+		if fragMsgTime > CurTime() then
+			local x, y = ScrW() / 2, ScrH() / 3.25
+			local text = language.GetPhrase( "sdm_youfragged" ) .. " " .. fragMsgNick
+			local font = "Frag_Font"
+			local fadeSpeed = 100
+			local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
+			draw.SimpleText( text, font, x + 2, y + 2, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
+			draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)
+		end
+			local firstplayer = LocalPlayer()
+			if teamsplayerTable and teamsplayerTable.Players then
+				firstplayer = teamsplayerTable.Players[1]
+		end
+		
+		if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 3 then
+			IBead = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/ibead")
+		elseif SeriousHUD:GetSkin() == 2 then
+			IBead = surface.GetTextureID("vgui/serioussam/hud/ibead")
+		end
+		
+		local hudr, hudg, hudb = self:GetHUDColor()
+		local hudr_e, hudg_e, hudb_e = self:GetHUDColorFrame()
+		local hudr_d, hudg_d, hudb_d = GetOppositeTeamColor()
+		
+		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 17.75 /1.25, ScrH() / 17.75 /1.25, Color(20, 20, 20, 100))
+		
+		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)		
+		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 17.75 /1.25, ScrH() / 17.75 /1.25)
+		
+		surface.SetTexture(ISkull)
+		surface.SetTexture(IBead)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.DrawTexturedRect(ScrH() / 80 * 1.25 , ScrH() /  14.75 / 5 * 1.2, ScrH() / 18 /1.4, ScrH() / 18 /1.4)	
+		draw.RoundedBox(0, ScrH() / 16, ScrH() /  14.75 / 5 , ScrH() / 14.75 * 3.75, ScrH() / 17.75 /1.25, Color(20, 20, 20, 100))
+		
+		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
+		surface.DrawOutlinedRect(ScrH() / 16 , ScrH() /  14.75 / 5 , ScrH() / 14.75 * 3.75, ScrH() / 17.75 /1.25)
+		
+		local playerkos = GetTeamFrags()
+
+		draw.SimpleText(playerkos, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 + 2 ,ScrH() /  15 / 25 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
+		draw.SimpleText(playerkos, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 ,ScrH() /  15 / 25, color_white, TEXT_ALIGN_CENTER)
+
+		if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 3 then
+			ISkull = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/iskull")
+		elseif SeriousHUD:GetSkin() == 2 then
+			ISkull = surface.GetTextureID("vgui/serioussam/hud/iskull")
+		end
+		
+		draw.RoundedBox(0, ScrH() / 80 , ScrH() / 16 , ScrH() / 17.75 /1.25, ScrH() / 17.75 /1.25, Color(20, 20, 20, 100))
+		
+		surface.SetDrawColor(hudr_d, hudg_d, hudb_d, 255)		
+		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() / 16, ScrH() / 17.75 /1.25, ScrH() / 17.75 /1.25)
+		
+		surface.SetTexture(ISkull)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.DrawTexturedRect(ScrH() / 80 * 1.25 , ScrH() / 16 * 1.05, ScrH() / 18 /1.4, ScrH() / 18 /1.4)	
+		draw.RoundedBox(0, ScrH() / 16 , ScrH() / 16, ScrH() / 14.75 * 3.75, ScrH() / 17.75 /1.25, Color(20, 20, 20, 100))
+		
+		surface.SetDrawColor(hudr_d, hudg_d, hudb_d, 255)
+		surface.DrawOutlinedRect(ScrH() / 16, ScrH() / 16 , ScrH() / 14.75 * 3.75, ScrH() / 17.75 /1.25)
+		
+		local playerdeaths = GetOppositeTeamFrags()
+		
+		draw.SimpleText(playerdeaths, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 + 2 ,ScrH() /  19.5 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
+		draw.SimpleText(playerdeaths, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 ,ScrH() /  19.5, color_white, TEXT_ALIGN_CENTER)
+	
 		if IsValid(firstplayer) and cvar_max_frags and GetConVarNumber("sdm_frag_limit") == 1 then
 			local max_frags = cvar_max_frags:GetInt()
 			local frags_left = math.min(max_frags - firstplayer:Frags(), max_frags)
 			if frags_left > 0 then
 				local text = language.GetPhrase( "sdm_fragsleft" ) .. " " .. frags_left
-				local x, y = ScrH() / 80, ScrH() /  13.5
+				local x, y = ScrH() / 80, ScrH() /  7.25
 				if !self:ShouldDrawTimer() then
-					y = ScrH() / 70
+					y = ScrH() /  9
 				end
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x + 2, y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
 				draw.SimpleText(text, "seriousHUDfont_fragsleft", x, y, color_white, TEXT_ALIGN_LEFT)
@@ -451,29 +452,48 @@ function GM:HUDPaint()
 				end
 			end
 		end
-	if LocalPlayer():Team() == TEAM_SPECTATOR then
-		local font = "seriousHUDfont_targetid"
-		local text = language.GetPhrase("#sdm_spectating") .. " " .. LocalPlayer():GetNWString("spectator_plynick")
-		local x = ScrW() / 2
-		local y = ScrH() / 1.25
+		
+		if self:ShouldDrawTimer() then
+			local timeLimit = cvar_max_time:GetInt()
 
-		draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER )
-		draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
-	end
-	if fragMsgTime > CurTime() then
-		local x, y = ScrW() / 2, ScrH() / 3.25
-		local text = language.GetPhrase( "sdm_youfragged" ) .. " " .. fragMsgNick
-		local font = "Frag_Font"
-		local fadeSpeed = 3
-		local alpha = 255 * math.Clamp((fragMsgTime - CurTime())*fadeSpeed, 0, 1)
-		draw.SimpleText( text, font, x + 2, y + 2, Color(0,0,0,alpha), TEXT_ALIGN_CENTER)
-		draw.SimpleText( text, font, x, y, Color(255,255,255,alpha), TEXT_ALIGN_CENTER)
-	end
+			local countdown = timeLimit - (CurTime() - GetGlobalFloat("GameTime"))
+			if countdown < 0 then
+				countdown = 0
+			end
+			local timer = string.FormattedTime(countdown, "00:%02i:%02i")
+			if game_state == STATE_GAME_END then
+				timer = "00:00:00"
+			end
+			
+			local x, y = ScrH() / 80, ScrH() /  9
+			
+			draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x + 2 , y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
+			draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x , y, color_white, TEXT_ALIGN_LEFT)
+		
+			if countdown <= 0 and !endgamesoundplayed then
+				surface.PlaySound( "misc/serioussam/churchbell.wav" )
+				endgamesoundplayed = true
+			end
+			
+			if cvar_announcer:GetBool() and AnnouncerSoundPlayed <= CurTime() then
+				local countdown_rnd = math.Round(countdown - .5)
+				if countdown_rnd == 300 and !announcer5 then
+					announcer5 = true
+					surface.PlaySound( minutesleft5 )
+					AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+				elseif countdown_rnd == 60 and !announcer1 then
+					announcer1 = true
+					surface.PlaySound( minuteleft1 )
+					AnnouncerSoundPlayed = CurTime() + AnnouncerDelay
+				end
+			end
+		end
+		
 		if !LocalPlayer():Alive() then
 			if LocalPlayer():Team() == TEAM_SPECTATOR then return end
 			local x, y = ScrW() / 2, ScrH() / 4
-			local text = "#sdm_respawn"
 			local font = "Death_Font"
+			local text = "#sdm_respawn"
 			draw.SimpleText( text, font, x + 2, y + 2, color_black, TEXT_ALIGN_CENTER)
 			draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
 			if fragByMsgNick != "" then
@@ -485,7 +505,7 @@ function GM:HUDPaint()
 				draw.SimpleText( text, font, x + 2, y + 2, color_black, TEXT_ALIGN_CENTER)
 				draw.SimpleText( text, font, x, y, color_white, TEXT_ALIGN_CENTER)
 			end
-		end		
+		end
 	end
 end
 

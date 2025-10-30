@@ -11,6 +11,11 @@ include("cl_menus.lua")
 include("cl_weaponselection.lua")
 include("cl_footsteps.lua")
 
+concommand.Add( "sdm_changeteam", function( ply, cmd, args )
+	OpenSSMenu()
+	OpenTeamMenu()
+end )
+
 net.Receive("ClientChatMessage", function()
 	local tbl = net.ReadTable()
 	local msg = ""

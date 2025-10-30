@@ -7,8 +7,6 @@ GM.TeamBased = true
 
 DeriveGamemode( "serioussam_dm" )
 
-
-
 function GM:CreateTeams()
 	TEAM_RED = 1
 	team.SetUp(TEAM_RED, "Red Team", Color(255,50,20, 255))
@@ -28,4 +26,5 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		return true
 	end
 end
+
 concommand.Remove("sdm_joingame")

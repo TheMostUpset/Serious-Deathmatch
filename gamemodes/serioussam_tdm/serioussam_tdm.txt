@@ -1,7 +1,7 @@
 "deathmatch"
 {
 	"base"		"base"
-	"title"		"Serious Team Deathmatch"
+	"title"		"Serious Sam Team Deathmatch"
 	"category"	"pvp"
 	"maps"		""
 	"menusystem"	"1"
