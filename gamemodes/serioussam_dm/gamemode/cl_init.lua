@@ -64,7 +64,7 @@ GM.MusicTable = {
     ["stdm_crystal_march"] = "crystalmarch.ogg",
     ["sdm_the_fortress"] = "thefortress.ogg",
     ["sdm_yoddler_classic"] = "yoddler.ogg",
-    ["sdm_skulls'n_bones"] = "holeclassic.ogg",
+    ["sdm_skulls_bones"] = "holeclassic.ogg",
 }
 function GM:PlayMapMusic(volume)
 	if lastMusicStation and IsValid(lastMusicStation) then

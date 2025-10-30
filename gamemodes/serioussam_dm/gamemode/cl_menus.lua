@@ -525,7 +525,7 @@ function OpenSSMenu()
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		--draw.SimpleText("v1.91", "MainMenu_font_very_small", ScrW()/1.05, ScrH() - ScrH() + 25, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("v1.92", "MainMenu_font_very_small", ScrW()/1.05, ScrH() - ScrH() + 25, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
 		surface.SetDrawColor(255,255,255)
@@ -1099,10 +1099,8 @@ function OpenQuitConfirmationMenu()
 	NoButton:SetY(h-h/2)
 	
 	ConfirmationMenu.Paint = function(self, w, h)
-		local hudr, hudg, hudb = GAMEMODE:GetHUDColorFrame()
-		if GAMEMODE:GetHUDSkin() then
-			hudr, hudg, hudb = 100, 125, 150
-		end
+		local hudr, hudg, hudb = GetFrameMMFColor()
+
 		local offsetX = math.sin(CurTime() * 1.5) * -22
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0, 0, 0, 255)
@@ -1267,7 +1265,7 @@ function OpenStopConfirmationMenu()
 	NoButton:SetY(h-h/2)
 	
 	ConfirmationMenu.Paint = function(self, w, h)
-		local hudr, hudg, hudb = GAMEMODE:GetHUDColorFrame()
+		local hudr, hudg, hudb = GetFrameMMFColor()
 		local offsetX = math.sin(CurTime() * 1.5) * -22
 		local offsetY = math.cos(CurTime() * 1.5) * -22
 		surface.SetDrawColor(0, 0, 0, 255)
@@ -1518,7 +1516,7 @@ function OpenSettingsMenu()
 	Music_Volume.Paint = function(self, w, h)
 		local number = Music_Volume.TextArea:GetText()
 		Music_Volume:SetCursor( "blank" )
-		surface.SetDrawColor(GetMMFColor())
+		surface.SetDrawColor(GetFrameMMFColor())
 		surface.DrawOutlinedRect(0,0,w,h)
 		local hudr,hudg,hudb = GetMMFColor()
 		surface.SetDrawColor(hudr-35,hudg-35,hudb-35, 200)

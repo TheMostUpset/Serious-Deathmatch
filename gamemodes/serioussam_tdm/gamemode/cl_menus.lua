@@ -171,7 +171,7 @@ function OpenSSMenu()
 	end
 	Team_Button:SizeToContents()
 	Team_Button:Center()
-	Team_Button:SetY(ScrH()/2.5)
+	Team_Button:SetY(ScrH()/2.515)
 
 	local Continue_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -208,85 +208,6 @@ function OpenSSMenu()
 	Continue_Button:SizeToContents()
 	Continue_Button:Center()
 	Continue_Button:SetY(ScrH()/2.925)
-	
-	if LocalPlayer():Team() == 0 then
-	local Spec_Button = vgui.Create("DButton", EscMenu)
-	local isFlashing = false
-	Spec_Button:SetText("#sdm_spectate")
-	Spec_Button:SetSize(ScrW()/12, ScrH()/20)
-	Spec_Button:SetFont("MainMenu_Font")
-	Spec_Button:SetTextColor(GetButtonColor())
-	Spec_Button.OnCursorEntered = function()
-		Spec_Button:SetCursor( "blank" )
-		text = "#sdm_help_joinspec"
-		isFlashing = true
-		surface.PlaySound("menus/select.wav")
-	end
-
-	Spec_Button.OnCursorExited = function()
-		text = ""
-		isFlashing = false
-		Spec_Button:SetTextColor(GetButtonColor())
-	end
-
-	Spec_Button.Paint = function(self, w, h)
-		if isFlashing then
-			ButtonFlashing(self)
-		end
-	end
-
-	Spec_Button.DoClick = function()
-		RunConsoleCommand("sdm_joinspec")
-		EscMenu:Close()
-		showGameUI = false
-		surface.PlaySound("menus/press.wav")
-	end
-	
-	Spec_Button:SizeToContents()
-	Spec_Button:Center()
-	Spec_Button:SetY(ScrH()/2.515)
-	end
-	
-	if LocalPlayer():Team() == TEAM_SPECTATOR then
-		local Return_Button = vgui.Create("DButton", EscMenu)
-		local isFlashing = false
-		Return_Button:SetText("#sdm_joingame")
-		Return_Button:SetSize(ScrW()/6, ScrH()/20)
-		Return_Button:Center()
-		Return_Button:SetFont("MainMenu_Font")
-		Return_Button:SetTextColor(GetButtonColor())
-		
-		Return_Button.Paint = function(self, w, h) 
-			if isFlashing then
-				ButtonFlashing(self)
-			end
-		end
-		
-		Return_Button.OnCursorEntered = function()
-			Return_Button:SetCursor( "blank" )
-			text = "#sdm_help_joingame"
-			surface.PlaySound("menus/select.wav")
-			isFlashing = true
-			
-		end
-
-		Return_Button.OnCursorExited = function()
-			text = ""
-			isFlashing = false
-			Return_Button:SetTextColor(GetButtonColor())
-		end
-
-		Return_Button.DoClick = function()
-			RunConsoleCommand("sdm_joingame")
-			EscMenu:Close()
-			showGameUI = false
-			surface.PlaySound("menus/press.wav")
-		end
-		
-		Return_Button:SizeToContents()
-		Return_Button:Center()
-		Return_Button:SetY(ScrH()/2.515)
-	end
 
 	local Disconnect_Button = vgui.Create("DButton", EscMenu)
 	local isFlashing = false
@@ -435,7 +356,7 @@ function OpenSSMenu()
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText("v1.91", "MainMenu_font_very_small", ScrW()/1.05, ScrH() - ScrH() + 25, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("v1.92", "MainMenu_font_very_small", ScrW()/1.05, ScrH() - ScrH() + 25, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
 		surface.SetDrawColor(255,255,255)
@@ -824,7 +745,7 @@ function OpenSettingsMenu()
 	end
 	
 	Back_Button:SizeToContents()
-	Back_Button:SetPos(ScrW() - ScrW() / 1.01, ScrH() - ScrH()/10)
+	Back_Button:SetPos(ScrW() - ScrW() / 1.0215, ScrH() - ScrH()/10)
 
 	local TFE_Color_Mixer = vgui.Create("DColorMixer", SettingsMenu)
 	TFE_Color_Mixer:SetSize(ScrW()/10, ScrH()/10)

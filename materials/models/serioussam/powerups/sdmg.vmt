@@ -1,5 +1,19 @@
 "VertexLitGeneric"
 {
 	"$basetexture" "models/serioussam/powerups/sdmg"
-	"$selfillum" "1"
+	"$bumpmap"	"models/serioussam/normal"	
+	"$phong" "1"
+	"$phongboost" "3.5"
+	"$phongexponent" "10"
+	"$phongfresnelranges" "[2 1.2 8]"
+	"$phongalbedotint" "1"
+	"$normalmapalphaenvmapmask" "1"
+
+
+	"$phongexponenttexture" "models\items\serioussam\exponent"
+
+	"$envmap" "env_cubemap"
+	"$envmapsaturation" .1
+	"$envmapcontrast" 1
+	"$envmaptint" .1 .1 .1
 }

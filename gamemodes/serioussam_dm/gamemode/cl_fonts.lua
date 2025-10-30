@@ -84,7 +84,7 @@ surface.CreateFont( "Vote_Font2", {
 
 surface.CreateFont("MainMenu_font_very_small", {
 	font = "Arial",
-	size = ScrH()/32,
+	size = ScrH()/38,
 	weight = 600,
 	shadow = true,
 	extended = true,
