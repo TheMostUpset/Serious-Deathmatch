@@ -61,8 +61,8 @@ function PaintBackground(self, w, h)
 	local skin = GAMEMODE:GetHUDSkin()
 	local hudr, hudg, hudb = GAMEMODE:GetHUDBGColor()
 	
-	local offsetX = math.sin(CurTime() * 1.5) * -22
-	local offsetY = math.cos(CurTime() * 1.5) * -22
+	local offsetX = math.sin(CurTime() * 1.5) * -25
+	local offsetY = math.cos(CurTime() * 1.5) * -20
 	surface.SetDrawColor(0,0,0)
 	surface.DrawRect(0, 0, w, h)
 	
@@ -72,7 +72,7 @@ function PaintBackground(self, w, h)
 		surface.SetTexture(ssbg)
 	end
 	
-	surface.SetDrawColor(hudr, hudg, hudb, 75)
+	surface.SetDrawColor(hudr, hudg, hudb, 50)
 	local texW = 256
 	local texH = 256
 	surface.DrawTexturedRectUV( offsetX-25, offsetY-25, w*1.5, h*1.5, 0, 0, w / texW, h / texH )
@@ -111,12 +111,12 @@ function PaintBackground(self, w, h)
 	
 	local texW = 256
 	local texH = 128
-	local offsetX = math.sin(CurTime() * 1.5) * 30
-	local offsetY = math.cos(CurTime() * 1.5) * 30
+	local offsetX = math.sin(CurTime() * 1.5) * 35
+	local offsetY = math.cos(CurTime() * 1.5) * 25
 	
 	if skin == 2 then
-		offsetX = math.sin(CurTime() * 1) * 28
-		offsetY = math.cos(CurTime() * 1) * 28
+		offsetX = math.sin(CurTime() * 1) * 25
+		offsetY = math.cos(CurTime() * 1) * 25
 	end
 	
 	if skin == 2 then
@@ -125,15 +125,15 @@ function PaintBackground(self, w, h)
 		surface.SetTexture(detailTexture_vtf)
 	end
 	
-	surface.SetDrawColor(hudr, hudg, hudb, 75)
+	surface.SetDrawColor(hudr, hudg, hudb, 100)
 	
 	if skin == 1 then
-		surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*2, h*2, 0, 0, w / texW, h / texH )
+		surface.DrawTexturedRectUV( offsetX-125, offsetY-125, w*3, h*3, 0, 0, w / texW, h / texH )
 	end
 	
 	if skin == 2 then
 		surface.SetTexture(detailTexture_vtf_tse_alpha)
-		surface.DrawTexturedRectUV( offsetX-35, offsetY-35, w*5, h*5, 0, 0, w / texW, h / texH )
+		surface.DrawTexturedRectUV( offsetX-125, offsetY-125, w*5, h*5, 0, 0, w / texW, h / texH )
 	end
 	
 	if skin == 2 then
@@ -804,7 +804,7 @@ function OpenCreditsMenu()
 		Serious Sam Voice by John J. Dick aka "Booger"
 		ㅤ
 		[SEPARATOR]
-		SERIOUS DEATHMATCH:
+		SERIOUS SAM DEATHMATCH:
 		ㅤ
 		[SEPARATOR]
 		PROGRAMMING
@@ -846,6 +846,7 @@ function OpenCreditsMenu()
 		NextOrange2704TheSlayer
 		omletus
 		o u t l a w
+		Raineronus MK2
 		Windows_TAHK
 		and all other Serious Deathmatch contributors.
 		ㅤ

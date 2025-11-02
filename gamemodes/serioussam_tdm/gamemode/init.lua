@@ -86,7 +86,7 @@ function GM:PlayerLoadout(ply)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 	
 	ply:SetViewOffset(Vector(0,0,60))
-	ply:SetViewOffsetDucked(Vector(0,0,24))
+	ply:SetViewOffsetDucked(Vector(0,0,30))
 	
 	ply:SetDuckSpeed(0.1)
 	ply:SetUnDuckSpeed(0.1)

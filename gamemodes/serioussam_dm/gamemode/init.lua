@@ -735,7 +735,7 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 	
-	ply:SetViewOffset(Vector(0,0,58))
+	ply:SetViewOffset(Vector(0,0,60))
 	ply:SetViewOffsetDucked(Vector(0,0,30))
 	
 	ply:SetDuckSpeed(0.1)
@@ -771,8 +771,10 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	end
 end
 
-function GM:OnDamagedByExplosion()
-end
+--did not work with GM
+hook.Add( "OnDamagedByExplosion", "DisableSound", function()
+    return true
+end)
 
 function GM:PlayerSwitchWeapon(ply, oldwep, newwep)
 	if ply:Alive() and IsValid(newwep) then
