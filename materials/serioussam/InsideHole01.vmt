@@ -1,0 +1,7 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/InsideHole01"
+	"$detail" "serioussam/Concrete01.vtf"
+	"$detailscale" "6"
+	"$detailblendfactor" "1.5"
+}

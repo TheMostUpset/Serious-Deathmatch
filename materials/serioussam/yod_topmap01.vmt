@@ -1,0 +1,8 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "serioussam/YOD_TopMap01"
+	"$detail" "serioussam/Sand02_dtl"
+	"$detailscale" "90"
+	"$detailblendfactor" "1.75"
+	"$surfaceprop" "snow"
+}

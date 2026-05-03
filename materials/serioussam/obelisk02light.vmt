@@ -1,0 +1,8 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "serioussam/obelisk02light"
+	"$translucent" "1"
+	$detail "serioussam/crumples.vtf"
+	$detailscale "3"
+	$color "{254 227 198}"
+}

@@ -1,0 +1,5 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/CAT_Carpet"
+	$surfaceprop "carpet"
+}

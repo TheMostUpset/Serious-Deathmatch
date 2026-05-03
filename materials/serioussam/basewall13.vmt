@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/BaseWall13"
+	$surfaceprop "rock"
+	$detail "serioussam/Rock02_dtl"
+	$detailscale "7"
+	$detailblendfactor "1.5"
+}

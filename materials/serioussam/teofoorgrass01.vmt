@@ -1,0 +1,7 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/TeoFoorGrass01"
+	$surfaceprop "grass"
+	$detail "serioussam/grass.vtf"
+	$detailscale "3"
+}

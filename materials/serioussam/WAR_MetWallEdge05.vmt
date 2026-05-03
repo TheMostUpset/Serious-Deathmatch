@@ -1,0 +1,7 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/WAR_MetWallEdge05"
+	$surfaceprop "Metal"
+	$detail "serioussam/Rock02.vtf"
+	$detailscale "7"
+}

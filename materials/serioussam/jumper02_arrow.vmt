@@ -1,0 +1,14 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/Jumper02_arrow"
+	$surfaceprop "metal"
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture"
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "24"
+		}
+	}
+}

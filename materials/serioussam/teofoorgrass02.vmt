@@ -1,0 +1,7 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/TeoFoorGrass02"
+	$detail "serioussam/Stain06"
+	$detailblendfactor 1.25
+	$detailscale 0.05
+}

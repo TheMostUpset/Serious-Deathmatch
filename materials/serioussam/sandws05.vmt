@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/SandWS05"
+	$color "{235 210 195}"
+	$surfaceprop "sand"
+	$detail "serioussam/topmap.vtf"
+	$detailscale "0.008"
+}

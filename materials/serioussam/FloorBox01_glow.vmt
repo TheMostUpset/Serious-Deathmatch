@@ -1,0 +1,6 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/FloorBox01_glow"
+	$selfillum "1"
+	$surfaceprop "glass"
+}

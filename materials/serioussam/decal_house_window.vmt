@@ -1,0 +1,10 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "serioussam/decal_house_window"
+	"$translucent" 1
+	"$decal" 1
+	$vertexalpha 1
+	"$surfaceprop" "no_decal"
+	$detail "serioussam/Rock02_dtl"
+	$detailscale "5"
+}

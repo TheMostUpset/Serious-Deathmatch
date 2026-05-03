@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/Crate"
+	"$detail" "serioussam/Wood01.vtf"
+	"$detailscale" "2"
+	"$detailblendfactor" "1.5"
+	"$surfaceprop" "wood"
+}

@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/column/column"
+	$detail "serioussam/Rock02.vtf"
+	$detailscale "10"
+}

@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/RoofWooden01"
+	$surfaceprop "metal"
+	$detail "serioussam/Concrete01.vtf"
+	$detailscale "10"
+	$detailblendfactor "1.75"
+}

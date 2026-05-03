@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/bars01"
+	$alphatest "1"
+	$allowalphatocoverage "1"
+	$surfaceprop "metal"
+	%compilepassbullets "1"
+}

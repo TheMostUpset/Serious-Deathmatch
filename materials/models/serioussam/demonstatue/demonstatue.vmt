@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/demonstatue/demonstatue"
+	$nocull 1
+}

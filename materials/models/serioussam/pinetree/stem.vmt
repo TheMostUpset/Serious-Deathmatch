@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/pinetree/pinetree"
+	"$nocull" 1
+	"$detail" "serioussam/Sand02_dtl"
+	"$detailscale" "7.5"
+	"$detailblendfactor" "1.25"
+}

@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/dome/dome"
+	$detail "serioussam/Rock02.vtf"
+	$detailscale "5"
+}

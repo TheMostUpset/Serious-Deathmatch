@@ -1,0 +1,6 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/Pillar02Vertical"
+	$detail "serioussam/crumples.vtf"
+	$detailscale "5"
+}

@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/effects/serioussam/Shockwavegreen"
+	"$nocull" 1
+	"$translucent" 1
+	"$additive" 1
+}

@@ -1,0 +1,7 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/PlasterArt_03_CM"
+	$surfaceprop "brick"
+	$detail "serioussam/rock02.vtf"
+	$detailscale "6"
+}

@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/snowman/snowman_tophat"
+	"$detail" "serioussam/Sand02_dtl"
+	"$detailscale" "3"
+	"$alphatest" "1"
+	"$allowalphatocoverage"	"1"
+	"$nocull" "1"
+}

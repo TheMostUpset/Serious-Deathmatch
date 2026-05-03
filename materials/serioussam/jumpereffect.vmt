@@ -1,0 +1,15 @@
+"UnlitGeneric"
+{
+	"$baseTexture" "serioussam/jumpereffect"
+	$additive 1
+	
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture"
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "10"
+		}
+	}
+}

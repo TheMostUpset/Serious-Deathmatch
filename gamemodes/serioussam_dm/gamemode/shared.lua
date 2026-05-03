@@ -30,7 +30,7 @@ if !cvar_timer_enabled then
 end
 
 if !cvar_holiday then
-	cvar_holiday = CreateConVar("sdm_holiday", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
+	cvar_holiday = CreateConVar("sdm_holiday", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_NOTIFY}, "Christmas!!!!!!", 0, 1)
 end
 
 if !cvar_powerupduration then

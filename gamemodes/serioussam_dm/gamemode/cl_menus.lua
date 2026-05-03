@@ -525,7 +525,7 @@ function OpenSSMenu()
 	EscMenu.Paint = function(self, w, h)
 		PaintBackground(self, w, h)
 		draw.SimpleText("#sdm_game", "MainMenu_Font", ScrW()/2, ScrH() - ScrH() + 50, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-		draw.SimpleText("v1.92", "MainMenu_font_very_small", ScrW()/1.05, ScrH() - ScrH() + 25, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.SimpleText("v1.93", "MainMenu_font_very_small", ScrW()/1.05, ScrH() - ScrH() + 25, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		draw.SimpleText(text, "MainMenu_font_very_small", ScrW()/2, ScrH()-ScrH()/14, Color(GetAccentColor()), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
 		surface.SetDrawColor(255,255,255)

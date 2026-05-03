@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/lamp/lamp"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$nocull" "1"
+}

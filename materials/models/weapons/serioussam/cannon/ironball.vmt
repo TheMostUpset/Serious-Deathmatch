@@ -1,0 +1,22 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/weapons/serioussam/cannon/IronBall"
+	
+	"$envmap" "env_cubemap"
+	"$envmapsaturation" .1
+	"$envmapcontrast" 1.05
+	"$envmaptint" .025 .025 .025
+	
+	"$bumpmap" "models\weapons\serioussam\normal"
+	"$phong" "1"
+	"$phongboost" "3.5"
+	"$phongexponent" "10"
+	"$phongfresnelranges" "[2 1.2 8]"
+	"$phongalbedotint" "1"
+	"$normalmapalphaenvmapmask" "1"
+
+	"$phongexponenttexture" "models\weapons\serioussam\exponent"
+
+	"$cloakPassEnabled" 		"1"				
+	"$nocull" "1"
+}

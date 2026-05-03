@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/flag/flag"
+	"$alphatest" "1"
+	"$nocull" "1"
+	"$treesway" "1"
+    "$treeswaystatic" "1"
+	"$treeswayscrumblefalloffexp" "1"
+	"$treeswayscrumblefrequency" "75"
+}

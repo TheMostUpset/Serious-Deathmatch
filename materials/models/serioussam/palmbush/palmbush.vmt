@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/palmbush/palmbush"
+	"$alphatest" "1"
+	"$allowalphatocoverage"	"1"
+}

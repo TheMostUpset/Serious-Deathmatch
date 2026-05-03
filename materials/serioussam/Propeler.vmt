@@ -1,0 +1,15 @@
+    "LightmappedGeneric"
+    {
+        "$basetexture" "serioussam/Propeler"
+		"$surfaceprop" "metal"
+		"$alphatest" "1"
+			"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture"
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "30"
+		}
+	}
+    }

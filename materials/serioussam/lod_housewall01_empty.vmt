@@ -1,0 +1,8 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "serioussam/LOD_HouseWall01_empty"
+	"$surfaceprop" "concrete"
+	$detail "serioussam/Rock02_dtl"
+	$detailscale "7.5"
+	$detailblendfactor	"1.5"
+}

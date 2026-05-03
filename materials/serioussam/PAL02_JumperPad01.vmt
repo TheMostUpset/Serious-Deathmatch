@@ -1,0 +1,15 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/PAL02_JumperPad01"
+	$surfaceprop "Metal"
+
+				"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture"
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "50"
+		}
+	}
+}

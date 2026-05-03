@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/jaguar/jaguar"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$nocull" "1"
+}

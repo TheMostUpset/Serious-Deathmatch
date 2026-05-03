@@ -1,0 +1,6 @@
+VertexLitGeneric
+{
+	"$basetexture" "models\serioussam\switch\switch"
+	"$cloakPassEnabled" 		"1"				
+	"$nocull" "1"
+}

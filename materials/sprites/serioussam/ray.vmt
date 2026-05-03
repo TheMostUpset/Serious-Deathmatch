@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "sprites/serioussam/ray"
+	"$additive" 1
+	"$vertexalpha" 1
+}

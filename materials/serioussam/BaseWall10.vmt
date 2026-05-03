@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/BaseWall10"
+	"$detail" "serioussam/Concrete01.vtf"
+	"$detailscale" "7"
+	"$detailblendfactor" "1.5"
+	"$surfaceprop" "brick"
+}

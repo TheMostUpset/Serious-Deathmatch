@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/WAR_Neon01"
+	$surfaceprop "Metal"
+	$detail "serioussam/Rock02.vtf"
+	$detailscale "7"
+	$selfillum "1"
+}

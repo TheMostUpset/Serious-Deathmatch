@@ -1,0 +1,10 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/CD_Head01"
+	"$decal" "1"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	$detail "serioussam/Rock02_dtl"
+	$detailscale "7"
+	$detailblendfactor "1.5"
+}

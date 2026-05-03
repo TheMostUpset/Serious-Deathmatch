@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/palm/leaves"
+	"$alphatest" "1"
+	"$nocull" "1"
+	"$allowalphatocoverage"	"1"
+	"$treesway" "1"
+    "$treeswaystatic" "1"
+    "$treeswayscrumblefalloffexp" "5"
+    "$treeswayscrumblefrequency" "5"
+}

@@ -38,16 +38,16 @@ util.AddNetworkString("ClientChatMessage")
 
 resource.AddSingleFile( "resource/fonts/seriousmenu.ttf" )
 
-PLAYER_WALKSPEED = 362
+PLAYER_WALKSPEED = 375
 PLAYER_RUNSPEED = 250
 PLAYER_JUMPPOWER = 300
 
-PLAYER_WALKSPEED_KNIFE = 437
-PLAYER_RUNSPEED_KNIFE = 325
-PLAYER_JUMPPOWER_KNIFE = 387
+PLAYER_WALKSPEED_KNIFE = 450
+PLAYER_RUNSPEED_KNIFE = 350
+PLAYER_JUMPPOWER_KNIFE = 385
 
-PLAYER_CROUCHSPEED_MULTIPLIER = 0.35
-PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE = 0.425
+PLAYER_CROUCHSPEED_MULTIPLIER = 0.3
+PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE = 0.4
 
 cvars.AddChangeCallback("sdm_instagib", function(name, value_old, value_new)
 	if GAMEMODE:GetState() == STATE_GAME_END or GAMEMODE:IsActiveMapVote() then return end
@@ -67,7 +67,7 @@ end)
 
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
-	RunConsoleCommand("sv_airaccelerate", "5")
+	RunConsoleCommand("sv_airaccelerate", "12.5")
 end
 
 function GM:ShutDown()
@@ -735,11 +735,13 @@ function GM:PlayerLoadout(ply)
 	ply:SetRenderFX(4)
 	ply:EmitSound("misc/serioussam/powerupbeep.wav")
 	
-	ply:SetViewOffset(Vector(0,0,60))
-	ply:SetViewOffsetDucked(Vector(0,0,30))
+	ply:SetViewOffset(Vector(0,0,58))
+	ply:SetViewOffsetDucked(Vector(0,0,26))
 	
 	ply:SetDuckSpeed(0.1)
 	ply:SetUnDuckSpeed(0.1)
+	
+	ply:SetGravity(1.01)
 
 	ply:SetupHands()
 	if player.GetCount() >= cvar_minplayers:GetInt() and self:GetState() == STATE_GAME_WARMUP then

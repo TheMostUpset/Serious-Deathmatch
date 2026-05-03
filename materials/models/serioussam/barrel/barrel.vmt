@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/barrel/barrel"
+	"$surfaceprop" "wood"
+	$detail "serioussam/Wood_dtl"
+	$detailscale "2.5"
+}

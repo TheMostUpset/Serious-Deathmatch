@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/RoofWooden01"
+	$surfaceprop "wood"
+	$detail "serioussam/BridgeBump2.vtf"
+	$detailscale "5"
+	$detailblendfactor "1.75"
+}

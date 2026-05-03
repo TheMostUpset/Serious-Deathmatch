@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/lightholder/lightholder"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+}

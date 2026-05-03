@@ -1,0 +1,8 @@
+LightmappedGeneric
+{
+	$basetexture "serioussam/Wingy02"
+	$translucent 1
+	$decal 1
+	$detail "serioussam/crumples.vtf"
+	$detailscale "5"
+}

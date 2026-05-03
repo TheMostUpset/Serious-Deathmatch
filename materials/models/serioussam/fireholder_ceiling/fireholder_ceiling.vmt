@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/fireholder_ceiling/fireholder_ceiling"
+	"$translucent" "1"
+	$alphatest				1
+	$allowalphatocoverage	1
+	"$nocull" 1
+}

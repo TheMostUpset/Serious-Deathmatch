@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/serioussam/ivy/ivy"
+	"$alphatest" "1"
+	"$allowalphatocoverage"	"1"
+}

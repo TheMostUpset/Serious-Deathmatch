@@ -1,0 +1,10 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "serioussam/parashute"
+	"$alphatest" 1
+	"$allowalphatocoverage" "1"
+	$detail "serioussam/Rock02_dtl"
+	$detailscale "3.5"
+	$detailblendfactor	"1.5"
+	$surfaceprop "sand"
+}

@@ -1,0 +1,6 @@
+UnlitGeneric
+{
+	$basetexture "skybox/skullsnbonesskybk"
+	$nofog 1
+	$ignorez 1
+}
