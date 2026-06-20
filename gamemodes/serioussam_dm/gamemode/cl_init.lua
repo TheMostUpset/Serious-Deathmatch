@@ -1,4 +1,6 @@
-local cvar_music = CreateClientConVar( "sdm_music", 1, true, false, "Enable music on SSDM maps", 0, 1)
+local cvar_music = CreateClientConVar( "sdm_music", "1", true, false, "Enable music on SSDM maps", 0, 1)
+local cvar_custom_music_en = CreateClientConVar( "sdm_custom_music_enable", "0", true, false, "Enable custom user music override", 0, 1)
+local cvar_custom_music_path = CreateClientConVar( "sdm_custom_music_path", "", true, false, "Filepath to the custom music file" )
 local cvar_playermodel = CreateClientConVar( "sdm_playermodel", "models/pechenko_121/samclassic.mdl", true, true, "Playermodel option")
 local cvar_playermodel_skin = CreateClientConVar( "sdm_playermodel_skin", 0, true, true, "Playermodel skin option", 0 )
 local cvar_playermodel_bodygroup = CreateClientConVar( "sdm_playermodel_bodygroup", 0, true, true, "Playermodel bodygroup option", 0, 1 )
@@ -10,11 +12,6 @@ include("cl_fonts.lua")
 include("cl_menus.lua")
 include("cl_weaponselection.lua")
 include("cl_footsteps.lua")
-
-concommand.Add( "sdm_changeteam", function( ply, cmd, args )
-	OpenSSMenu()
-	OpenTeamMenu()
-end )
 
 net.Receive("ClientChatMessage", function()
 	local tbl = net.ReadTable()
@@ -51,73 +48,97 @@ end
 
 local lastMusicStation
 GM.MusicTable = {
-    ["sdm_red_station"] = "redstation.ogg",
-    ["sdm_desert_temple"] = "deserttemple.ogg",
-    ["sdmw_winter_temple"] = "deserttemple.ogg",
-    ["sdm_sun_palace"] = "sunpalace.ogg",
-    ["sdm_little_trouble"] = "littetrouble.ogg",
-    ["sdmw_little_winter"] = "littetrouble.ogg",
-    ["sdm_brkeen_chevap"] = "brkeen.ogg",
-    ["sdmw_xmas_chevap"] = "brkeen.ogg",
-    ["sdm_lost_tomb"] = "losttomb.ogg",
-    ["sdm_hole_classic"] = "holeclassic.ogg",
-    ["stdm_crystal_march"] = "crystalmarch.ogg",
-    ["sdm_the_fortress"] = "thefortress.ogg",
-    ["sdm_yoddler_classic"] = "yoddler.ogg",
-    ["sdm_skulls_bones"] = "holeclassic.ogg",
+    ["sdm_red_station"] = "Desert_Temple_Deathmatch.mp3",
+    ["sdm_desert_temple"] = "Desert_Temple_Egypt.mp3",
+    ["sdmw_winter_temple"] = "Desert_Temple_Egypt.mp3",
+    ["sdm_sun_palace"] = "Gates_of_Persepolis.mp3",
+    ["sdm_little_trouble"] = "littetrouble.mp3",
+    ["sdmw_little_winter"] = "littetrouble.mp3",
+    ["sdm_brkeen_chevap"] = "Catacombs.mp3",
+    ["sdmw_xmas_chevap"] = "Catacombs.mp3",
+    ["sdm_lost_tomb"] = "The_Lost_Tomb_Deathmatch.mp3",
+    ["sdm_hole_classic"] = "Enlightening_the_World.mp3",
+    ["stdm_crystal_march"] = "crystalmarch.mp3",
+    ["sdm_the_fortress"] = "thefortress.mp3",
+    ["sdm_yoddler_classic"] = "yoddler.mp3",
+    ["sdm_skulls_bones"] = "holeclassic.mp3",
 }
+
 function GM:PlayMapMusic(volume)
-	if lastMusicStation and IsValid(lastMusicStation) then
-		lastMusicStation:Stop()
-		lastMusicStation = nil
-		timer.Remove("MusicLoopTimer")
-	end
-	
-	local convarVal = cvar_music:GetFloat()
-	if convarVal > 0 then
-		local music = self.MusicTable[game.GetMap()]
-		if music then
-			volume = volume or convarVal
-			sound.PlayFile("sound/music/"..music, "", function(station, errorID, errorName)
-				if IsValid(station) then
-					station:Play()
-					station:SetVolume(volume)
-					lastMusicStation = station
-					timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
-						GAMEMODE:PlayMapMusic()
-					end)
-				end
-			end)
-		end
-	end
+    if lastMusicStation and IsValid(lastMusicStation) then
+        lastMusicStation:Stop()
+        lastMusicStation = nil
+        timer.Remove("MusicLoopTimer")
+    end
+    
+    local convarVal = cvar_music:GetFloat()
+    if convarVal > 0 then
+        local targetPath = nil
+
+        if cvar_custom_music_en:GetBool() and cvar_custom_music_path:GetString() ~= "" then
+            targetPath = cvar_custom_music_path:GetString()
+        else
+            local mapMusic = self.MusicTable[game.GetMap()]
+            if mapMusic then
+                targetPath = "sound/music/" .. mapMusic
+            end
+        end
+
+        if targetPath then
+            volume = volume or convarVal
+            sound.PlayFile(targetPath, "", function(station, errorID, errorName)
+                if IsValid(station) then
+                    station:Play()
+                    station:SetVolume(volume)
+                    lastMusicStation = station
+                    timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
+                        GAMEMODE:PlayMapMusic()
+                    end)
+                else
+                    print("failed to load sound at " .. targetPath .. ": " .. tostring(errorName))
+                end
+            end)
+        end
+    end
 end
+
 cvars.AddChangeCallback("sdm_music", function(name, value_old, value_new)
-	value_new = tonumber(value_new)
-	value_old = tonumber(value_old)
-	if !isnumber(value_new) then return end
-	if value_new > 0 then
-		if value_old == 0 then
-			GAMEMODE:PlayMapMusic(value_new)
-		elseif lastMusicStation and IsValid(lastMusicStation) then
-			lastMusicStation:SetVolume(value_new)
-		end
-	else
-		GAMEMODE:StopMapMusic()
-	end
-end)
+    value_new = tonumber(value_new)
+    value_old = tonumber(value_old)
+    if not isnumber(value_new) then return end
+    if value_new > 0 then
+        if value_old == 0 then
+            GAMEMODE:PlayMapMusic(value_new)
+        elseif lastMusicStation and IsValid(lastMusicStation) then
+            lastMusicStation:SetVolume(value_new)
+        end
+    else
+        GAMEMODE:StopMapMusic()
+    end
+end, "SDM_MusicMain")
+
+cvars.AddChangeCallback("sdm_custom_music_enable", function(name, value_old, value_new)
+    GAMEMODE:PlayMapMusic()
+end, "SDM_CustomMusicToggle")
+
+cvars.AddChangeCallback("sdm_custom_music_path", function(name, value_old, value_new)
+    if cvar_custom_music_en:GetBool() then
+        GAMEMODE:PlayMapMusic()
+    end
+end, "SDM_CustomMusicPath")
 
 function GM:StopMapMusic()
-	timer.Remove("MusicLoopTimer")
-	if lastMusicStation and IsValid(lastMusicStation) then
-		lastMusicStation:Stop()
-		lastMusicStation = nil
-	else
-		RunConsoleCommand("stopsound")
-	end
+    timer.Remove("MusicLoopTimer")
+    if lastMusicStation and IsValid(lastMusicStation) then
+        lastMusicStation:Stop()
+        lastMusicStation = nil
+    else
+        RunConsoleCommand("stopsound")
+    end
 end
 
 function GM:PostCleanupMap()
-	self:PlayMapMusic()
+    self:PlayMapMusic()
 end
 
 local thirdperson_enabled = false

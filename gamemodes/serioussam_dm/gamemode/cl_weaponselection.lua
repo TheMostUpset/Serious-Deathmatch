@@ -53,24 +53,24 @@ local function GetCurSwep()
 end
 
 local HUDOrder = {
-    [0] = { "weapon_ss_knife", "weapon_ss_chainsaw" },               -- key 1
-    [1] = { "weapon_ss_colt", "weapon_ss_colt_dual" },               -- key 2
+    [0] = { "weapon_ss_knife", "weapon_ss_chainsaw" },                -- key 1
+    [1] = { "weapon_ss_colt", "weapon_ss_colt_dual" },                -- key 2
     [2] = { "weapon_ss_singleshotgun", "weapon_ss_doubleshotgun" },  -- key 3
-    [3] = { "weapon_ss_tommygun", "weapon_ss_minigun" },             -- key 4
+    [3] = { "weapon_ss_tommygun", "weapon_ss_minigun" },              -- key 4
     [4] = { "weapon_ss_rocketlauncher", "weapon_ss_grenadelauncher" }, -- key 5
-    [5] = { "weapon_ss_flamer", "weapon_ss_sniper" },                -- key 6
-    [6] = { "weapon_ss_ghostbuster", "weapon_ss_laser" },            -- key 7
+    [5] = { "weapon_ss_flamer", "weapon_ss_sniper" },                 -- key 6
+    [6] = { "weapon_ss_ghostbuster", "weapon_ss_laser" },             -- key 7
     [7] = { "weapon_ss_cannon" }, 									 -- key 8
 }
 
 local CycleOrder = {
-    [0] = { "weapon_ss_knife", "weapon_ss_chainsaw" },               -- key 1
-    [1] = { "weapon_ss_colt_dual", "weapon_ss_colt" },               -- key 2
+    [0] = { "weapon_ss_knife", "weapon_ss_chainsaw" },                -- key 1
+    [1] = { "weapon_ss_colt_dual", "weapon_ss_colt" },                -- key 2
     [2] = { "weapon_ss_doubleshotgun", "weapon_ss_singleshotgun" },  -- key 3
-    [3] = { "weapon_ss_minigun", "weapon_ss_tommygun" },             -- key 4
+    [3] = { "weapon_ss_minigun", "weapon_ss_tommygun" },              -- key 4
     [4] = { "weapon_ss_rocketlauncher", "weapon_ss_grenadelauncher" }, -- key 5
-    [5] = { "weapon_ss_flamer", "weapon_ss_sniper" },                -- key 6
-    [6] = { "weapon_ss_laser", "weapon_ss_ghostbuster" },            -- key 7
+    [5] = { "weapon_ss_flamer", "weapon_ss_sniper" },                 -- key 6
+    [6] = { "weapon_ss_laser", "weapon_ss_ghostbuster" },             -- key 7
     [7] = { "weapon_ss_cannon" },									 -- key 8
 }
 
@@ -127,16 +127,30 @@ local lastSwitchTime = 0
 local switchCooldown = 0.45
 
 -- overwrite binding
+-- overwrite binding
 hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply, bind, pressed)
-    if (bind ~= "invnext" and bind ~= "invprev") and not pressed then return end
     bind = bind:lower()
+
+    -- FIX: Stop double-firing. 
+    -- If the key/scroll is released (pressed == false), we stop the script.
+    -- We return 'true' for weapon binds to ensure the default engine action remains blocked.
+    if not pressed then 
+        if bind == "invnext" or bind == "invprev" or string.sub(bind, 1, 4) == "slot" then
+            return true
+        end
+        return 
+    end
+
     if LocalPlayer():InVehicle() then return end
 
-    if RealTime() - lastSwitchTime < switchCooldown then
-        if string.sub(bind, 1, 4) == "slot" or bind == "invnext" or bind == "invprev" then
-            return true
-        else
-            return
+    -- Remove cooldown lock strictly for scrolling so users can scroll quickly
+    if bind ~= "invnext" and bind ~= "invprev" then
+        if RealTime() - lastSwitchTime < switchCooldown then
+            if string.sub(bind, 1, 4) == "slot" then
+                return true
+            else
+                return
+            end
         end
     end
 
@@ -182,6 +196,8 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
         CurTb = slotIndex
         CurSlt = nextWeapon.hudIndex
 
+        timer.Remove("scrolldelay")
+
         local wep = LocalPlayer():GetWeapon(nextWeapon.classname)
         if IsValid(wep) and LocalPlayer():GetActiveWeapon() ~= wep then
             newinv = nextWeapon.classname
@@ -208,13 +224,24 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
 
         if #flatWeapons == 0 then return true end
 
-        local activeWep = LocalPlayer():GetActiveWeapon()
-        local activeClass = IsValid(activeWep) and activeWep:GetClass() or nil
         local currentPos = 0
-        for i, w in ipairs(flatWeapons) do
-            if w.classname == activeClass then
-                currentPos = i
-                break
+        if alpha > 0 then
+            for i, w in ipairs(flatWeapons) do
+                if w.slot == CurTb and w.hudIndex == CurSlt then
+                    currentPos = i
+                    break
+                end
+            end
+        end
+
+        if currentPos == 0 then
+            local activeWep = LocalPlayer():GetActiveWeapon()
+            local activeClass = IsValid(activeWep) and activeWep:GetClass() or nil
+            for i, w in ipairs(flatWeapons) do
+                if w.classname == activeClass then
+                    currentPos = i
+                    break
+                end
             end
         end
 
@@ -222,7 +249,7 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
         if bind == "invnext" then
             nextPos = currentPos + 1
             if nextPos > #flatWeapons then nextPos = 1 end
-        else -- invprev
+        else
             nextPos = currentPos - 1
             if nextPos < 1 then nextPos = #flatWeapons end
         end
@@ -232,14 +259,17 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
         CurTb = nextWeapon.slot
         CurSlt = nextWeapon.hudIndex
 
-        local wep = LocalPlayer():GetWeapon(nextWeapon.classname)
-        if IsValid(wep) and LocalPlayer():GetActiveWeapon() ~= wep then
-            newinv = nextWeapon.classname
-        end
-
         alpha = 1
         lastAction = RealTime()
-        lastSwitchTime = RealTime()
+
+        timer.Create("scrolldelay", 0.1, 1, function()
+            if not IsValid(LocalPlayer()) then return end
+            local wep = LocalPlayer():GetWeapon(nextWeapon.classname)
+            if IsValid(wep) and LocalPlayer():GetActiveWeapon() ~= wep then
+                newinv = nextWeapon.classname
+                lastSwitchTime = RealTime()
+            end
+        end)
 
         return true
     end

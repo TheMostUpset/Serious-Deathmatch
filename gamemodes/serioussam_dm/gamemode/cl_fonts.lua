@@ -58,15 +58,6 @@ surface.CreateFont( "GameEnd_Font", {
 	antialias = true,
 } )
 
-surface.CreateFont( "MainMenu_Font", {
-	font = "Arial Stretched",
-	size = ScrH()/16,
-	weight = 0,
-	antialias = true,
-	shadow = true,
-	extended = true,
-} )
-
 surface.CreateFont( "Vote_Font", {
 	font = "Arial Stretched",
 	size = ScrH()/32,
@@ -82,18 +73,36 @@ surface.CreateFont( "Vote_Font2", {
 	extended = true,
 } )
 
-surface.CreateFont("MainMenu_font_very_small", {
-	font = "Arial",
-	size = ScrH()/38,
+surface.CreateFont( "MainMenu_Font", {
+	font = "Arial Stretched",
+	size = ScrH()/16,
+	weight = 0,
+	antialias = true,
+	shadow = true,
+	extended = true,
+} )
+
+surface.CreateFont( "MainMenu_BiggerFont", {
+	font = "Arial Stretched",
+	size = ScrH()/12,
+	weight = 0,
+	antialias = true,
+	shadow = true,
+	extended = true,
+} )
+
+surface.CreateFont("MainMenu_SmallerFont", {
+	font = "Arial Stretched",
+	size = ScrH()/20,
 	weight = 600,
 	shadow = true,
 	extended = true,
 })
 
-surface.CreateFont("MainMenu_font_small", {
-	font = "Arial Stretched",
-	size = ScrH()/20,
-	weight = 600,
+surface.CreateFont("MainMenu_MuchSmallerFont", {
+	font = "Arial",
+	size = ScrH()/32,
+	weight = 1600,
 	shadow = true,
 	extended = true,
 })

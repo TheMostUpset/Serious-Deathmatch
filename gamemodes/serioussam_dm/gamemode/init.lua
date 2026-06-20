@@ -88,6 +88,16 @@ function GM:InitPostEntity()
 		self:ToggleMapPickups(false)
 		self:ReplaceSDMGPickup()
 	end
+	
+	local MapLua = ents.Create("lua_run")
+    if not IsValid(MapLua) then return end
+    MapLua:SetName("catapult_lua_bridge")
+    MapLua:Spawn()
+
+    local catapults = ents.FindByClass("trigger_catapult")
+    for _, catapult in ipairs(catapults) do
+        catapult:Fire("AddOutput", "OnCatapulted catapult_lua_bridge:RunPassedCode:hook.Run('PlayerCatapulted',ACTIVATOR):0:-1")
+    end
 end
 
 function GM:ToggleMapPickups(on)
@@ -847,3 +857,9 @@ function GM:IsSpawnpointSuitable( pl, spawnpointent, bMakeSuitable )
 	return true
 
 end
+
+hook.Add("PlayerCatapulted", "PlayCatapultSound", function(ply)
+    if IsValid(ply) and ply:IsPlayer() then
+        ply:EmitSound("player/serioussam/jump.wav", 80, 100, 1)
+    end
+end)

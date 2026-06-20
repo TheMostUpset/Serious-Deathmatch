@@ -422,8 +422,8 @@ function GM:HUDPaint()
 			
 			local x, y = ScrH() / 80, ScrH() /  9
 			
-			draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x + 2 , y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
-			draw.SimpleText("TIME LEFT: " .. timer, "seriousHUDfont_fragsleft", x , y, color_white, TEXT_ALIGN_LEFT)
+			draw.SimpleText(language.GetPhrase( "sdm_timeleft" ).. " " .. timer, "seriousHUDfont_fragsleft", x + 2 , y + 2, Color(0,0,0,200), TEXT_ALIGN_LEFT)
+			draw.SimpleText(language.GetPhrase( "sdm_timeleft" ) .. " " .. timer, "seriousHUDfont_fragsleft", x , y, color_white, TEXT_ALIGN_LEFT)
 		
 			if countdown <= 0 and !endgamesoundplayed then
 				surface.PlaySound( "misc/serioussam/churchbell.wav" )
