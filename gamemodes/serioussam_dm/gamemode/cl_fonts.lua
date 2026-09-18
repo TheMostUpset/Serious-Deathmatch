@@ -1,6 +1,6 @@
 surface.CreateFont("seriousHUDfont_frags", {
 	font = "default",
-	size = ScrH()/16,
+	size = ScrH()/17,
 	weight = 600,
 	blursize = 1,
 	extended = true,
@@ -78,16 +78,16 @@ surface.CreateFont( "MainMenu_Font", {
 	size = ScrH()/16,
 	weight = 0,
 	antialias = true,
-	shadow = true,
 	extended = true,
+	blursize = 1
 } )
 
 surface.CreateFont( "MainMenu_BiggerFont", {
 	font = "Arial Stretched",
-	size = ScrH()/12,
+	size = ScrH()/11,
 	weight = 0,
 	antialias = true,
-	shadow = true,
+	blursize = 1,
 	extended = true,
 } )
 
@@ -95,16 +95,25 @@ surface.CreateFont("MainMenu_SmallerFont", {
 	font = "Arial Stretched",
 	size = ScrH()/20,
 	weight = 600,
-	shadow = true,
+	blursize = 1,
 	extended = true,
 })
 
 surface.CreateFont("MainMenu_MuchSmallerFont", {
-	font = "Arial",
-	size = ScrH()/32,
-	weight = 1600,
-	shadow = true,
+	font = "Arial Narrow",
+	size = ScrH()/30,
+	weight = 800,
+	blursize = 1,
 	extended = true,
+})
+
+surface.CreateFont("MainMenu_Font_Models", 
+{   font = "Arial Narrow",
+    extended = true,
+	size = ScrH() / 32,
+	weight = 1600,
+	antialias = true,
+	blursize = 1,
 })
 
 surface.CreateFont("RAM_VoteFont", {
@@ -137,7 +146,7 @@ surface.CreateFont("MainMenu_Font_32",
 	size = ScrH() / 48,
 	weight = 800,
 	antialias = true,
-	shadow = true
+	blursize = 1,
 })
 
 surface.CreateFont("Credits_Font_64", 
@@ -147,13 +156,4 @@ surface.CreateFont("Credits_Font_64",
 	weight = 800,
 	blursize = 1,
 	antialias = true,
-})
-
-surface.CreateFont("MainMenu_Font_Models", 
-{   font = "Arial",
-    extended = true,
-	size = ScrH() / 32,
-	weight = 800,
-	antialias = true,
-	shadow = true
 })

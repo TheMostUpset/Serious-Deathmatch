@@ -168,20 +168,18 @@ function GM:FinishMove(pl, move)
 end
 
 function GM:PlayerTick(ply, mv)
-	-- AntiBunnyHop
 	if mv:KeyPressed(IN_JUMP) and ply:OnGround() then
 		local vel = mv:GetVelocity()
-		if vel:Length2D() > mv:GetMaxClientSpeed() + 1 then
+		if vel:Length2D() > mv:GetMaxClientSpeed() + 75 then
 			vel.z = 0
-			mv:SetVelocity(vel * 0.8)
+			mv:SetVelocity(vel * 0.6)
 		end
 	end
 	if SERVER then
-		-- CheckIfPlayerStuck which one was in timer
 		if ply:Alive() and (!ply.nextStuckCheck or ply.nextStuckCheck < CurTime()) then
-			ply.nextStuckCheck = CurTime() + 1 -- check every second
+			ply.nextStuckCheck = CurTime() + 1
 			if !ply:InVehicle() then
-				local Offset = Vector(2, 2, 2) -- This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
+				local Offset = Vector(2, 2, 2)
 				local pushDir = VectorRand()
 				for i = 1, 2 do
 					pushDir[i] = math.Round(pushDir[i])
@@ -192,7 +190,7 @@ function GM:PlayerTick(ply, mv)
 				
 				if ply.Stuck then
 					Offset = Vector(0, 0, 0)
-					ply.nextStuckCheck = CurTime() + .05 -- если действительно застряли, перепроеряем чаще
+					ply.nextStuckCheck = CurTime() + .05
 				end
 
 				for _, ent in pairs(ents.FindInBox(ply:GetPos() + ply:OBBMins() + Offset, ply:GetPos() + ply:OBBMaxs() - Offset)) do

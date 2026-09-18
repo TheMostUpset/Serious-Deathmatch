@@ -337,7 +337,7 @@ function GM:HUDPaint()
 		
 		draw.RoundedBox(0, ScrH() / 80 , ScrH() /  14.75 / 5 , ScrH() / 17.75 /1.25, ScrH() / 17.75 /1.25, Color(20, 20, 20, 100))
 		
-		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)		
+		surface.SetDrawColor(hudr_e, hudg_e, hudb_e, 255)
 		surface.DrawOutlinedRect(ScrH() / 80 , ScrH() /  14.75 / 5, ScrH() / 17.75 /1.25, ScrH() / 17.75 /1.25)
 		
 		surface.SetTexture(ISkull)
@@ -351,8 +351,8 @@ function GM:HUDPaint()
 		
 		local playerkos = LocalPlayer():Frags()
 
-		draw.SimpleText(playerkos, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 + 2 ,ScrH() /  15 / 25 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
-		draw.SimpleText(playerkos, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 ,ScrH() /  15 / 25, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText(playerkos, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 + 2, ScrH() - ScrH() / 1.0035 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
+		draw.SimpleText(playerkos, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05, ScrH() - ScrH() / 1.0035, color_white, TEXT_ALIGN_CENTER)
 
 		if SeriousHUD:GetSkin() == 1 or SeriousHUD:GetSkin() == 3 then
 			ISkull = surface.GetTextureID("vgui/serioussam/hud/hud_tfe/iskull")
@@ -375,8 +375,8 @@ function GM:HUDPaint()
 		
 		local playerdeaths = LocalPlayer():Deaths()
 		
-		draw.SimpleText(playerdeaths, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 + 2 ,ScrH() /  19.5 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
-		draw.SimpleText(playerdeaths, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 ,ScrH() /  19.5, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText(playerdeaths, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 + 2 , ScrH() - ScrH() / 1.055 + 2, Color(0, 0, 0, 150), TEXT_ALIGN_CENTER)
+		draw.SimpleText(playerdeaths, "seriousHUDfont_frags", ScrH() / 11.25 * 2.05 , ScrH() - ScrH() / 1.055, color_white, TEXT_ALIGN_CENTER)
 	
 		if IsValid(firstplayer) and cvar_max_frags and GetConVarNumber("sdm_frag_limit") == 1 then
 			local max_frags = cvar_max_frags:GetInt()

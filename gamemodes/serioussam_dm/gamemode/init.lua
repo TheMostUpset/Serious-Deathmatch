@@ -1,7 +1,4 @@
 resource.AddWorkshop("3127352943")
-resource.AddWorkshop("262062192")
-resource.AddWorkshop("258523980")
-resource.AddWorkshop("718492479")
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("cl_hud.lua")
@@ -40,11 +37,11 @@ resource.AddSingleFile( "resource/fonts/seriousmenu.ttf" )
 
 PLAYER_WALKSPEED = 375
 PLAYER_RUNSPEED = 250
-PLAYER_JUMPPOWER = 300
+PLAYER_JUMPPOWER = 290
 
 PLAYER_WALKSPEED_KNIFE = 450
 PLAYER_RUNSPEED_KNIFE = 350
-PLAYER_JUMPPOWER_KNIFE = 385
+PLAYER_JUMPPOWER_KNIFE = 385 -- will be changed with the little trouble remake (idk when)
 
 PLAYER_CROUCHSPEED_MULTIPLIER = 0.3
 PLAYER_CROUCHSPEED_MULTIPLIER_KNIFE = 0.4
@@ -67,7 +64,7 @@ end)
 
 function GM:Initialize()
 	RunConsoleCommand("ss_sv_dmrules", "1")
-	RunConsoleCommand("sv_airaccelerate", "12.5")
+	RunConsoleCommand("sv_airaccelerate", "2.5")
 end
 
 function GM:ShutDown()
@@ -518,26 +515,83 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 	return self:GetState() != STATE_GAME_END
 end
 
+game.AddDecal("MyCustomBlood", "decals/my_custom_decal")
+
 function GM:EntityTakeDamage(ent, dmginfo)
-	if self:IsInstagib() then
-		dmginfo:ScaleDamage(100)
-	end
-	if ent.SS_Flamer_ignite and dmginfo:GetAttacker():GetClass() == "entityflame" then
-		local data = ent.SS_Flamer_ignite
-		if data[3] > CurTime() then
-			local attacker = data[1]
-			local inflictor = data[2]
-			if IsValid(attacker) then
-				dmginfo:SetAttacker(attacker)
-			end
-			if IsValid(inflictor) then
-				dmginfo:SetInflictor(inflictor)
-			end
-		end
-	end
-	if dmginfo:GetInflictor():GetClass() == "point_hurt" and dmginfo:GetInflictor():GetName() == "worlddamage_sand" then
-		ent:SetLocalVelocity(Vector(0,0,250))
-	end
+    if self:IsInstagib() then
+        dmginfo:ScaleDamage(100)
+    end
+
+    if ent.SS_Flamer_ignite and IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():GetClass() == "entityflame" then
+        local data = ent.SS_Flamer_ignite
+        if data[3] > CurTime() then
+            local attacker = data[1]
+            local inflictor = data[2]
+            if IsValid(attacker) then
+                dmginfo:SetAttacker(attacker)
+            end
+            if IsValid(inflictor) then
+                dmginfo:SetInflictor(inflictor)
+            end
+        end
+    end
+
+    if IsValid(dmginfo:GetInflictor()) and dmginfo:GetInflictor():GetClass() == "point_hurt" and dmginfo:GetInflictor():GetName() == "worlddamage_sand" then
+        ent:SetLocalVelocity(Vector(0, 0, 250))
+    end
+
+    -- Decal Logic
+    if not (ent:IsPlayer() or ent:IsNPC() or ent:IsNextBot()) then return end
+
+    -- Remove bullet/slash/club damage types that trigger engine blood decals
+    dmginfo:SetDamageType(bit.band(dmginfo:GetDamageType(), bit.bnot(DMG_BULLET + DMG_CLUB + DMG_SLASH)))
+
+    -- Calculate damage origin and vector safely
+    local dmgPos = dmginfo:GetDamagePosition()
+    if dmgPos == Vector(0, 0, 0) then
+        dmgPos = ent:WorldSpaceCenter()
+    end
+
+    local forceDir = dmginfo:GetDamageForce():GetNormalized()
+    if forceDir == Vector(0, 0, 0) then
+        local attacker = dmginfo:GetAttacker()
+        if IsValid(attacker) then
+            forceDir = (ent:GetPos() - attacker:GetPos()):GetNormalized()
+        else
+            forceDir = -ent:GetForward()
+        end
+    end
+
+    -- Trace to find a surface behind or near the entity
+    local tr = util.TraceLine({
+        start = dmgPos,
+        endpos = dmgPos + (forceDir * 200),
+        filter = ent
+    })
+
+    if tr.Hit then
+        util.Decal("MyCustomBlood", tr.HitPos - tr.HitNormal, tr.HitPos + tr.HitNormal)
+    end
+end
+
+function GM:EntityTakeDamage(ent, dmginfo)
+    if self:IsInstagib() then
+        dmginfo:ScaleDamage(100)
+    end
+
+    if ent.SS_Flamer_ignite and IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():GetClass() == "entityflame" then
+        local data = ent.SS_Flamer_ignite
+        if data[3] > CurTime() then
+            local attacker = data[1]
+            local inflictor = data[2]
+            if IsValid(attacker) then dmginfo:SetAttacker(attacker) end
+            if IsValid(inflictor) then dmginfo:SetInflictor(inflictor) end
+        end
+    end
+
+    if IsValid(dmginfo:GetInflictor()) and dmginfo:GetInflictor():GetClass() == "point_hurt" and dmginfo:GetInflictor():GetName() == "worlddamage_sand" then
+        ent:SetLocalVelocity(Vector(0,0,250))
+    end
 end
 
 function GM:StartGameTimer()

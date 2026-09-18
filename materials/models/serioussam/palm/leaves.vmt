@@ -6,6 +6,6 @@
 	"$allowalphatocoverage"	"1"
 	"$treesway" "1"
     "$treeswaystatic" "1"
-    "$treeswayscrumblefalloffexp" "5"
-    "$treeswayscrumblefrequency" "5"
+    "$treeswayscrumblefalloffexp" "4"
+    "$treeswayscrumblefrequency" "8"
 }

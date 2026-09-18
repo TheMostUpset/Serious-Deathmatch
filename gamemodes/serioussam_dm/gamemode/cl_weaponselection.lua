@@ -127,13 +127,9 @@ local lastSwitchTime = 0
 local switchCooldown = 0.45
 
 -- overwrite binding
--- overwrite binding
 hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply, bind, pressed)
     bind = bind:lower()
 
-    -- FIX: Stop double-firing. 
-    -- If the key/scroll is released (pressed == false), we stop the script.
-    -- We return 'true' for weapon binds to ensure the default engine action remains blocked.
     if not pressed then 
         if bind == "invnext" or bind == "invprev" or string.sub(bind, 1, 4) == "slot" then
             return true
@@ -143,7 +139,6 @@ hook.Add("PlayerBindPress", "WeaponSelector.Hooks.PlayerBindPress", function(ply
 
     if LocalPlayer():InVehicle() then return end
 
-    -- Remove cooldown lock strictly for scrolling so users can scroll quickly
     if bind ~= "invnext" and bind ~= "invprev" then
         if RealTime() - lastSwitchTime < switchCooldown then
             if string.sub(bind, 1, 4) == "slot" then
@@ -279,16 +274,17 @@ end)
 local sdmg = surface.GetTextureID("vgui/serioussam/hud/pseriousdamage")
 local invis = surface.GetTextureID("vgui/serioussam/hud/pinvisibility")
 hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
-    --weapon selection
+    -- weapon selection
     local hudr, hudg, hudb = GAMEMODE:GetHUDColor()
-    local size = ScrH() / 14.75
-    local gap_screen = ScrH() / 14
-    local y = ScrH() - size - gap_screen * 2.2
-    local ammosize = size/1.025
-    local ammoy = y+ammosize/4
+    
+    local size = math.Round(ScrH() / 14.75)
+    local gap_screen = math.Round(ScrH() / 14)
+    local y = math.Round(ScrH() - size - gap_screen * 2.2)
+    local ammosize = math.Round(size / 1.025)
+    local ammoy = math.Round(y + ammosize / 4)
     local icon_gap = 5.5
-    local powerupx = ScrH() / 14.75
-    local powerupy = ScrH() / 14.75
+    local powerupx = math.Round(ScrH() / 14.75)
+    local powerupy = math.Round(ScrH() / 14.75)
 
     if not IsValid(LocalPlayer()) then return end
 
@@ -296,7 +292,6 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
         if alpha ~= 0 then
             alpha = 0
         end
-
         return
     end
 
@@ -319,16 +314,21 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
     local numWeapons = #weapons
 
     local iconWidth = powerupx
-    local gap = 4
+    
+    local gap = 6 
 
     local totalWidth = numWeapons * iconWidth + (numWeapons - 1) * gap
 
-    local x = (ScrW() / 2) - (totalWidth / 2)
+    local x = math.floor((ScrW() / 2) - (totalWidth / 2))
 
     local pos = x
     local frame_r, frame_g, frame_b = SeriousHUD:GetFrameColor()
     if SeriousHUD:GetSkin() == 1 then
-        WeaponSelector.Colors.Select = Color(255, 255, 255, 255)
+		if GetConVar("ss_hud_color_r"):GetInt() == 255 and GetConVar("ss_hud_color_g"):GetInt() == 255 and GetConVar("ss_hud_color_b"):GetInt() == 255 then
+			WeaponSelector.Colors.Select = Color(240, 200, 0, 255)
+		else
+			WeaponSelector.Colors.Select = Color(255, 255, 255, 255)
+		end
     elseif SeriousHUD:GetSkin() == 2 then
         WeaponSelector.Colors.Select = Color(240, 200, 0, 255)
 	elseif SeriousHUD:GetSkin() == 3 then
@@ -346,14 +346,13 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
 
             draw.RoundedBox(0, x, ammoy / 1.2, powerupx, powerupy, Color(20, 20, 20, 160))
 			
-			
             surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(frame_r, frame_g, frame_b))
 			if wep.ammo == 0 then
 				surface.SetDrawColor(selected and WeaponSelector.Colors.Select or Color(frame_r / 3, frame_g / 3, frame_b / 3))
 			end
             surface.DrawOutlinedRect( x, ammoy / 1.2, powerupx, powerupy)
 
-            --serious sam weapon icons
+            -- serious sam weapon icons
             local icon = SeriousHUD and SeriousHUD:GetWeaponIcon(wep.classname) or sdmg
             local iconr, icong, iconb = hudr, hudg, hudb
             if wep.ammo == 0 then
@@ -370,9 +369,9 @@ hook.Add("HUDPaint", "WeaponSelector.Hooks.HUDPaint", function()
             surface.DrawTexturedRect( x+1, ammoy / 1.2+2, ammosize, ammosize)
 
             local w, h = surface.GetTextSize(wep.classname)
-            x = x + (powerupx + 4)
+            
+            x = x + (powerupx + gap) 
         end
-
     end
 
     surface.SetAlphaMultiplier(1)

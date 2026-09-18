@@ -1,9 +1,10 @@
 local cvar_music = CreateClientConVar( "sdm_music", "1", true, false, "Enable music on SSDM maps", 0, 1)
-local cvar_custom_music_en = CreateClientConVar( "sdm_custom_music_enable", "0", true, false, "Enable custom user music override", 0, 1)
-local cvar_custom_music_path = CreateClientConVar( "sdm_custom_music_path", "", true, false, "Filepath to the custom music file" )
+local cvar_music_mode = CreateClientConVar( "sdm_music_mode", 0, true, false, "Changes the music mode \n0 - Map dependant, 1 - Selectable, 2 - Random", 0, 2)
+local cvar_music_path = CreateClientConVar( "sdm_music_path", "sound/music/Freedom.mp3", true, false, "Filepath to the custom music file" )
 local cvar_playermodel = CreateClientConVar( "sdm_playermodel", "models/pechenko_121/samclassic.mdl", true, true, "Playermodel option")
 local cvar_playermodel_skin = CreateClientConVar( "sdm_playermodel_skin", 0, true, true, "Playermodel skin option", 0 )
 local cvar_playermodel_bodygroup = CreateClientConVar( "sdm_playermodel_bodygroup", 0, true, true, "Playermodel bodygroup option", 0, 1 )
+local cvar_prefer_thirdperson = CreateClientConVar( "sdm_prefer_thirdperson", 0, true, true, "Prefer third person view", 0, 1 )
 
 include("shared.lua")
 include("sb.lua")
@@ -39,29 +40,52 @@ local slotsFix = {
 }
 
 function GM:InitPostEntity()
-	self:PlayMapMusic()
-	for class, slot in pairs(slotsFix) do
-		local wepEnt = weapons.GetStored(class)
-		if wepEnt then wepEnt.Slot = slot end
-	end
+    self:PlayMapMusic()
+    for class, slot in pairs(slotsFix) do
+        local wepEnt = weapons.GetStored(class)
+        if wepEnt then wepEnt.Slot = slot end
+    end
 end
 
 local lastMusicStation
+local musicRequestID = 0
+
 GM.MusicTable = {
-    ["sdm_red_station"] = "Desert_Temple_Deathmatch.mp3",
-    ["sdm_desert_temple"] = "Desert_Temple_Egypt.mp3",
-    ["sdmw_winter_temple"] = "Desert_Temple_Egypt.mp3",
+    ["sdm_red_station"] = "Red_Station.mp3",
+    ["sdm_desert_temple"] = "Desert_Temple.mp3",
+    ["sdmw_winter_temple"] = "Desert_Temple.mp3",
     ["sdm_sun_palace"] = "Gates_of_Persepolis.mp3",
-    ["sdm_little_trouble"] = "littetrouble.mp3",
-    ["sdmw_little_winter"] = "littetrouble.mp3",
+    ["sdm_little_trouble"] = "As_Above_So_Below.mp3",
+    ["sdmw_little_winter"] = "As_Above_So_Below.mp3",
     ["sdm_brkeen_chevap"] = "Catacombs.mp3",
     ["sdmw_xmas_chevap"] = "Catacombs.mp3",
     ["sdm_lost_tomb"] = "The_Lost_Tomb_Deathmatch.mp3",
     ["sdm_hole_classic"] = "Enlightening_the_World.mp3",
-    ["stdm_crystal_march"] = "crystalmarch.mp3",
-    ["sdm_the_fortress"] = "thefortress.mp3",
-    ["sdm_yoddler_classic"] = "yoddler.mp3",
-    ["sdm_skulls_bones"] = "holeclassic.mp3",
+    --["stdm_crystal_march"] = "Crystal_March.mp3",
+    ["sdm_the_fortress"] = "The_Citadel.mp3",
+    ["sdm_yoddler_classic"] = "Jingle_Bells.mp3",
+    ["sdm_skulls_bones"] = "The_Citadel.mp3",
+}
+
+GM.RandomMusicTable = {
+	"As_Above_So_Below.mp3",
+	"Catacombs.mp3",
+	"Crystal_March.mp3",
+	"Demise_of_Lava_Golem.mp3",
+	"Desert_Temple.mp3",
+	"Dunes_Reptiloid.mp3",
+	"Enlightening_the_World.mp3",
+	"Freedom.mp3",
+	"Gates_of_Persepolis.mp3",
+	"Highlander_Reptiloid.mp3",
+	"Jingle_Bells.mp3",
+	"Marshfreakinhoppers.mp3",
+	"Red_Station.mp3",
+	"The_Citadel.mp3",
+	"The_Grand_Cathedral.mp3",
+	"The_Great_Pyramid.mp3",
+	"The_Lost_Tomb_Deathmatch.mp3",
+	"The_Ride_of_the_Marsh_Hoppers.mp3"
 }
 
 function GM:PlayMapMusic(volume)
@@ -74,9 +98,13 @@ function GM:PlayMapMusic(volume)
     local convarVal = cvar_music:GetFloat()
     if convarVal > 0 then
         local targetPath = nil
+        local mode = cvar_music_mode:GetInt()
 
-        if cvar_custom_music_en:GetBool() and cvar_custom_music_path:GetString() ~= "" then
-            targetPath = cvar_custom_music_path:GetString()
+        if mode == 2 then
+            local randomTrack = self.RandomMusicTable[math.random(#self.RandomMusicTable)]
+            targetPath = "sound/music/" .. randomTrack
+        elseif mode == 1 and cvar_music_path:GetString() ~= "" then
+            targetPath = cvar_music_path:GetString()
         else
             local mapMusic = self.MusicTable[game.GetMap()]
             if mapMusic then
@@ -86,11 +114,22 @@ function GM:PlayMapMusic(volume)
 
         if targetPath then
             volume = volume or convarVal
-            sound.PlayFile(targetPath, "", function(station, errorID, errorName)
+            
+            musicRequestID = musicRequestID + 1
+            local myRequestID = musicRequestID 
+
+            sound.PlayFile(targetPath, "noplay", function(station, errorID, errorName)
+                
+                if myRequestID ~= musicRequestID then
+                    if IsValid(station) then station:Stop() end
+                    return
+                end
+                
                 if IsValid(station) then
                     station:Play()
                     station:SetVolume(volume)
                     lastMusicStation = station
+                    
                     timer.Create("MusicLoopTimer", station:GetLength(), 1, function()
                         GAMEMODE:PlayMapMusic()
                     end)
@@ -117,18 +156,21 @@ cvars.AddChangeCallback("sdm_music", function(name, value_old, value_new)
     end
 end, "SDM_MusicMain")
 
-cvars.AddChangeCallback("sdm_custom_music_enable", function(name, value_old, value_new)
+cvars.AddChangeCallback("sdm_music_mode", function(name, value_old, value_new)
     GAMEMODE:PlayMapMusic()
 end, "SDM_CustomMusicToggle")
 
-cvars.AddChangeCallback("sdm_custom_music_path", function(name, value_old, value_new)
-    if cvar_custom_music_en:GetBool() then
+cvars.AddChangeCallback("sdm_music_path", function(name, value_old, value_new)
+    if cvar_music_mode:GetInt() == 1 then
         GAMEMODE:PlayMapMusic()
     end
 end, "SDM_CustomMusicPath")
 
 function GM:StopMapMusic()
     timer.Remove("MusicLoopTimer")
+    
+    musicRequestID = musicRequestID + 1 
+    
     if lastMusicStation and IsValid(lastMusicStation) then
         lastMusicStation:Stop()
         lastMusicStation = nil
@@ -142,18 +184,28 @@ function GM:PostCleanupMap()
 end
 
 local thirdperson_enabled = false
-function togglethirdperson()
-	thirdperson_enabled = not thirdperson_enabled
+local function togglethirdperson()
+    thirdperson_enabled = not thirdperson_enabled
 end
 concommand.Add("togglethirdperson", togglethirdperson)
 
-hook.Add( "PlayerButtonDown", "TPCheck", function( ply, button )
-	
-	if not IsFirstTimePredicted() then return end
-	if CLIENT and button == KEY_H then
-		togglethirdperson()
-	end
+if CLIENT then
+    hook.Add("PlayerButtonDown", "TPCheckKey", function(ply, button)
+        if not IsFirstTimePredicted() then return end
 
+        if button == KEY_H then
+            togglethirdperson()
+        end
+    end)
+end
+
+hook.Add("NotifyShouldTransmit", "TPCheckRespawn", function(ply, shouldTransmit)
+    if CLIENT and ply == LocalPlayer() and shouldTransmit then
+        local cvar = GetConVar("sdm_prefer_thirdperson")
+        if cvar and cvar:GetInt() == 1 then
+            togglethirdperson()
+        end
+    end
 end)
 
 function GM:CalcThirdpersonView(ply, pos, ang, fov)
