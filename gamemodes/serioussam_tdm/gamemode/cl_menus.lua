@@ -368,8 +368,8 @@ function OpenTeamMenu()
 			end
 
 			RED_Button:SizeToContents()
-			RED_Button:Center()
-			RED_Button:SetY(ScrH()/2.25)
+			RED_Button:CenterHorizontal()
+			RED_Button:CenterVertical(0.44)
 			
 			local isFlashing = false
 			
@@ -414,8 +414,8 @@ function OpenTeamMenu()
 			end
 
 			BLUE_Button:SizeToContents()
-			BLUE_Button:Center()
-			BLUE_Button:SetY(ScrH()/2)
+			BLUE_Button:CenterHorizontal()
+			BLUE_Button:CenterVertical(0.5)
 			
 			local isFlashing = false
 			
@@ -460,8 +460,8 @@ function OpenTeamMenu()
 			end
 
 			SPEC_Button:SizeToContents()
-			SPEC_Button:Center()
-			SPEC_Button:SetY(ScrH()/1.8)
+			SPEC_Button:CenterHorizontal()
+			SPEC_Button:CenterVertical(0.56)
 
 			local isFlashing = false
 

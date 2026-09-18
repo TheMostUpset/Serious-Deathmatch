@@ -1093,47 +1093,6 @@ function OpenOptionsMenu()
 
 	local isFlashing = false
 	
-	local Video_Button = vgui.Create("DButton", OptionsMenu)
-	Video_Button:SetText("#sdm_videooptions")
-	Video_Button:SetFont("MainMenu_Font")
-	Video_Button:SetTextColor(Color(0, 0, 0, 0))
-
-	Video_Button.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		else
-			self.CurrentTextColor = GetButtonColor()
-		end
-
-		local col = self.CurrentTextColor or GetButtonColor()
-		draw.SimpleText("#sdm_videooptions", "MainMenu_Font", w / 2 + 3, h / 2 + 4, color_black, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		draw.SimpleText("#sdm_videooptions", "MainMenu_Font", w / 2, h / 2, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	end
-
-	Video_Button.OnCursorEntered = function()
-		isFlashing = true
-		text = "#sdm_help_videooptions"
-		Video_Button:SetCursor( "blank" )
-		surface.PlaySound("menus/select.wav")
-	end
-
-	Video_Button.OnCursorExited = function()
-		isFlashing = false
-		text = ""
-		Video_Button.CurrentTextColor = GetButtonColor()
-	end
-
-	Video_Button.DoClick = function()
-		--OpenVideoOptions()
-		surface.PlaySound("menus/press.wav")
-	end
-	
-	Video_Button:SizeToContents()
-	Video_Button:Center()
-	Video_Button:SetY(ScrH() / 2.515)
-
-	local isFlashing = false
-	
 	local Audio_Button = vgui.Create("DButton", OptionsMenu)
 	Audio_Button:SetText("#sdm_audiooptions")
 	Audio_Button:SetFont("MainMenu_Font")
@@ -1169,8 +1128,8 @@ function OpenOptionsMenu()
 	end
 	
 	Audio_Button:SizeToContents()
-	Audio_Button:Center()
-	Audio_Button:SetY(ScrH() / 2.18)
+	Audio_Button:CenterHorizontal()
+	Audio_Button:CenterVertical(0.47)
 	
 	local isFlashing = false
 	
@@ -1210,8 +1169,8 @@ function OpenOptionsMenu()
 	end
 	
 	Profile_Button:SizeToContents()
-	Profile_Button:Center()
-	Profile_Button:SetY(ScrH() / 1.925)
+	Profile_Button:CenterHorizontal()
+	Profile_Button:CenterVertical(0.53)
 
 	local isFlashing = false
 	
@@ -2535,74 +2494,76 @@ function OpenProfileOptions()
 		ModelFrame:SetCursor("blank")
 	end
 
-	local isFlashing = false
-	
-	local PMSelect_Button = vgui.Create("DButton", ProfileMenu)
-	PMSelect_Button:SetFont("MainMenu_MuchSmallerFont")
-	PMSelect_Button:SetText("#sdm_selectpm")
-	PMSelect_Button:SetTextColor(Color(0, 0, 0, 0))
+	if engine.ActiveGamemode() == "serioussam_dm" then
+		local isFlashing = false
+		
+		local PMSelect_Button = vgui.Create("DButton", ProfileMenu)
+		PMSelect_Button:SetFont("MainMenu_MuchSmallerFont")
+		PMSelect_Button:SetText("#sdm_selectpm")
+		PMSelect_Button:SetTextColor(Color(0, 0, 0, 0))
 
-	PMSelect_Button.Paint = function(self, w, h) 
-		if isFlashing then
-			ButtonFlashing(self)
-		else
-			self.CurrentTextColor = GetButtonColor()
+		PMSelect_Button.Paint = function(self, w, h) 
+			if isFlashing then
+				ButtonFlashing(self)
+			else
+				self.CurrentTextColor = GetButtonColor()
+			end
+
+			local col = self.CurrentTextColor or GetButtonColor()
+			draw.SimpleText("#sdm_selectpm", "MainMenu_MuchSmallerFont", 2, h / 2 + 3, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("#sdm_selectpm", "MainMenu_MuchSmallerFont", 0, h / 2, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+		
+		PMSelect_Button.DoClick = function()
+			surface.PlaySound("menus/press.wav")
+			OpenModelMenu()	
+		end
+		
+		PMSelect_Button.OnCursorEntered = function()
+			PMSelect_Button:SetCursor( "blank" )
+			text = "#sdm_help_pmselect"
+			isFlashing = true
+			surface.PlaySound("menus/select.wav")
 		end
 
-		local col = self.CurrentTextColor or GetButtonColor()
-		draw.SimpleText("#sdm_selectpm", "MainMenu_MuchSmallerFont", 2, h / 2 + 3, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText("#sdm_selectpm", "MainMenu_MuchSmallerFont", 0, h / 2, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
-	
-	PMSelect_Button.DoClick = function()
-		surface.PlaySound("menus/press.wav")
-		OpenModelMenu()	
-	end
-	
-	PMSelect_Button.OnCursorEntered = function()
-		PMSelect_Button:SetCursor( "blank" )
-		text = "#sdm_help_pmselect"
-		isFlashing = true
-		surface.PlaySound("menus/select.wav")
-	end
+		PMSelect_Button.OnCursorExited = function()
+			text = ""
+			isFlashing = false
+			PMSelect_Button.CurrentTextColor = GetButtonColor()
+		end
 
-	PMSelect_Button.OnCursorExited = function()
-		text = ""
-		isFlashing = false
-		PMSelect_Button.CurrentTextColor = GetButtonColor()
-	end
+		PMSelect_Button:SetSize(ScrW()/6, ScrH()/20)
+		PMSelect_Button:SetContentAlignment(4)
+		PMSelect_Button:SetX(ScrW()/1.475)
+		PMSelect_Button:SetY(ScrH()/1.23)
+	
+	
+		local ModelButton = vgui.Create( "DButton", ProfileMenu )
+		ModelButton:SetText( "" )			
+		
+		ModelButton.Paint = function(self, w, h) end
+		
+		ModelButton.DoClick = function()
+			surface.PlaySound("menus/press.wav")
+			OpenModelMenu()
+		end
 
-	PMSelect_Button:SetSize(ScrW()/6, ScrH()/20)
-	PMSelect_Button:SetContentAlignment(4)
-	PMSelect_Button:SetX(ScrW()/1.475)
-	PMSelect_Button:SetY(ScrH()/1.23)
-	
-	local ModelButton = vgui.Create( "DButton", ProfileMenu )
-	ModelButton:SetText( "" )			
-	
-	ModelButton.Paint = function(self, w, h) end
-	
-	ModelButton.DoClick = function()
-		surface.PlaySound("menus/press.wav")
-		OpenModelMenu()
+		ModelButton.OnCursorEntered = function()
+			ModelButton:SetCursor("blank")
+			text = "#sdm_help_pmselect"
+			surface.PlaySound("menus/select.wav")
+			isFlashing = true
+		end
+		
+		ModelButton.OnCursorExited = function()
+			text = ""
+			isFlashing = false
+			PMSelect_Button.CurrentTextColor = GetButtonColor()
+		end
+		
+		ModelButton:SetSize( ScrW() / 3.5, ScrH() / 1.6 )
+		ModelButton:SetPos( ScrW() / 1.475, ScrH() / 4.2 )
 	end
-
-	ModelButton.OnCursorEntered = function()
-		ModelButton:SetCursor("blank")
-		text = "#sdm_help_pmselect"
-		surface.PlaySound("menus/select.wav")
-		isFlashing = true
-	end
-	
-	ModelButton.OnCursorExited = function()
-		text = ""
-		isFlashing = false
-		PMSelect_Button.CurrentTextColor = GetButtonColor()
-	end
-	
-	ModelButton:SetSize( ScrW() / 3.5, ScrH() / 1.6 )
-	ModelButton:SetPos( ScrW() / 1.475, ScrH() / 4.2 )
-
 	local isFlashing = false
 	
 	local Name_Button = vgui.Create("DButton", ProfileMenu)
@@ -2714,7 +2675,13 @@ function OpenProfileOptions()
 	Team_Button:SetX(ScrW()-ScrW() / 1.05)
 	Team_Button:CenterVertical(0.34)
 	
-	Team_2_Button:SetText("#sdm_none")
+	if engine.ActiveGamemode() == "serioussam_tdm" and LocalPlayer():Team() == 1 then
+		Team_2_Button:SetText("#sdm_redteam")
+	elseif engine.ActiveGamemode() == "serioussam_tdm" and LocalPlayer():Team() == 2 then
+		Team_2_Button:SetText("#sdm_blueteam")
+	else
+		Team_2_Button:SetText("#sdm_none")
+	end
 	Team_2_Button:SetFont("MainMenu_MuchSmallerFont")
 	Team_2_Button:SetTextColor(Color(0, 0, 0, 0))
 
@@ -2726,8 +2693,16 @@ function OpenProfileOptions()
 		end
 
 		local col = self.CurrentTextColor or GetButtonColor()
-		draw.SimpleText("#sdm_none", "MainMenu_MuchSmallerFont", 17, h / 2 + 3, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText("#sdm_none", "MainMenu_MuchSmallerFont", 15, h / 2, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		if engine.ActiveGamemode() == "serioussam_tdm" and LocalPlayer():Team() == 1 then
+			draw.SimpleText("#sdm_redteam", "MainMenu_MuchSmallerFont", 17, h / 2 + 3, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("#sdm_redteam", "MainMenu_MuchSmallerFont", 15, h / 2, Color(255,0,0), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		elseif engine.ActiveGamemode() == "serioussam_tdm" and LocalPlayer():Team() == 2 then
+			draw.SimpleText("#sdm_blueteam", "MainMenu_MuchSmallerFont", 17, h / 2 + 3, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("#sdm_blueteam", "MainMenu_MuchSmallerFont", 15, h / 2, Color(0,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		else
+			draw.SimpleText("#sdm_none", "MainMenu_MuchSmallerFont", 17, h / 2 + 3, color_black, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("#sdm_none", "MainMenu_MuchSmallerFont", 15, h / 2, col, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
 	end
 
 	Team_2_Button.OnCursorEntered = function()
